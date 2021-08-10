@@ -2,12 +2,14 @@
 
 namespace app\controllers;
 
-use app\controllers\Controller;
-
 use app\models\Theme;
+use app\models\Expression;
+
+use app\controllers\Controller;
 
 class ThemesController extends Controller {
     private $themeModel;
+    private $expressionModel;
 
     // Constructeur
 
@@ -15,17 +17,42 @@ class ThemesController extends Controller {
         $this->init();
 
         $this->themeModel = new Theme();
+        $this->expressionModel = new Expression();
     }
 
     // Liste des thèmes
 
     public function index() {
-        // 
+        // Données
+
+        $list = $this->themeModel->findAll();
+
+        $themes = [];
+
+        $index = 0;
+
+        foreach ($list as $theme) {
+            // Lecture
+
+            $themeId = $theme->id;
+            $title = $theme->title;
+            $author = $this->themeModel->findUser($themeId);
+            $nbExpressions = $this->expressionModel->countByTheme($themeId);
+
+            // Enregistrement
+
+            $themes[$index]["id"] = $themeId;
+            $themes[$index]["title"] = $title;
+            $themes[$index]["author"] = $author;
+            $themes[$index]["nbExpressions"] = $nbExpressions;
+
+            $index++;
+        }
 
         // Rendu
 
         echo $this->twig->render("themes.twig", [
-            "key" => "value",
+            "themes" => $themes,
         ]);
     }
 

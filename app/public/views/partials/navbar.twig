@@ -1,18 +1,18 @@
-<nav id="navbar">
-    <a href="{{ root }}" class="nav-brand">English Learner</a>
+<nav id="navbar" class="w3-bar w3-blue">
+    <a href="{{ root }}" id="nav-title" class="w3-bar-item w3-button w3-mobile">English Learner</a>
 
     {% if user %}
-    <a href="{{ root }}/profile">Bienvenue {{ username }}</a>
-    <a href="{{ root }}/logout">Déconnexion</a>
+    <a href="{{ root }}/profile" class="w3-bar-item w3-button w3-mobile">Bienvenue {{ username }}</a>
+    <a href="{{ root }}/logout" class="w3-bar-item w3-button w3-mobile">Déconnexion</a>
     {% else %}
-    <a href="{{ root }}/register">Inscription</a>
-    <a href="{{ root }}/login">Connexion</a>
+    <a href="{{ root }}/register" class="w3-bar-item w3-button w3-mobile">Inscription</a>
+    <a href="{{ root }}/login" class="w3-bar-item w3-button w3-mobile">Connexion</a>
     {% endif %}
 
-    <a href="{{ root }}/users">Communauté</a>
-    <a href="{{ root }}/themes">Listes</a>
+    <a href="{{ root }}/users" class="w3-bar-item w3-button w3-mobile">Communauté</a>
+    <a href="{{ root }}/themes" class="w3-bar-item w3-button w3-mobile">Listes</a>
 
-    <a href="javascript:void(0);" class="icon" onclick="toggleNavbar()">
+    <a href="javascript:void(0);" class="w3-icon" onclick="toggleNavbar()">
         <i class="fa fa-bars"></i>
     </a>
 </nav>

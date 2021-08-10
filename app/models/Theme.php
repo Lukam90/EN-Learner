@@ -59,6 +59,25 @@ class Theme extends Model {
         return count($themes);
     }
 
+    // Nom de l'utilisateur
+
+    public function findUser($themeId) {
+        $statement = $this->dbHandler
+                          ->prepare("
+                                SELECT u.username
+                                FROM users u, themes t
+                                WHERE u.id = t.user_id
+                                AND t.id = :id
+                            ");
+
+        $statement->bindValue(":id", $themeId);
+
+        $statement->execute();
+
+        //return $statement->fetchAll(\PDO::FETCH_OBJ);
+        return $statement->fetchColumn();
+    }
+
     // Appartenance à un utilisateur
 
     public function belongsTo($userId, $themeId) {

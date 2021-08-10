@@ -1,6 +1,4 @@
-* {
-    box-sizing: border-box;
-}
+/* Général */
 
 body {
     font-family: "Lato", sans-serif;
@@ -11,6 +9,40 @@ main {
     margin: auto;
 }
 
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    color: white;
+    width: 100%;
+}
+
 a {
     text-decoration: none;
+}
+
+/* Couleurs / Stats */
+
+#themes {
+    background-color: rgba(37, 102, 28, 0.5);
+}
+
+#themes:hover {
+    background-color: rgba(37, 102, 28, 0.8);
+}
+
+#expressions {
+    background-color: rgba(0, 0, 128, 0.5);
+}
+
+#expressions:hover {
+    background-color: rgba(0, 0, 128, 0.8);
+}
+
+#users {
+    background-color: rgba(255, 166, 0, 0.5);
+}
+
+#users:hover {
+    background-color: rgba(255, 166, 0, 0.8);
 }

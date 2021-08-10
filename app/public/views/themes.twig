@@ -3,5 +3,43 @@
 {% block title %}Listes{% endblock %}
 
 {% block content %}
-<h2>La liste des thèmes</h2>
+    <h2>La liste des thèmes</h2>
+
+    <button class="w3-btn w3-green w3-margin-bottom">
+        <i class="fa fa-plus"></i> Ajouter un thème
+    </button>
+
+    {% if themes %}
+    <table class="w3-table w3-striped w3-hoverable">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Auteur</th>
+                <th>Nb Expressions</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for theme in themes %}
+            <tr>
+                <td>{{ theme.title }}</td>
+                <td>{{ theme.author }}</td>
+                <td>{{ theme.nbExpressions }}</td>
+                <td>
+                    <button class="w3-btn w3-blue w3-margin-right">
+                        <i class="fa fa-pencil"></i> Editer
+                    </button>
+
+                    <button class="w3-btn w3-red">
+                        <i class="fa fa-trash"></i> Supprimer
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Aucun thème n'est enregistré.</p>
+    {% endif %}
 {% endblock %}

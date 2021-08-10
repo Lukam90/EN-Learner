@@ -15,9 +15,8 @@
         
         <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
 
+        <link href="{{ public }}/css/w3.css" rel="stylesheet">
         <link href="{{ public }}/css/style.css" rel="stylesheet">
-        <link href="{{ public }}/css/footer.css" rel="stylesheet">
-        <link href="{{ public }}/css/navbar.css" rel="stylesheet">
 
         {% block styles %}
         {% endblock %}
@@ -32,7 +31,7 @@
 
         {# Content #}
 
-        <main>
+        <main class="w3-container">
             {% block content %}
             {% endblock %}
         </main>

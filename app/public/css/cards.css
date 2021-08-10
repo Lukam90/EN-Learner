@@ -1,32 +1,7 @@
-/* Colonnes */
+/* Cartes (Accueil / Stats) */
 
-.column {
-    float: left;
-    width: 33%;
-    padding: 0 10px;
-}
-
-/* Lignes (+ marge) */
-
-.row {
-    margin: 0 -5px;
-}
-
-/* Cartes */
-
-.card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    
-    height: 200px;
-    padding: 16px;
+.w3-card {
     text-align: center;
-    background-color: #f1f1f1;
-}
-
-/* Liens */
-
-.column a {
-    color: #000;
 }
 
 /* Couleurs */
@@ -53,14 +28,4 @@
 
 #users:hover {
     background-color: rgba(255, 166, 0, 0.8);
-}
-
-/* Responsive - Largeur de l'écran */
-
-@media screen and (max-width: 600px) {
-    .column {
-        width: 100%;
-        display: block;
-        margin-bottom: 20px;
-    }
 }

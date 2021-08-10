@@ -52,9 +52,9 @@ class UsersController extends Controller {
             $color = "";
 
             if ($role == "Administrateur") {
-                $color = "has-text-danger";
+                $color = "w3-text-red";
             } else if ($role == "Modérateur") {
-                $color = "has-text-success";
+                $color = "w3-text-green";
             }
 
             // Enregistrement
