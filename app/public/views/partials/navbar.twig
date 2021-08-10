@@ -1,32 +1,18 @@
-<div class="block">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-start">
-            <a href="{{ root }}" class="navbar-item">
-                <h1 class="title is-4">English Learner</h1>
-            </a>
-        </div>
+<nav id="navbar">
+    <a href="{{ root }}" class="nav-brand">English Learner</a>
 
-        <div class="navbar-end">
-        {% if user %}
-            <a href="{{ root }}/profile" class="navbar-item">Bienvenue {username}</a>
-            <a href="{{ root }}/logout" class="navbar-item">Déconnexion</a>
-        {% else %}
-            <a href="{{ root }}/register" class="navbar-item">Inscription</a>
-            <a href="{{ root }}/login" class="navbar-item">Connexion</a>
-        {% endif %}
-        </div>
+    {% if user %}
+    <a href="{{ root }}/profile">Bienvenue {{ username }}</a>
+    <a href="{{ root }}/logout">Déconnexion</a>
+    {% else %}
+    <a href="{{ root }}/register">Inscription</a>
+    <a href="{{ root }}/login">Connexion</a>
+    {% endif %}
 
-        <a href="{{ root }}/users" class="navbar-item">Communauté</a>
-        <a href="{{ root }}/themes" class="navbar-item">Listes</a>
+    <a href="{{ root }}/users">Communauté</a>
+    <a href="{{ root }}/themes">Listes</a>
 
-        {# Burger Icon (Responsive) #}
-
-        <!--
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-        </a>
-        -->
-    </nav>
-</div>
+    <a href="javascript:void(0);" class="icon" onclick="toggleNavbar()">
+        <i class="fa fa-bars"></i>
+    </a>
+</nav>
