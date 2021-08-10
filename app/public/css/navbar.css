@@ -1,5 +1,11 @@
 /* Barre de navigation */
 
+/* Titre du site */
+
+.nav-brand {
+    font-weight: bold;
+}
+
 /* Couleur de fond */
 
 nav {

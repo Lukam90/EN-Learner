@@ -2,41 +2,45 @@
 
 {% block title %}Accueil{% endblock %}
 
+{% block styles %}
+<link href="{{ public }}/css/cards.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
 
-<p>Il y a actuellement :</p>
+<h1>Il y a actuellement...</h1>
 
-<div class="w3-row-padding">
-    <div class="third">
-        
+<div class="row">
+    <div class="column">
+        <div class="card" id="themes">
+            <a href="{{ root }}/themes">
+                <h1>{{ nbThemes }}</h1>
+
+                <h2>thèmes</h2>
+            </a>
+        </div>
     </div>
-</div>
 
-<div class="block">
-    <div class="columns">
-        <div class="column is-one-third">
+    <div class="column">
+        <div class="card" id="expressions">
             <a href="{{ root }}/themes">
-                <p class="notification has-text-centered has-text-black title is-primary">
-                {{ nbThemes }} thèmes
-                </p>
-            </a>
-        </div>
+                <h1>{{ nbExpressions }}</h1>
 
-        <div class="column is-one-third">
-            <a href="{{ root }}/themes">
-                <p class="notification has-text-centered has-text-black title is-success">
-                {{ nbExpressions }} expressions
-                </p>
+                <h2>expressions</h2>
             </a>
         </div>
+    </div>
+    
+    <div class="column">
+        <a href="{{ root }}/users">
+        <div class="card" id="users">
+            
+                <h1>{{ nbUsers }}</h1>
 
-        <div class="column is-one-third">
-            <a href="{{ root }}/users">
-                <p class="notification has-text-centered title is-warning">
-                {{ nbUsers }} utilisateurs
-                </p>
-            </a>
+                <h2>utilisateurs</h2>
+            
         </div>
+        </a>
     </div>
 </div>
 {% endblock %}

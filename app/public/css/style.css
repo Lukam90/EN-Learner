@@ -1,21 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: "Lato", sans-serif;
 }
 
 main {
-    width: 80%;
+    max-width: 80%;
+    margin: auto;
 }
 
 a {
     text-decoration: none;
-}
-
-/* Navigation Bar */
-
-.nav-brand {
-    font-weight: bold;
-}
-
-.nav-links {
-    float: right;
 }
