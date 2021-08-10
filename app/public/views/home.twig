@@ -1,0 +1,37 @@
+{% extends "layout.twig" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="content">
+    <p class="is-large">Il y a actuellement</p>
+</div>
+
+<div class="block">
+    <div class="columns">
+        <div class="column is-one-third">
+            <a href="{{ root }}/themes">
+                <p class="notification has-text-centered has-text-black title is-primary">
+                {{ nbThemes }} thèmes
+                </p>
+            </a>
+        </div>
+
+        <div class="column is-one-third">
+            <a href="{{ root }}/themes">
+                <p class="notification has-text-centered has-text-black title is-success">
+                {{ nbExpressions }} expressions
+                </p>
+            </a>
+        </div>
+
+        <div class="column is-one-third">
+            <a href="{{ root }}/users">
+                <p class="notification has-text-centered title is-warning">
+                {{ nbUsers }} utilisateurs
+                </p>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

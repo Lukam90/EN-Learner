@@ -1,0 +1,10 @@
+<?php
+$_SESSION['token'] = bin2hex(random_bytes(32));
+?>
+
+<input type="hidden" name="token" value="<?=$_SESSION['token']?>"/>
+
+<?php
+if ($_POST['token'] == $_SESSION['token']) {
+    // ...
+}

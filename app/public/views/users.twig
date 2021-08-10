@@ -1,0 +1,39 @@
+{% extends "layout.twig" %}
+
+{% block title %}Communauté{% endblock %}
+
+{% block content %}
+<h2 class="title">La liste des utilisateurs</h2>
+
+<!-- Tables -->
+
+<div class="table-container">
+    {% if users %}
+    <table class="table is-fullwidth is-hoverable is-striped is-bordered">
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Rôle</th>
+                <th>Inscrit(e) le</th>
+                <th>Contributions</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td class="{{ user.color }}">{{ user.role }}</td>
+                <td>{{ user.createdAt }}</td>
+                <td>{{ user.nbThemes }} thèmes<br>{{ user.nbExpressions }} expressions</td>
+                <td></td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% else %}
+    <p>Aucun utilisateur n'est enregistré.</p>
+    {% endif %}
+</div>
+{% endblock %}

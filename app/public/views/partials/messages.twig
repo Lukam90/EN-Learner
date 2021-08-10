@@ -1,0 +1,17 @@
+{# Success Messages #}
+
+{% if success %}
+    <div class="success">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    This is an alert box.
+    </div>
+{% endif %}
+
+{# Error Messages #}
+
+{% if error %}
+    <div class="error">
+        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    This is an alert box.
+    </div>
+{% endif %}

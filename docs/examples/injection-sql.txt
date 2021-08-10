@@ -1,0 +1,11 @@
+<?php
+protected function makeQuery($query, $params = null) {
+    if ($params) {
+        $statement = self::$bdd->prepare($query);
+        $statement->execute($params);
+    } else {
+        $statement = self::$bdd->query($query);
+    }
+
+    return $statement;
+}

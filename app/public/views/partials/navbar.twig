@@ -1,0 +1,32 @@
+<div class="block">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-start">
+            <a href="{{ root }}" class="navbar-item">
+                <h1 class="title is-4">English Learner</h1>
+            </a>
+        </div>
+
+        <div class="navbar-end">
+        {% if user %}
+            <a href="{{ root }}/profile" class="navbar-item">Bienvenue {username}</a>
+            <a href="{{ root }}/logout" class="navbar-item">Déconnexion</a>
+        {% else %}
+            <a href="{{ root }}/register" class="navbar-item">Inscription</a>
+            <a href="{{ root }}/login" class="navbar-item">Connexion</a>
+        {% endif %}
+        </div>
+
+        <a href="{{ root }}/users" class="navbar-item">Communauté</a>
+        <a href="{{ root }}/themes" class="navbar-item">Listes</a>
+
+        {# Burger Icon (Responsive) #}
+
+        <!--
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+        -->
+    </nav>
+</div>
