@@ -25,57 +25,12 @@ class Expression extends Model {
         ";
     }
 
-    // Résultats liés à une table
-
-    public function findAllBy($id, $fkName) {
-        $tableName = $fkName . "s";
-        $idName = $fkName . "_id";
-
-        $statement = $this->dbHandler
-                          ->prepare("
-                                SELECT e.*
-                                FROM expressions e, $tableName fk
-                                WHERE e.$idName = fk.id
-                                AND fk.id = :id
-                            ");
-
-        $statement->bindValue(":id", $id);
-
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
-    }
-
-    // Expressions d'un thème
-
-    public function findAllByTheme($themeId) {
-        return $this->findAllBy($themeId, "theme");
-    }
-
-    // Expressions d'un auteur
-
-    public function findAllByAuthor($userId) {
-        return $this->findAllBy($userId, "user");
-    }
-
     // Nombre d'expressions liées à une table
 
     public function countBy($id, $tableName) {
         $expressions = $this->findAllBy($id, $tableName);
 
         return count($expressions);
-    }
-
-    // Nombre d'expressions d'un thème
-
-    public function countByTheme($themeId) {
-        return $this->countBy($themeId, "theme");
-    }
-
-    // Nombre d'expressions d'un utilisateur
-
-    public function countByUser($userId) {
-        return $this->countBy($userId, "user");
     }
 
     // Appartenance à un utilisateur

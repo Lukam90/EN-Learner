@@ -2,14 +2,16 @@
 
 namespace app\controllers;
 
+use app\core\Session;
+
 use app\models\Theme;
-use app\models\Expression;
+use app\models\User;
 
 use app\controllers\Controller;
 
 class ThemesController extends Controller {
     private $themeModel;
-    private $expressionModel;
+    private $userModel;
 
     // Constructeur
 
@@ -17,7 +19,7 @@ class ThemesController extends Controller {
         $this->init();
 
         $this->themeModel = new Theme();
-        $this->expressionModel = new Expression();
+        $this->userModel = new User();
     }
 
     // Liste des thèmes
@@ -31,13 +33,34 @@ class ThemesController extends Controller {
 
         $index = 0;
 
+        // Ajout
+
+        $canAdd = false;
+
+        $userId = 0;
+
+        if (Session::isLoggedIn()) {
+            $userId = Session::var("user_id");
+
+            $canAdd = ! $currentUser.banned;
+        }
+
+        // Boucle d'affichage
+
         foreach ($list as $theme) {
             // Lecture
 
             $themeId = $theme->id;
             $title = $theme->title;
             $author = $this->themeModel->findUser($themeId);
-            $nbExpressions = $this->expressionModel->countByTheme($themeId);
+            $nbExpressions = $this->themeModel->countExpressions($themeId);
+
+            // Edition
+
+            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
+            $isSuperUser = $this->userModel->isSuperUser($userId);
+
+            $canEdit = $canAdd && $belongsTo && $isSuperUser;
 
             // Enregistrement
 
@@ -45,6 +68,7 @@ class ThemesController extends Controller {
             $themes[$index]["title"] = $title;
             $themes[$index]["author"] = $author;
             $themes[$index]["nbExpressions"] = $nbExpressions;
+            $themes[$index]["canEdit"] = $canEdit;
 
             $index++;
         }
@@ -53,6 +77,8 @@ class ThemesController extends Controller {
 
         echo $this->twig->render("themes.twig", [
             "themes" => $themes,
+            "can-add" => $canAdd,
+            "can-edit" => $canEdit
         ]);
     }
 

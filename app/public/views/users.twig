@@ -13,7 +13,7 @@
                 <th>Rôle</th>
                 <th>Inscrit(e) le</th>
                 <th>Contributions</th>
-                <th></th>
+                {% if canEdit %}<th></th>{% endif %}
             </tr>
         </thead>
 
@@ -24,15 +24,22 @@
                 <td class="{{ user.color }}">{{ user.role }}</td>
                 <td>{{ user.createdAt }}</td>
                 <td>{{ user.nbThemes }} thèmes<br>{{ user.nbExpressions }} expressions</td>
+
+                {% if canEdit %}
                 <td>
                     <button class="w3-btn w3-blue w3-margin-right">
-                        <i class="fa fa-pencil"></i> Editer
+                        <a href="{{ root }}/users/edit/{{ user.id }}">
+                            <i class="fa fa-pencil"></i> Editer
+                        </a>
                     </button>
 
                     <button class="w3-btn w3-red">
-                        <i class="fa fa-trash"></i> Supprimer
+                        <a href="{{ root }}/users/delete/{{ user.id }}">
+                            <i class="fa fa-trash"></i> Supprimer
+                        </a>
                     </button>
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

@@ -10,8 +10,6 @@ use app\controllers\Controller;
 
 class UsersController extends Controller {
     private $userModel;
-    private $themeModel;
-    private $expressionModel;
 
     // Constructeur
 
@@ -19,8 +17,6 @@ class UsersController extends Controller {
         $this->init();
 
         $this->userModel = new User();
-        $this->themeModel = new Theme();
-        $this->expressionModel = new Expression();
     }
 
     // Liste des utilisateurs
@@ -44,8 +40,8 @@ class UsersController extends Controller {
             $createdAt = new \DateTime($user->created_at);
             $createdAt = $createdAt->format("d/m/Y");
 
-            $nbThemes = $this->themeModel->countByUser($userId);
-            $nbExpressions = $this->expressionModel->countByUser($userId);
+            $nbThemes = $this->userModel->countThemes($userId);
+            $nbExpressions = $this->userModel->countExpressions($userId);
 
             // Couleur / Rôle
 

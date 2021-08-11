@@ -21,42 +21,36 @@ class Theme extends Model {
         ";
     }
 
-    // Sélection d'un thème par l'ID
-
-    public function findById($id) {
-        return $this->findBy("id", $id);
-    }
-
     // Sélection d'un thème par le titre
 
     public function findByTitle($title) {
         return $this->findBy("title", $title);
     }
 
-    // Sélection de thèmes d'un utilisateur
+    // Expressions d'un thème
 
-    public function findAllByUser($id) {
+    public function findExpressions($themeId) {
         $statement = $this->dbHandler
                           ->prepare("
-                                SELECT t.*
-                                FROM themes t, users u
-                                WHERE t.user_id = u.id
-                                AND u.id = :id
+                                SELECT e.*
+                                FROM expressions e, themes t
+                                WHERE e.theme_id = t.id
+                                AND t.id = :id
                             ");
 
-        $statement->bindValue(":id", $id);
+        $statement->bindValue(":id", $themeId);
 
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    // Nombre de thèmes d'un utilisateur
+    // Nombre d'expressions d'un thème
 
-    public function countByUser($id) {
-        $themes = $this->findAllByUser($id);
+    public function countExpressions($themeId) {
+        $expressions = $this->findExpressions($themeId);
 
-        return count($themes);
+        return count($expressions);
     }
 
     // Nom de l'utilisateur
@@ -74,7 +68,6 @@ class Theme extends Model {
 
         $statement->execute();
 
-        //return $statement->fetchAll(\PDO::FETCH_OBJ);
         return $statement->fetchColumn();
     }
 

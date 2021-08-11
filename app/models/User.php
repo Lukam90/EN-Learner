@@ -23,12 +23,6 @@ class User extends Model {
         ";
     }
 
-    // Sélection d'un utilisateur par son ID
-
-    public function findById($id) {
-        return $this->findBy("id", $id);
-    }
-
     // Sélection d'un utilisateur par son pseudo
 
     public function findByName($username) {
@@ -39,6 +33,58 @@ class User extends Model {
 
     public function findByEmail($email) {
         return $this->findBy("email", $email);
+    }
+
+    // Thèmes d'un utilisateur
+
+    public function findThemes($userId) {
+        $statement = $this->dbHandler
+                          ->prepare("
+                                SELECT t.*
+                                FROM themes t, users u
+                                WHERE t.user_id = u.id
+                                AND u.id = :id
+                            ");
+
+        $statement->bindValue(":id", $userId);
+
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    // Nombre de thèmes d'un utilisateur
+
+    public function countThemes($userId) {
+        $themes = $this->findThemes($userId);
+
+        return count($themes);
+    }
+
+    // Expressions d'un utilisateur
+
+    public function findExpressions($userId) {
+        $statement = $this->dbHandler
+                          ->prepare("
+                                SELECT e.*
+                                FROM expressions e, users u
+                                WHERE e.user_id = u.id
+                                AND u.id = :id
+                            ");
+
+        $statement->bindValue(":id", $userId);
+
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    // Nombre d'expressions d'un utilisateur
+
+    public function countExpressions($userId) {
+        $expressions = $this->findExpressions($userId);
+
+        return count($expressions);
     }
 
     // Connexion d'un utilisateur
@@ -103,6 +149,12 @@ class User extends Model {
 
     public function isAdmin($id) {
         return $this->is($id, "role", "Administrateur");
+    }
+
+    // Rôle de modérateur ou d'administrateur
+
+    public function isSuperUser($id) {
+        return $this->isModerator($id) || $this->isAdmin($id);
     }
 
     // Utilisateur banni
