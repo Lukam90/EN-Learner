@@ -22,7 +22,7 @@ Filtre par titre []
 
 La route **/themes/new** fonctionne []
 
-- user autorisé, modo, admin
+\- user autorisé, modo, admin
 
 Titre obligatoire []
 
@@ -36,7 +36,7 @@ Redirection vers la liste []
 
 Route **/themes/:id/edit** []
 
-- user = autorisé, modo, admin
+\- user = autorisé, modo, admin
 
 Formulaire d'édition + validation []
 
@@ -50,31 +50,10 @@ Redirection vers la liste []
 
 Route **/themes/:id/delete** []
 
-- user = autorisé, modo, admin
+\- user = autorisé, modo, admin
 
 Redirection vers la liste []
 
 Suppression en modal []
 
-- Cascade avec suppression des expressions liées au thème
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+\- Cascade avec suppression des expressions liées au thème

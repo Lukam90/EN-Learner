@@ -2,10 +2,13 @@
 
 namespace app\controllers;
 
+use app\core\Request;
+use app\core\Post;
 use app\models\User;
+
+use app\core\Session;
 use app\models\Theme;
 use app\models\Expression;
-
 use app\controllers\Controller;
 
 class UsersController extends Controller {
@@ -88,12 +91,89 @@ class UsersController extends Controller {
     // Inscription d'un utilisateur
 
     public function register() {
-        // 
+        $success = [];
+        $errors = [];
+        $tips = [];
+        $page = "";
+
+        // Utilisateur connecté
+
+        $loggedIn = Session::has("user_id");
+
+        /* Validation */
+
+        // Invités seulement
+
+        $valid = ! $loggedIn;
+
+        // Données du formulaire
+
+        $username = "";
+        $email = "";
+        $password = "";
+        $confirmPassword = "";
+
+        // Indications
+
+        $tips["username"] = "Le pseudo doit faire entre 2 et 32 caractères alphanumériques (espaces inclus).";
+        $tips["email"] = "L'adresse e-mail doit être valide et peut comporter jusqu'à 100 caractères.";
+        $tips["password"] = "Le mot de passe doit comporter 8 à 32 caractères alphanumériques, avec au moins une minuscule, une majuscule et un chiffre.";
+
+        // Envoi du formulaire
+
+        if (Request::isPost()) {
+            var_dump(Post::var("email"));
+            var_dump(Post::var("password"));
+            var_dump(Post::var("confirmPassword"));
+
+            // Pseudo
+
+            if (Post::has("username")) {
+                $username = Post::var("username");
+
+                var_dump($username);
+            } else {
+                $errors["username"] = "Le pseudo doit être renseigné.";
+            }
+
+            // E-mail
+
+            if (Post::has("email")) {
+                $email = Post::var("email");
+
+                var_dump($email);
+            } else {
+                $errors["email"] = "L'adresse e-mail doit être renseignée.";
+            }
+
+            // Mot de passe
+
+            if (Post::has("password")) {
+                $password = Post::hash("password");
+
+                var_dump($password);
+            } else {
+                $errors["password"] = "Le mot de passe doit être renseigné.";
+            }
+
+            // Confirmation du mot de passe
+
+            if (Post::has("confirm")) {
+                $confirm = Post::hash("confirm");
+
+                var_dump($confirm);
+            } else {
+                $errors["confirm"] = "Le mot de passe doit être confirmé.";
+            }
+        }
 
         // Rendu
 
         echo $this->twig->render("users/register.twig", [
-            "key" => "value"
+            "success" => $success,
+            "tips" => $tips,
+            "errors" => $errors,
+            "loggedIn" => $loggedIn
         ]);
     }
 

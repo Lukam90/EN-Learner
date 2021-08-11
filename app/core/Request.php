@@ -1,5 +1,7 @@
 <?php
 
+namespace app\core;
+
 abstract class Request {
     public static function is($method) {
         return $_SERVER["REQUEST_METHOD"] == $method;

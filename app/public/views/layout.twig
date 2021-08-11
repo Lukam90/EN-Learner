@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -27,14 +26,22 @@
     </head>
 
     <body>
+        {# Navigation #}
+
         {% include "partials/navbar.twig" %}
 
-        {# Content #}
+        {# Main #}
 
         <main class="w3-container">
             <noscript>
                 <h3 class="w3-text-red">JavaScript doit être activé pour accéder à l'ensemble des fonctionnalités.</h3>
             </noscript>
+
+            {# Flash Messages #}
+
+            {% include "partials/messages.twig" %}
+
+            {# Content #}
 
             {% block content %}
             {% endblock %}

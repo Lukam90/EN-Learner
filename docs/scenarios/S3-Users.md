@@ -123,27 +123,3 @@ Le bouton de suppression fonctionne []
 La suppression d'un utilisateur fonctionne []
 
 Cascade > Suppression des expressions, suivi des thèmes associés
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

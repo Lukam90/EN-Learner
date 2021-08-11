@@ -3,5 +3,39 @@
 {% block title %}Inscription{% endblock %}
 
 {% block content %}
-<h2>La page d'inscription</h2>
+    <h2>Inscription</h2>
+
+    {% if not loggedIn %}
+        <form action="{{ root }}/register" class="w3-container w3-half" method="post">
+            <label for="username">Pseudo</label>
+            <input type="text" name="username" id="username" value="{{ username }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.username }}</p>
+
+            <p class="w3-text-red">{{ errors.username }}</p>
+
+            <label for="email">E-mail</label>
+            <input type="email" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.email }}</p>
+
+            <p class="w3-text-red">{{ errors.email }}</p>
+
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" value="{{ password }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.password }}</p>
+
+            <p class="w3-text-red">{{ errors.password }}</p>
+
+            <label for="confirm">Confirmer le mot de passe</label>
+            <input type="password" name="confirm" id="confirm" value="{{ confirm }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-red">{{ errors.confirm }}</p>
+
+            <button class="w3-btn w3-blue">S'inscrire</button>
+        </form>
+    {% else %}
+        <p>Vous êtes déjà inscrit(e).</p>
+    {% endif %}
 {% endblock %}

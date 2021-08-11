@@ -1,17 +1,23 @@
 {# Success Messages #}
 
 {% if success %}
-    <div class="success">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    This is an alert box.
+    {% for message in success %}
+    <div class="w3-panel w3-pale-blue w3-display-container w3-border">
+        <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
+        
+        <p>{{ message }}</p>
     </div>
+    {% endfor %}
 {% endif %}
 
 {# Error Messages #}
 
 {% if error %}
-    <div class="error">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    This is an alert box.
+    {% for message in error %}
+    <div class="w3-panel w3-pale-red w3-display-container w3-border">
+        <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
+        
+        <p>{{ message }}</p>
     </div>
+    {% endfor %}
 {% endif %}

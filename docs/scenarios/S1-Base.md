@@ -19,21 +19,3 @@ Page de "Mentions Légales" [!] : finalisation
 Affichage d'un message flash de succès [!] : W3 CSS
 
 Affichage d'un message flash d'erreur [!] : W3 CSS
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

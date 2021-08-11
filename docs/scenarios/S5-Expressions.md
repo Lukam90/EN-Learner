@@ -44,7 +44,7 @@ Formulaire d'ajout + validation []
 
 Route **/expressions/:id/edit** valide []
 
-- user autorisé =, modo, admin
+\- user autorisé =, modo, admin
 
 Formulaire d'édition + validation []
 
@@ -56,24 +56,6 @@ Formulaire d'édition + validation []
 
 Route **/expressions/:id/delete** valide []
 
-- user autorisé =, modo, admin
+\- user autorisé =, modo, admin
 
 Suppression en modal []
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,3 @@
-python _merge.py
+python merge.py
 
 sh docopy.sh
