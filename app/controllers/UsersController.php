@@ -3,19 +3,19 @@
 namespace app\controllers;
 
 use app\core\Post;
-use app\models\User;
 use app\core\Request;
 use app\core\Session;
-
-use app\core\Constants;
-
+use app\core\Security;
 use app\core\Validation;
+
+use app\models\User;
+
 use app\controllers\Controller;
 
 class UsersController extends Controller {
-    // Modèle (User)
+    // Attributs
 
-    private $userModel;
+    private $userModel; // Modèle (User)
 
     // Constructeur
 
@@ -94,18 +94,19 @@ class UsersController extends Controller {
     // Inscription d'un utilisateur
 
     public function register() {
-        $success = [];
-        $page = "";
-
         // Utilisateur connecté
 
         $loggedIn = Session::has("user_id");
 
         /* Validation */
 
-        // Invités seulement
+        $validator = new Validation();
 
-        $valid = ! $loggedIn;
+        // Indications
+
+        $validator->setTip("username", "Le pseudo doit faire entre 2 et 32 caractères alphanumériques (espaces inclus).");
+        $validator->setTip("email", "L'adresse e-mail doit être valide et peut comporter jusqu'à 100 caractères.");
+        $validator->setTip("password", "Le mot de passe doit comporter 8 à 32 caractères alphanumériques, avec au moins une minuscule, une majuscule et un chiffre.");
 
         // Données du formulaire
 
@@ -114,46 +115,47 @@ class UsersController extends Controller {
         $password = "";
         $confirm = "";
 
-        // Indications
-
-        $this->tips["username"] = Validation::TIP_USERNAME;
-        $this->tips["email"] = Validation::TIP_EMAIL;
-        $this->tips["password"] = Validation::TIP_PASSWORD;
-
         // Envoi du formulaire
+
+        $errors = [];
 
         if (Request::isPost()) {
             var_dump($_POST);
 
-            // Pseudo
+            $username = $validator->username();
+            $email = $validator->email();
+            $password = $validator->password();
+            $confirm = $validator->confirm($password);
 
-            $username = $this->validateUsername();
+            // Validation
 
-            // E-mail
+            $errors = $validator->getErrors();
 
-            $email = $this->validateEmail();
+            $valid = empty($errors) && ! $loggedIn;
 
-            // Mot de passe
+            // Enregistrement
 
-            $password = $this->validatePassword();
+            if ($valid) {
+                $hashedPassword = Security::hash($password);
 
-            // Confirmation du mot de passe
+                $newUser = [
+                    "username" => $username,
+                    "email" => $email,
+                    "password" => $hashedPassword
+                ];
 
-            if (! Post::empty("confirm")) {
-                $confirm = Post::var("confirm");
+                //$this->userModel->insert($newUser);
 
-                var_dump($confirm);
-            } else {
-                $this->errors["confirm"] = "Le mot de passe doit être confirmé.";
+                Session::set("success", "Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
             }
         }
 
         // Rendu
 
         echo $this->twig->render("users/register.twig", [
-            "success" => $success,
-            "tips" => $this->tips,
-            "errors" => $this->errors,
+            //"success" => $success,
+            "tips" => $validator->getTips(),
+            "errors" => $errors,
             "loggedIn" => $loggedIn,
 
             "username" => $username,
@@ -221,113 +223,5 @@ class UsersController extends Controller {
         echo $this->twig->render("users/confirm.twig", [
             "key" => "value"
         ]);
-    }
-
-    /* Validation des données */
-
-    // Pseudo
-
-    public function validateUsername() {
-        $username = "";
-
-        if (! Post::empty("username")) {
-            $username = Post::var("username");
-
-            $regex = "/^[a-z0-9\s]{2,32}$/i";
-    
-            if (preg_match($regex, $username)) {
-                $exists = $this->userModel->findByName($username);
-    
-                if (! $exists) {
-                    $this->tips["username"] = "";
-                } else {
-                    $this->errors["username"] = "Le pseudo existe déjà. Veuillez en choisir un autre.";
-                }
-            } else {
-                $this->errors["username"] = "Le pseudo doit être valide.";
-            }
-        } else {
-            $this->errors["username"] = "Le pseudo doit être renseigné.";
-        }
-
-        return $username;
-    }
-
-    // E-mail
-
-    public function validateEmail() {
-        $email = "";
-
-        if (! Post::empty("email")) {
-            $email = Post::var("email");
-
-            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $exists = $this->userModel->findByEmail($email);
-
-                $this->tips["email"] = "";
-    
-                if ($exists) {
-                    $this->errors["email"] = "Un compte existe déjà avec cette adresse e-mail. Veuillez en saisir une nouvelle.";
-                }
-            } else {
-                $this->errors["email"] = "L'adresse e-mail doit être valide.";
-            }
-        } else {
-            $this->errors["email"] = "L'adresse e-mail doit être renseignée.";
-        }
-
-        return $email;
-    }
-
-    public function validatePassword() {
-        $password = "";
-
-        if (! Post::empty("password")) {
-            $password = Post::var("password");
-
-            $length = strlen($password);
-
-            $hasLength = $length >= 8 && $length <= 32;
-
-            if ($hasLength) {
-                $hasLowerCase = preg_match("/[a-z]+/", $password);
-                $hasUpperCase = preg_match("/[A-Z]+/", $password);
-                $hasDigit = preg_match("/[0-9]+/", $password);
-
-                $matches = $hasLowerCase && $hasUpperCase && $hasDigit;
-
-                if ($matches) {
-                    $this->tips["password"] = "";
-                } else {
-                    $this->errors["password"] = "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre.";
-                }
-            } else {
-                $this->errors["password"] = "Le mot de passe doit contenir entre 8 et 32 caractères.";
-            }
-        } else {
-            $this->errors["password"] = "Le mot de passe doit être renseigné.";
-        }
-
-        return $password;
-    }
-
-    // Confirmation du mot de passe
-
-    public function validateConfirm($password) {
-        $confirm = "";
-
-        if (! Post::empty("confirm")) {
-            $confirm = Post::var("confirm");
-    
-            if ($confirm === $password) {
-
-            } else {
-                $this->errors["confirm"] = "";
-            }
-        } else {
-            $this->errors["confirm"] = "Le mot de passe doit être confirmé.";
-        }
-
-        return $confirm;
     }
 }
