@@ -2,13 +2,14 @@
 
 namespace app\controllers;
 
-use app\core\Constants;
-use app\core\Request;
 use app\core\Post;
+use app\models\User;
+use app\core\Request;
 use app\core\Session;
 
-use app\models\User;
+use app\core\Constants;
 
+use app\core\Validation;
 use app\controllers\Controller;
 
 class UsersController extends Controller {
@@ -115,9 +116,9 @@ class UsersController extends Controller {
 
         // Indications
 
-        $this->tips["username"] = Constants::TIP_USERNAME;
-        $this->tips["email"] = Constants::TIP_EMAIL;
-        $this->tips["password"] = Constants::TIP_PASSWORD;
+        $this->tips["username"] = Validation::TIP_USERNAME;
+        $this->tips["email"] = Validation::TIP_EMAIL;
+        $this->tips["password"] = Validation::TIP_PASSWORD;
 
         // Envoi du formulaire
 
@@ -130,23 +131,11 @@ class UsersController extends Controller {
 
             // E-mail
 
-            if (! Post::empty("email")) {
-                $email = Post::var("email");
-
-                var_dump($email);
-            } else {
-                $this->errors["email"] = "L'adresse e-mail doit être renseignée.";
-            }
+            $email = $this->validateEmail();
 
             // Mot de passe
 
-            if (! Post::empty("password")) {
-                $password = Post::var("password");
-
-                var_dump($password);
-            } else {
-                $this->errors["password"] = "Le mot de passe doit être renseigné.";
-            }
+            $password = $this->validatePassword();
 
             // Confirmation du mot de passe
 
@@ -262,5 +251,83 @@ class UsersController extends Controller {
         }
 
         return $username;
+    }
+
+    // E-mail
+
+    public function validateEmail() {
+        $email = "";
+
+        if (! Post::empty("email")) {
+            $email = Post::var("email");
+
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $exists = $this->userModel->findByEmail($email);
+
+                $this->tips["email"] = "";
+    
+                if ($exists) {
+                    $this->errors["email"] = "Un compte existe déjà avec cette adresse e-mail. Veuillez en saisir une nouvelle.";
+                }
+            } else {
+                $this->errors["email"] = "L'adresse e-mail doit être valide.";
+            }
+        } else {
+            $this->errors["email"] = "L'adresse e-mail doit être renseignée.";
+        }
+
+        return $email;
+    }
+
+    public function validatePassword() {
+        $password = "";
+
+        if (! Post::empty("password")) {
+            $password = Post::var("password");
+
+            $length = strlen($password);
+
+            $hasLength = $length >= 8 && $length <= 32;
+
+            if ($hasLength) {
+                $hasLowerCase = preg_match("/[a-z]+/", $password);
+                $hasUpperCase = preg_match("/[A-Z]+/", $password);
+                $hasDigit = preg_match("/[0-9]+/", $password);
+
+                $matches = $hasLowerCase && $hasUpperCase && $hasDigit;
+
+                if ($matches) {
+                    $this->tips["password"] = "";
+                } else {
+                    $this->errors["password"] = "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre.";
+                }
+            } else {
+                $this->errors["password"] = "Le mot de passe doit contenir entre 8 et 32 caractères.";
+            }
+        } else {
+            $this->errors["password"] = "Le mot de passe doit être renseigné.";
+        }
+
+        return $password;
+    }
+
+    // Confirmation du mot de passe
+
+    public function validateConfirm($password) {
+        $confirm = "";
+
+        if (! Post::empty("confirm")) {
+            $confirm = Post::var("confirm");
+    
+            if ($confirm === $password) {
+
+            } else {
+                $this->errors["confirm"] = "";
+            }
+        } else {
+            $this->errors["confirm"] = "Le mot de passe doit être confirmé.";
+        }
+
+        return $confirm;
     }
 }
