@@ -2,10 +2,12 @@
 
 namespace app\core;
 
+use app\core\Security;
+
 abstract class Cookie {
     static function var($parameter) {
         if (self::has($parameter)) {
-            return $_COOKIE[$parameter];
+            return Security::clean($_COOKIE[$parameter]);
         }
     }
 

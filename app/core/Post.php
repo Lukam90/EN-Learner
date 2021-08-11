@@ -2,15 +2,13 @@
 
 namespace app\core;
 
+use app\core\Security;
+
 abstract class Post {
     public static function var($parameter) {
         if (self::has($parameter)) {
-            return $_POST[$parameter];
+            return Security::clean($_POST[$parameter]);
         }
-    }
-
-    public static function hash($parameter) {
-        return password_hash(self::var($parameter, PASSWORD_BCRYPT));
     }
 
     public static function has($parameter) {

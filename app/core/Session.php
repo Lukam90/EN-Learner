@@ -2,10 +2,12 @@
 
 namespace app\core;
 
+use app\core\Security;
+
 class Session {
     public static function var($parameter) {
         if (self::has($parameter)) {
-            return $_SESSION[$parameter];
+            return Security::clean($_SESSION[$parameter]);
         }
     }
 

@@ -2,10 +2,12 @@
 
 namespace app\core;
 
+use app\core\Security;
+
 abstract class Get {
     public static function var($parameter) {
         if (self::has($parameter)) {
-            return $_GET[$parameter];
+            return Security::clean($_GET[$parameter]);
         }
     }
 

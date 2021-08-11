@@ -2,16 +2,18 @@
 
 namespace app\controllers;
 
+use app\core\Constants;
 use app\core\Request;
 use app\core\Post;
+use app\core\Session;
+
 use app\models\User;
 
-use app\core\Session;
-use app\models\Theme;
-use app\models\Expression;
 use app\controllers\Controller;
 
 class UsersController extends Controller {
+    // Modèle (User)
+
     private $userModel;
 
     // Constructeur
@@ -92,8 +94,6 @@ class UsersController extends Controller {
 
     public function register() {
         $success = [];
-        $errors = [];
-        $tips = [];
         $page = "";
 
         // Utilisateur connecté
@@ -111,59 +111,51 @@ class UsersController extends Controller {
         $username = "";
         $email = "";
         $password = "";
-        $confirmPassword = "";
+        $confirm = "";
 
         // Indications
 
-        $tips["username"] = "Le pseudo doit faire entre 2 et 32 caractères alphanumériques (espaces inclus).";
-        $tips["email"] = "L'adresse e-mail doit être valide et peut comporter jusqu'à 100 caractères.";
-        $tips["password"] = "Le mot de passe doit comporter 8 à 32 caractères alphanumériques, avec au moins une minuscule, une majuscule et un chiffre.";
+        $this->tips["username"] = Constants::TIP_USERNAME;
+        $this->tips["email"] = Constants::TIP_EMAIL;
+        $this->tips["password"] = Constants::TIP_PASSWORD;
 
         // Envoi du formulaire
 
         if (Request::isPost()) {
-            var_dump(Post::var("email"));
-            var_dump(Post::var("password"));
-            var_dump(Post::var("confirmPassword"));
+            var_dump($_POST);
 
             // Pseudo
 
-            if (Post::has("username")) {
-                $username = Post::var("username");
-
-                var_dump($username);
-            } else {
-                $errors["username"] = "Le pseudo doit être renseigné.";
-            }
+            $username = $this->validateUsername();
 
             // E-mail
 
-            if (Post::has("email")) {
+            if (! Post::empty("email")) {
                 $email = Post::var("email");
 
                 var_dump($email);
             } else {
-                $errors["email"] = "L'adresse e-mail doit être renseignée.";
+                $this->errors["email"] = "L'adresse e-mail doit être renseignée.";
             }
 
             // Mot de passe
 
-            if (Post::has("password")) {
-                $password = Post::hash("password");
+            if (! Post::empty("password")) {
+                $password = Post::var("password");
 
                 var_dump($password);
             } else {
-                $errors["password"] = "Le mot de passe doit être renseigné.";
+                $this->errors["password"] = "Le mot de passe doit être renseigné.";
             }
 
             // Confirmation du mot de passe
 
-            if (Post::has("confirm")) {
-                $confirm = Post::hash("confirm");
+            if (! Post::empty("confirm")) {
+                $confirm = Post::var("confirm");
 
                 var_dump($confirm);
             } else {
-                $errors["confirm"] = "Le mot de passe doit être confirmé.";
+                $this->errors["confirm"] = "Le mot de passe doit être confirmé.";
             }
         }
 
@@ -171,9 +163,14 @@ class UsersController extends Controller {
 
         echo $this->twig->render("users/register.twig", [
             "success" => $success,
-            "tips" => $tips,
-            "errors" => $errors,
-            "loggedIn" => $loggedIn
+            "tips" => $this->tips,
+            "errors" => $this->errors,
+            "loggedIn" => $loggedIn,
+
+            "username" => $username,
+            "email" => $email,
+            "password" => $password,
+            "confirm" => $confirm
         ]);
     }
 
@@ -235,5 +232,35 @@ class UsersController extends Controller {
         echo $this->twig->render("users/confirm.twig", [
             "key" => "value"
         ]);
+    }
+
+    /* Validation des données */
+
+    // Pseudo
+
+    public function validateUsername() {
+        $username = "";
+
+        if (! Post::empty("username")) {
+            $username = Post::var("username");
+
+            $regex = "/^[a-z0-9\s]{2,32}$/i";
+    
+            if (preg_match($regex, $username)) {
+                $exists = $this->userModel->findByName($username);
+    
+                if (! $exists) {
+                    $this->tips["username"] = "";
+                } else {
+                    $this->errors["username"] = "Le pseudo existe déjà. Veuillez en choisir un autre.";
+                }
+            } else {
+                $this->errors["username"] = "Le pseudo doit être valide.";
+            }
+        } else {
+            $this->errors["username"] = "Le pseudo doit être renseigné.";
+        }
+
+        return $username;
     }
 }

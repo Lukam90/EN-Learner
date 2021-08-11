@@ -7,18 +7,29 @@ use Twig\Loader\FilesystemLoader;
 
 abstract class Controller {
     protected $twig;
-    protected $root;
+    protected $tips;
+    protected $errors;
 
     public function init() {
+        // Moteur de templates (Twig)
+
         $loader = new FilesystemLoader(dirname(__DIR__) . "/public/views");
 
         $this->twig = new Environment($loader, [
             'cache' => false,
         ]);
 
-        $this->root = "http://localhost/en_app";
+        $root = "http://localhost/en_app";
 
-        $this->twig->addGlobal('root', $this->root);
-        $this->twig->addGlobal('public', $this->root . "/app/public");
+        $this->twig->addGlobal('root', $root);
+        $this->twig->addGlobal('public', $root . "/app/public");
+
+        // Indications
+
+        $this->tips = [];
+
+        // Erreurs
+
+        $this->errors = [];
     }
 }

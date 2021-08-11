@@ -10,4 +10,8 @@ abstract class Security {
 
         return $string;
     }
+
+    public static function hash($string) {
+        return password_hash($string, PASSWORD_BCRYPT);
+    }
 }
