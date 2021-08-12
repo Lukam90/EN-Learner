@@ -84,15 +84,57 @@ class ThemesController extends Controller {
 
     // Liste des expressions d'un thème
 
-    public function show($id) {
-        // 
+    public function show($themeId) {
+        // Données
+
+        $theme = $this->themeModel->findById($themeId);
+
+        $title = $theme->title;
+
+        $list = $this->themeModel->findExpressions($themeId);
+
+        $expressions = [];
+
+        $canAdd = true;
+
+        // Boucle d'affichage
+
+        foreach ($list as $expression) {
+            // Lecture
+
+            $id = $expression->id;
+            $french = $expression->french;
+            $english = $expression->english;
+            $phonetics = $expression->phonetics;
+
+            $author = $this->themeModel->findUser($themeId);
+
+            $userId = $expression->user_id;
+            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
+            $isSuperUser = $this->userModel->isSuperUser($userId);
+
+            $canEdit = $belongsTo || $isSuperUser;
+
+            // Enregistrement
+
+            $expressions[] = [
+                "id" => $id,
+                "french" => $french,
+                "english" => $english,
+                "phonetics" => $phonetics,
+                "author" => $author,
+                "canEdit" => true,
+            ];
+        }
 
         // Rendu
 
         echo $this->twig->render("themes/show_theme.twig", [
             "session" => Session::all(),
 
-            "title" => "Une liste de vocabulaire",
+            "title" => $title,
+            "expressions" => $expressions,
+            "canAdd" => $canAdd
         ]);
     }
 

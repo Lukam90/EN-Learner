@@ -119,7 +119,7 @@ abstract class Model {
     // Sélection d'une ligne par un ID
 
     public function findById($id) {
-        return findBy("id", $id);
+        return $this->findBy("id", $id);
     }
 
     // Vérification d'une ligne par un attribut avec ID

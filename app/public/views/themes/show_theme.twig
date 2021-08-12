@@ -3,5 +3,58 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-<h2>{{ title }}</h2>
+    <h2>{{ title }}</h2>
+
+    {% if canAdd %}
+        <button class="w3-btn w3-green w3-margin-bottom">
+            <a href="{{ root }}/expressions/new">
+                <i class="fa fa-plus"></i> Ajouter une expression
+            </a>
+        </button>
+    {% endif %}
+
+    {% if expressions %}
+        <table class="w3-table w3-striped w3-hoverable">
+            <thead>
+                <tr>
+                    <th>Mot</th>
+                    <th>Traduction</th>
+                    <th>Prononciation</th>
+                    <th>Auteur</th>
+                    {% if canAdd %}
+                    <th></th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for expression in expressions %}
+                <tr>
+                    <td>{{ expression.french }}</td>
+                    <td>{{ expression.english }}</td>
+                    <td>{{ expression.phonetics }}</td>
+                    <td>{{ expression.author }}</td>
+
+                    {% if expression.canEdit %}
+                    <td>
+                        <button class="w3-btn w3-blue w3-margin-right">
+                            <a href="{{ root }}/expressions/edit/{{ expression.id }}">
+                                <i class="fa fa-pencil"></i> Editer
+                            </a>
+                        </button>
+
+                        <button class="w3-btn w3-red">
+                            <a href="{{ root }}/expressions/delete/{{ expression.id }}">
+                                <i class="fa fa-trash"></i> Supprimer
+                            </a>
+                        </button>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune expression n'est enregistrée pour ce thème.</p>
+    {% endif %}
 {% endblock %}
