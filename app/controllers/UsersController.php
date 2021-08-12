@@ -6,12 +6,13 @@ use app\core\Post;
 use app\core\Request;
 use app\core\Session;
 use app\core\Security;
-
-use app\validation\UserValidation;
+use app\core\Redirection;
 
 use app\models\User;
 
 use app\controllers\Controller;
+
+use app\validation\UserValidation;
 
 class UsersController extends Controller {
     // Attributs
@@ -179,6 +180,16 @@ class UsersController extends Controller {
         echo $this->twig->render("users/login.twig", [
             "key" => "value"
         ]);
+    }
+
+    // Déconnexion d'un utilisateur
+
+    public function logout() {
+        // 
+
+        // Redirection vers la page d'accueil
+
+        Redirection::home();
     }
 
     // Edition d'un utilisateur

@@ -8,87 +8,49 @@ use app\controllers\UsersController;
 use app\controllers\ThemesController;
 use app\controllers\ExpressionsController;
 
-class Router {
-    private $controller;
-    private $url;
-    private $page;
-    private $parameter;
-    private $id;
-
-    // Constructeurs
-
-    public function __construct() {
-        $this->url = "";
-        $this->page = "home";
-        $this->parameter = "";
-        $this->id = 0;
-    }
+abstract class Router {
+    /* Paramètres */
 
     // Définition de l'URL
 
-    public function setUrl() {
+    public static function url() {
+        $url = "/";
+
         if (Get::has("url")) {
-            $this->url = rtrim(Get::var("url"), "/");
+            $url = rtrim(Get::var("url"), "/");
         }
 
         if (Post::has("url")) {
-            $this->url = rtrim(Post::var("url"), "/");
+            $url = rtrim(Post::var("url"), "/");
         }
 
-        $this->url = filter_var($this->url, FILTER_SANITIZE_URL);
-        $this->url = explode("/", $this->url);
+        $url = filter_var($url, FILTER_SANITIZE_URL);
+        $url = explode("/", $url);
+
+        return $url;
     }
 
     // Définition de la page
 
-    public function setPage() {
-        if (strlen($this->url[0]) > 0) {
-            $this->page = $this->url[0];
-        }
-    }
+    public static function page($url) {
+        $page = "home";
 
-    // Définition du paramètre
-
-    public function setParameter() {
-        $this->parameter = $this->url[1];
-    }
-
-    // Définition de l'ID
-
-    public function setID() {
-        $this->id = (int) $this->url[2];
-    }
-
-    // Correspondance de paramètres
-
-    public function finds($values) {
-        foreach ($values as $value) {
-            if ($value == $this->parameter) {
-                return true;
-            }
+        if (strlen($url[0]) > 0) {
+            $page = $url[0];
         }
 
-        return false;
-    }
-
-    // Présence d'un paramètre
-
-    public function hasParameter() {
-        return isset($this->url[1]);
-    }
-
-    // Présence d'un ID
-
-    public function hasID() {
-        return isset($this->url[2]);
+        return $page;
     }
 
     /* Redirections */
 
     // Redirection de la page
 
-    public function redirectPage() {
-        switch ($this->page) {
+    public static function init() {
+        $url = self::url();
+        $page = self::page($url);
+
+        switch ($page) {
             case "home":
                 Redirection::home();
                 
@@ -98,23 +60,21 @@ class Router {
             case "register":
             case "reset":
             case "confirm":
-                $methodName = $this->page;
-
-                $this->controller = new UsersController();
-                $this->controller->$methodName();
+                Redirection::auth($page);
 
                 break;
 
             case "users":
-                $this->redirectUsers();
+                Redirection::users($url);
 
                 break;
+                
             case "themes":
-                $this->redirectThemes();
+                Redirection::themes($url);
 
                 break;
             case "expressions":
-                $this->redirectExpressions();
+                //$this->redirectExpressions();
 
                 break;
             case "tests":
@@ -128,35 +88,9 @@ class Router {
         }
     }
 
-    // Redirection des utilisateurs
+    /** Suite à réadapter */
 
-    public function redirectUsers() {
-        $this->controller = new UsersController();
-
-        if ($this->hasParameter()) {
-            $this->setParameter();
-
-            $withId = $this->finds(["profile", "edit", "delete"]);
-
-            $methodName = $this->parameter;
-
-            // Route avec ID (ex : /users/edit/2)
-
-            if ($withId) {
-                if ($this->hasID()) {
-                    $this->setID();
-
-                    $this->controller->$methodName($this->id);
-                } else {
-                    Redirection::notFound();
-                }
-            } else { // Route sans ID (ex : /users/edit)
-                Redirection::notFound();
-            }
-        } else { // Liste des utilisateurs (/users)
-            $this->controller->index();
-        }
-    }
+    /*
 
     // Redirection des thèmes
 
@@ -190,7 +124,11 @@ class Router {
         }
     }
 
+    */
+
     // Redirection des expressions
+
+    /*
 
     public function redirectExpressions() {
         $this->controller = new ExpressionsController();
@@ -221,13 +159,5 @@ class Router {
             Redirection::notFound();
         }
     }
-
-    /* Initialisation / Base du routeur */
-
-    public function init() {
-        $this->setUrl();
-        $this->setPage();
-
-        $this->redirectPage();
-    }
+    */
 }
