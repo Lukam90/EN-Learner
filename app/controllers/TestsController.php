@@ -25,7 +25,7 @@ class TestsController extends Controller {
         }
 
         echo $this->twig->render("tests.twig", [
-            "session" => Session::all(),
+            "action" => Request::self(),
         ]);
     }
 }

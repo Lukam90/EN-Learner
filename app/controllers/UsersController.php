@@ -146,8 +146,7 @@ class UsersController extends Controller {
                 $registered = $this->userModel->insert($newUser);
 
                 if ($registered) {
-                    
-                    //Session::set("success", "Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
+                    Session::set("success", "Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
 
                     //header("Location : ./");
                 } else {
