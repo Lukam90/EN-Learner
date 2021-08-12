@@ -1,23 +1,21 @@
 {# Success Messages #}
 
-{% if success %}
-    {% for message in success %}
+<p>{{ session.success }}</p>
+
+{% if session.success %}
     <div class="w3-panel w3-pale-blue w3-display-container w3-border">
         <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
         
-        <p>{{ message }}</p>
+        <p>{{ session.success }}</p>
     </div>
-    {% endfor %}
 {% endif %}
 
 {# Error Messages #}
 
-{% if error %}
-    {% for message in error %}
+{% if session.alert %}
     <div class="w3-panel w3-pale-red w3-display-container w3-border">
         <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
         
-        <p>{{ message }}</p>
+        <p>{{ session.alert }}</p>
     </div>
-    {% endfor %}
 {% endif %}

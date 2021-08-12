@@ -31,8 +31,6 @@ class ThemesController extends Controller {
 
         $themes = [];
 
-        $index = 0;
-
         // Ajout
 
         $canAdd = false;
@@ -64,18 +62,20 @@ class ThemesController extends Controller {
 
             // Enregistrement
 
-            $themes[$index]["id"] = $themeId;
-            $themes[$index]["title"] = $title;
-            $themes[$index]["author"] = $author;
-            $themes[$index]["nbExpressions"] = $nbExpressions;
-            $themes[$index]["canEdit"] = $canEdit;
-
-            $index++;
+            $themes[] = [
+                "id" => $themeId,
+                "title" => $title,
+                "author" => $author,
+                "nbExpressions" => $nbExpressions,
+                "canEdit" => $canEdit
+            ];
         }
 
         // Rendu
 
         echo $this->twig->render("themes.twig", [
+            "session" => Session::all(),
+
             "themes" => $themes,
             "can-add" => $canAdd,
             "can-edit" => $canEdit
@@ -90,6 +90,8 @@ class ThemesController extends Controller {
         // Rendu
 
         echo $this->twig->render("themes/show_theme.twig", [
+            "session" => Session::all(),
+
             "title" => "Une liste de vocabulaire",
         ]);
     }
@@ -102,6 +104,8 @@ class ThemesController extends Controller {
         // Rendu
 
         echo $this->twig->render("themes/new_theme.twig", [
+            "session" => Session::all(),
+
             "key" => "value",
         ]);
     }
@@ -114,6 +118,8 @@ class ThemesController extends Controller {
         // Rendu
 
         echo $this->twig->render("themes/edit_theme.twig", [
+            "session" => Session::all(),
+
             "title" => "Mon thème",
         ]);
     }
@@ -126,6 +132,8 @@ class ThemesController extends Controller {
         // Rendu
 
         echo $this->twig->render("themes/delete_theme.twig", [
+            "session" => Session::all(),
+            
             "title" => "Mon thème",
         ]);
     }

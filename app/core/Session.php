@@ -47,6 +47,14 @@ class Session {
         unset($_SESSION[$parameter]);
     }
 
+    // Objet entier d'une session
+
+    public static function all() {
+        if (self::exists()) {
+            return $_SESSION;
+        }
+    }
+
     // Messages Flash
 
     // Succès

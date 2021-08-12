@@ -2,11 +2,12 @@
 
 namespace app\controllers;
 
-use app\controllers\Controller;
-
 use app\models\User;
+
+use app\core\Session;
 use app\models\Theme;
 use app\models\Expression;
+use app\controllers\Controller;
 
 class HomeController extends Controller {
     private $userModel;
@@ -35,6 +36,8 @@ class HomeController extends Controller {
         // Rendu
 
         echo $this->twig->render("home.twig", [
+            "session" => Session::all(),
+            
             "title"         => "Accueil",
             "nbUsers"       => $nbUsers,
             "nbThemes"      => $nbThemes,

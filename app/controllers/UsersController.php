@@ -6,7 +6,8 @@ use app\core\Post;
 use app\core\Request;
 use app\core\Session;
 use app\core\Security;
-use app\core\Validation;
+
+use app\validation\UserValidation;
 
 use app\models\User;
 
@@ -34,8 +35,6 @@ class UsersController extends Controller {
 
         $users = [];
 
-        $index = 0;
-
         foreach ($list as $user) {
             // Lecture
 
@@ -61,15 +60,15 @@ class UsersController extends Controller {
 
             // Enregistrement
 
-            $users[$index]["id"] = $userId;
-            $users[$index]["username"] = $username;
-            $users[$index]["role"] = $role;
-            $users[$index]["color"] = $color;
-            $users[$index]["createdAt"] = $createdAt;
-            $users[$index]["nbThemes"] = $nbThemes;
-            $users[$index]["nbExpressions"] = $nbExpressions;
-
-            $index++;
+            $users[] = [
+                "id" => $userId,
+                "username" => $username,
+                "role" => $role,
+                "color" => $color,
+                "createdAt" => $createdAt,
+                "nbThemes" => $nbThemes,
+                "nbExpressions" => $nbExpressions
+            ];
         }
 
         // Rendu
@@ -100,7 +99,7 @@ class UsersController extends Controller {
 
         /* Validation */
 
-        $validator = new Validation();
+        $validator = new UserValidation();
 
         // Indications
 
@@ -144,16 +143,22 @@ class UsersController extends Controller {
                     "password" => $hashedPassword
                 ];
 
-                //$this->userModel->insert($newUser);
+                $registered = $this->userModel->insert($newUser);
 
-                Session::set("success", "Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
+                if ($registered) {
+                    
+                    //Session::set("success", "Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
+
+                    //header("Location : ./");
+                } else {
+                    Session::set("alert", "Une erreur s'est produite. Veuillez contacter l'administrateur du site.");
+                }
             }
         }
 
         // Rendu
 
         echo $this->twig->render("users/register.twig", [
-            //"success" => $success,
             "tips" => $validator->getTips(),
             "errors" => $errors,
             "loggedIn" => $loggedIn,
@@ -161,7 +166,7 @@ class UsersController extends Controller {
             "username" => $username,
             "email" => $email,
             "password" => $password,
-            "confirm" => $confirm
+            "confirm" => $confirm,
         ]);
     }
 

@@ -10,6 +10,8 @@ class NotFoundController extends Controller {
     }
 
     public function render() {
-        echo $this->twig->render("errors/404.twig");
+        echo $this->twig->render("errors/404.twig", [
+            "session" => Session::all(),
+        ]);
     }
 }

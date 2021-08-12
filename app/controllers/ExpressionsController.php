@@ -25,6 +25,7 @@ class ExpressionsController extends Controller {
         // Rendu
 
         echo $this->twig->render("expressions/new_expression.twig", [
+            "session" => Session::all(),
             "key" => "value",
         ]);
     }
@@ -37,6 +38,7 @@ class ExpressionsController extends Controller {
         // Rendu
 
         echo $this->twig->render("expressions/edit_expression.twig", [
+            "session" => Session::all(),
             "title" => "Mon thème",
         ]);
     }
@@ -49,6 +51,7 @@ class ExpressionsController extends Controller {
         // Rendu
 
         echo $this->twig->render("expressions/delete_expression.twig", [
+            "session" => Session::all(),
             "title" => "Mon thème",
         ]);
     }

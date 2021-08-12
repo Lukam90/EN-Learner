@@ -2,10 +2,10 @@
 
 namespace app\core;
 
-use app\controllers\HomeController;
+use app\core\Redirection;
+
 use app\controllers\UsersController;
 use app\controllers\ThemesController;
-use app\controllers\NotFoundController;
 use app\controllers\ExpressionsController;
 
 class Router {
@@ -90,7 +90,7 @@ class Router {
     public function redirectPage() {
         switch ($this->page) {
             case "home":
-                $this->redirectHome();
+                Redirection::home();
                 
                 break;
             case "login":
@@ -117,27 +117,15 @@ class Router {
                 $this->redirectExpressions();
 
                 break;
+            case "tests":
+                Redirection::tests();
+
+                break;
             default:
-                $this->redirect404();
+                Redirection::notFound();
 
                 break;
         }
-    }
-
-    // Redirection vers la page d'accueil
-
-    public function redirectHome() {
-        $this->controller = new HomeController();
-        $this->controller->index();
-    }
-
-    // Redirection 404 : Non trouvé
-
-    public function redirect404() {
-        header("HTTP/1.0 404 Not Found");
-
-        $this->controller = new NotFoundController();
-        $this->controller->render();
     }
 
     // Redirection des utilisateurs
@@ -160,10 +148,10 @@ class Router {
 
                     $this->controller->$methodName($this->id);
                 } else {
-                    $this->redirect404();
+                    Redirection::notFound();
                 }
             } else { // Route sans ID (ex : /users/edit)
-                $this->redirect404();
+                Redirection::notFound();
             }
         } else { // Liste des utilisateurs (/users)
             $this->controller->index();
@@ -192,10 +180,10 @@ class Router {
 
                     $this->controller->$methodName($this->id);
                 } else {
-                    $this->redirect404();
+                    Redirection::notFound();
                 }
             } else { // Route avec paramètre inconnu (ex : /themes/inconnu)
-                $this->redirect404();
+                Redirection::notFound();
             }
         } else { // Route sans paramètres (/themes)
             $this->controller->index();
@@ -224,13 +212,13 @@ class Router {
 
                     $this->controller->$methodName($this->id);
                 } else {
-                    $this->redirect404();
+                    Redirection::notFound();
                 }
             } else { // Route sans ID (ex : /expressions/edit)
-                $this->redirect404();
+                Redirection::notFound();
             }
         } else { // Route sans paramètres (ex : /expressions)
-            $this->redirect404();
+            Redirection::notFound();
         }
     }
 

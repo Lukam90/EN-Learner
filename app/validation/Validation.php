@@ -1,8 +1,6 @@
 <?php
 
-namespace app\core;
-
-use app\models\User;
+namespace app\validation;
 
 abstract class Validation {
     protected $tips;
