@@ -7,6 +7,7 @@ use app\controllers\TestsController;
 use app\controllers\UsersController;
 use app\controllers\ErrorsController;
 use app\controllers\ThemesController;
+use app\controllers\ExpressionsController;
 
 abstract class Redirection {
     /* Gestion des URLS */
@@ -35,7 +36,7 @@ abstract class Redirection {
         return false;
     }
 
-    /* Redirections */
+    /* Redirection */
 
     // Redirection vers la page d'accueil
 
@@ -94,18 +95,48 @@ abstract class Redirection {
             if ($methodName == "new") { // Ajout (/themes/new)
                 $controller->new();
             } else if ($withId) { // Route avec ID (ex : /themes/action/x)
-                if (self::hasID($url[2])) {
+                if (self::hasID($url)) {
                     $id = (int) $url[2];
 
                     $controller->$methodName($id);
                 } else {
-                    Redirection::notFound();
+                    self::notFound();
                 }
             } else { // Route avec paramètre inconnu (ex : /themes/inconnu)
-                Redirection::notFound();
+                self::notFound();
             }
         } else { // Route sans paramètres (/themes)
             $controller->index();
+        }
+    }
+
+    // Redirection des expressions
+
+    public function expressions($url) {
+        $controller = new ExpressionsController();
+
+        // Route avec paramètre (ex : /expressions/action)
+
+        if (self::hasParameter($url)) {
+            $methodName = $url[1];
+
+            $withId = self::finds($methodName, ["edit", "delete"]);
+
+            if ($methodName == "new") {
+                $controller->new();
+            } else if ($withId) { // Route avec ID (ex : /expressions/edit/1)
+                if (self::hasID($url)) {
+                    $id = (int) $url[2];
+
+                    $controller->$methodName($id);
+                } else {
+                    self::notFound();
+                }
+            } else { // Route sans ID (ex : /expressions/edit)
+                self::notFound();
+            }
+        } else { // Route sans paramètres (ex : /expressions)
+            self::notFound();
         }
     }
 

@@ -74,7 +74,7 @@ abstract class Router {
 
                 break;
             case "expressions":
-                //$this->redirectExpressions();
+                Redirection::expressions($url);
 
                 break;
             case "tests":
@@ -87,77 +87,4 @@ abstract class Router {
                 break;
         }
     }
-
-    /** Suite à réadapter */
-
-    /*
-
-    // Redirection des thèmes
-
-    public function redirectThemes() {
-        $this->controller = new ThemesController();
-
-        // Route avec paramètre (ex : /themes/action)
-
-        if ($this->hasParameter()) {
-            $this->setParameter();
-
-            $withId = $this->finds(["show", "edit", "delete", "start"]);
-
-            if ($this->parameter == "new") {
-                $this->controller->new();
-            } else if ($withId) { // Route avec ID (ex : /themes/action/x)
-                if ($this->hasID()) {
-                    $this->setID();
-
-                    $methodName = $this->parameter;
-
-                    $this->controller->$methodName($this->id);
-                } else {
-                    Redirection::notFound();
-                }
-            } else { // Route avec paramètre inconnu (ex : /themes/inconnu)
-                Redirection::notFound();
-            }
-        } else { // Route sans paramètres (/themes)
-            $this->controller->index();
-        }
-    }
-
-    */
-
-    // Redirection des expressions
-
-    /*
-
-    public function redirectExpressions() {
-        $this->controller = new ExpressionsController();
-
-        // Route avec paramètre (ex : /expressions/action)
-
-        if ($this->hasParameter()) {
-            $this->setParameter();
-
-            $withId = $this->finds(["edit", "delete"]);
-
-            if ($this->parameter == "new") {
-                $this->controller->new();
-            } else if ($withId) { // Route avec ID (ex : /expressions/edit/1)
-                if ($this->hasID()) {
-                    $this->setID();
-
-                    $methodName = $this->parameter;
-
-                    $this->controller->$methodName($this->id);
-                } else {
-                    Redirection::notFound();
-                }
-            } else { // Route sans ID (ex : /expressions/edit)
-                Redirection::notFound();
-            }
-        } else { // Route sans paramètres (ex : /expressions)
-            Redirection::notFound();
-        }
-    }
-    */
 }

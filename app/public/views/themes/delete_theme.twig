@@ -1,5 +1,17 @@
 {% extends "layout.twig" %}
 
 {% block content %}
-<h2>Suppression du thème : {{ title }}</h2>
+    <h2>Suppression du thème : {{ title }}</h2>
+
+    {% if 1 %}
+        <form action="{{ root }}/themes/delete/1" class="w3-container w3-third" method="post">
+            <p>Voulez-vous supprimer ce thème ?</p>
+
+            <button class="w3-btn w3-red">Confirmer</button>
+        </form>
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à supprimer ce thème.</p>
+
+        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/themes">liste des thèmes</a>.</p>
+    {% endif %}
 {% endblock %}

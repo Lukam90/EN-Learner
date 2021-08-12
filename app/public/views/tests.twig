@@ -4,9 +4,45 @@
 
 {% block content %}
 
-<h2>Ceci est une page de tests.</h2>
+<h2>Messages flash</h2>
 
-<form action="{{ root }}/tests" class="w3-container w3-half" method="post">
+<form action="{{ root }}/tests" class="w3-container" method="post">
     <button class="w3-btn w3-blue">Tester la session (messages flash)</button>
 </form>
+
+<h2>Routes et liens</h2>
+
+<div class="w3-container">
+    <h3>Routes d'authentification</h3>
+
+    {% for link in auth %}
+    <a href="{{ root }}/{{ link }}" target="_blank">
+        <button class="w3-btn w3-blue">{{ link }}</button>
+    </a>
+    {% endfor %}
+    
+    <h3>Routes des thèmes (CRUD)</h3>
+
+    {% for link in themes %}
+    <a href="{{ root }}/{{ link }}" target="_blank">
+        <button class="w3-btn w3-blue">{{ link }}</button>
+    </a>
+    {% endfor %}
+
+    <h3>Routes des utilisateurs (CRUD)</h3>
+
+    {% for link in users %}
+    <a href="{{ root }}/{{ link }}" target="_blank">
+        <button class="w3-btn w3-blue">{{ link }}</button>
+    </a>
+    {% endfor %}
+
+    <h3>Routes des expressions (CRUD)</h3>
+
+    {% for link in expressions %}
+    <a href="{{ root }}/{{ link }}" target="_blank">
+        <button class="w3-btn w3-blue">{{ link }}</button>
+    </a>
+    {% endfor %}
+</div>
 {% endblock %}

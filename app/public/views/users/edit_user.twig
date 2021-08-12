@@ -3,5 +3,27 @@
 {% block title %}Edition du statut de {{ username }}{% endblock %}
 
 {% block content %}
-<h2>Edition du statut de {{ username }}</h2>
+    <h2>Edition du statut de {{ username }}</h2>
+
+    {% if 1 %}
+        <form action="{{ root }}/users/edit/1" class="w3-container w3-quarter" method="post">
+            <select class="w3-select" name="option">
+                <option value="" disabled selected>Rôle de l'utilisateur</option>
+                <option value="Membre">Membre</option>
+                <option value="Modérateur">Modérateur</option>
+                <option value="Administrateur">Administrateur</option>
+            </select>
+
+            <p>
+                <label class="w3-margin-right" for="banned">Banni</label>
+                <input class="w3-check" type="checkbox" name="banned" id="banned">
+            </p>
+
+            <button class="w3-btn w3-blue">Editer</button>
+        </form>
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
+
+        <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}">page d'accueil</a>.</p>
+    {% endif %}
 {% endblock %}

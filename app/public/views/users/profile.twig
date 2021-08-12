@@ -3,5 +3,45 @@
 {% block title %}Profil de l'utilisateur {{ username }}{% endblock %}
 
 {% block content %}
-<h2>Profil de l'utilisateur {{ username }}</h2>
+    <h2>Profil de l'utilisateur {{ username }}</h2>
+
+    {% if not loggedIn %}
+        <h3>Changement d'identifiants</h3>
+
+        <form action="{{ root }}/users/profile/1" class="w3-container w3-half" method="post">
+            <label for="username">Pseudo</label>
+            <input type="text" name="username" id="username" value="{{ username }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.username }}</p>
+
+            <p class="w3-text-red">{{ errors.username }}</p>
+
+            <label for="email">E-mail</label>
+            <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.email }}</p>
+
+            <p class="w3-text-red">{{ errors.email }}</p>
+
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" value="{{ password }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.password }}</p>
+
+            <p class="w3-text-red">{{ errors.password }}</p>
+
+            <label for="confirm">Confirmer le mot de passe</label>
+            <input type="password" name="confirm" id="confirm" value="{{ confirm }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-red">{{ errors.confirm }}</p>
+
+            <button class="w3-btn w3-blue">S'inscrire</button>
+        </form>
+
+        <h3>Changement de mot de passe</h3>
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à consulter cette page de profil.</p>
+
+        <p>Veuillez revenir à la <a href="{{ root }}">page d'accueil</a>.</p>
+    {% endif %}
 {% endblock %}

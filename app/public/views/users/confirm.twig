@@ -1,7 +1,17 @@
 {% extends "layout.twig" %}
 
-{% block title %}Confirmation du mot de passe{% endblock %}
+{% block title %}Confirmation du changement de mot de passe{% endblock %}
 
 {% block content %}
-<h2>La page de confirmation du mot de passe</h2>
+    <h2>Confirmation du changement de mot de passe</h2>
+
+    {% if 0 %}
+        <p>Votre mot de passe a bien été changé.</p>
+
+        <p>Vous pouvez à nouveau vous <a class="w3-text-blue" href="{{ root }}/login">connecter</a>.</p>
+    {% else %}
+        <p>Vous n'avez pas fait de demande de réinitialisation de mot de passe.</p>
+
+        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}">page d'accueil</a>.</p>
+    {% endif %}
 {% endblock %}

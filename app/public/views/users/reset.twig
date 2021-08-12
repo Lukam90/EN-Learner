@@ -3,5 +3,26 @@
 {% block title %}Réinitialisation du mot de passe{% endblock %}
 
 {% block content %}
-<h2>La page de réinitialisation du mot de passe</h2>
+    <h2>Demande de réinitialisation de mot de passe</h2>
+
+    {% if 1 %}
+        <form action="{{ root }}/reset" class="w3-container w3-third" method="post">
+            <label for="email">Adresse e-mail</label>
+            <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.email }}</p>
+
+            <p class="w3-text-red">{{ errors.email }}</p>
+
+            <button class="w3-btn w3-blue">Envoyer</button>
+
+            <p>
+                <a class="w3-text-blue" href="{{ root }}/login">Revenir à la page de connexion</a>
+            </p>
+        </form>
+    {% else %}
+        <p>Vous êtes déjà connecté(e).</p>
+
+        <p>Vous pouvez revenir sur la <a class="w3-text-blue" href="{{ root }}">page d'accueil</a> ou changer vos informations sur votre <a class="w3-text-blue" href="{{ root }}/users/profile/1">page de profil</a>.</p>
+    {% endif %}
 {% endblock %}

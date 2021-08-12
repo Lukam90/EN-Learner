@@ -3,5 +3,42 @@
 {% block title %}Ajouter une expression{% endblock %}
 
 {% block content %}
-<h2>Ajout d'une expression</h2>
+    <h2>Ajout d'une expression</h2>
+
+    {% if 1 %}
+        <form action="{{ root }}/expressions/new" class="w3-container w3-third" method="post">
+            <!-- Expression (FR) -->
+
+            <label for="french">Expression</label>
+            <input type="text" name="french" id="french" value="{{ french }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.french }}</p>
+
+            <p class="w3-text-red">{{ errors.french }}</p>
+
+            <!-- Traduction (EN) -->
+
+            <label for="english">Traduction</label>
+            <input type="text" name="english" id="english" value="{{ english }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.english }}</p>
+
+            <p class="w3-text-red">{{ errors.english }}</p>
+
+            <!-- Phonétique -->
+
+            <label for="phonetics">Phonétique</label>
+            <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="w3-input w3-border w3-margin-bottom">
+
+            <p class="w3-text-blue">{{ tips.phonetics }}</p>
+
+            <p class="w3-text-red">{{ errors.phonetics }}</p>
+
+            <!-- Bouton -->
+
+            <button class="w3-btn w3-blue">Ajouter</button>
+        </form>
+    {% else %}
+        <p>Vous devez être <a class="w3-text-blue" href="{{ root }}/login">connecté(e)</a> pour ajouter une expression à ce thème.</p>
+    {% endif %}
 {% endblock %}

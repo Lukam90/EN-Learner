@@ -24,8 +24,16 @@ class TestsController extends Controller {
             return;
         }
 
+        $auth = ["register", "login", "logout", "reset", "confirm"];
+        $themes = ["themes", "themes/show/1", "themes/new", "themes/edit/1", "themes/delete/1"];
+        $users = ["users", "users/profile/1", "users/edit/1", "users/delete/1"];
+        $expressions = ["expressions/new", "expressions/edit/1", "expressions/delete/1"];
+
         echo $this->twig->render("tests.twig", [
-            "action" => Request::self(),
+            "auth" => $auth,
+            "themes" => $themes,
+            "users" => $users,
+            "expressions" => $expressions
         ]);
     }
 }
