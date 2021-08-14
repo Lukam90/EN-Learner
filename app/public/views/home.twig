@@ -1,3 +1,19 @@
+{% macro stats(page, id, count, name) %}
+
+<div class="w3-third">
+    <a href="{{ root }}/{{ page }}">
+        <div id="{{ id }}" class="w3-card w3-container w3-center w3-margin-right">
+            <h1>{{ count }}</h1>
+
+            <h2>{{ name }}</h2>
+        </div>
+    </a>
+</div>
+
+{% endmacro %}
+
+{# *** #}
+
 {% extends "layout.twig" %}
 
 {% block title %}Accueil{% endblock %}
@@ -6,33 +22,10 @@
 
 <h1>Il y a actuellement...</h1>
 
-<div class="w3-third">
-    <a href="{{ root }}/themes">
-        <div id="themes" class="w3-card w3-container w3-center w3-margin-right">
-            <h1>{{ nbThemes }}</h1>
+{{ _self.stats("themes", "themes", nbThemes, "thèmes") }}
 
-            <h2>thèmes</h2>
-        </div>
-    </a>
-</div>
+{{ _self.stats("users", "users", nbUsers, "utilisateurs") }}
 
-<div class="w3-third">
-    <a href="{{ root }}/users">
-        <div id="users" class="w3-card w3-container w3-center w3-margin-right">
-            <h1>{{ nbUsers }}</h1>
+{{ _self.stats("themes", "expressions", nbExpressions, "expressions") }}
 
-            <h2>utilisateurs</h2>
-        </div>
-    </a>
-</div>
-
-<div class="w3-third">
-    <a href="{{ root }}/themes">
-        <div id="expressions" class="w3-card w3-container w3-center w3-margin-right">
-            <h1>{{ nbExpressions }}</h1>
-
-            <h2>expressions</h2>
-        </div>
-    </a>
-</div>
 {% endblock %}

@@ -1,3 +1,5 @@
+{% import "macros/forms.twig" as forms %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Inscription{% endblock %}
@@ -7,31 +9,47 @@
 
     {% if not loggedIn %}
         <form action="{{ root }}/register" class="w3-container w3-half" method="post">
+            {# Pseudo #}
+
             <label for="username">Pseudo</label>
             <input type="text" name="username" id="username" value="{{ username }}" class="w3-input w3-border w3-margin-bottom">
 
-            <p class="w3-text-blue">{{ tips.username }}</p>
+            {{ forms.tip(tips.username, "blue") }}}
 
-            <p class="w3-text-red">{{ errors.username }}</p>
+            {{ forms.tip(errors.username, "red") }}
 
-            <label for="email">E-mail</label>
+            {# Adresse e-mail #}
+
+            <label for="email">Adresse e-mail</label>
             <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
 
-            <p class="w3-text-blue">{{ tips.email }}</p>
+            {{ forms.tip(tips.email, "blue") }}}
 
-            <p class="w3-text-red">{{ errors.email }}</p>
+            {{ forms.tip(errors.email, "red") }}
+
+            {# Mot de passe #}
 
             <label for="password">Mot de passe</label>
             <input type="password" name="password" id="password" value="{{ password }}" class="w3-input w3-border w3-margin-bottom">
 
-            <p class="w3-text-blue">{{ tips.password }}</p>
+            {{ forms.tip(tips.password, "blue") }}}
 
-            <p class="w3-text-red">{{ errors.password }}</p>
+            {{ forms.tip(errors.password, "red") }}
+
+            {# Confirmation du mot de passe #}
 
             <label for="confirm">Confirmer le mot de passe</label>
             <input type="password" name="confirm" id="confirm" value="{{ confirm }}" class="w3-input w3-border w3-margin-bottom">
 
-            <p class="w3-text-red">{{ errors.confirm }}</p>
+            {{ forms.tip(errors.confirm, "red") }}
+
+            {# Jeton CSRF #}
+
+            <input type="hidden" name="token" value="{{ token }}">
+
+            {# Bouton #}
+
+            {{ forms.tip(errors.confirm, "red") }}
 
             <button class="w3-btn w3-blue">S'inscrire</button>
         </form>

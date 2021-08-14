@@ -1,16 +1,25 @@
+{# Navbar > Items #}
+
+{% macro navItem(page, title, id = "") %}
+
+<a href="{{ root }}/{{ page }}" id="{{ id }}" class="w3-bar-item w3-button w3-mobile">{{ title }}</a>
+
+{% endmacro %}
+
+{# *** #}
+
 <nav id="navbar" class="w3-bar w3-blue">
-    <a href="{{ root }}" id="nav-title" class="w3-bar-item w3-button w3-mobile">English Learner</a>
+    {{ _self.navItem("", "English Learner", "nav-title") }}
 
     {% if user %}
-    <a href="{{ root }}/profile" class="w3-bar-item w3-button w3-mobile">Bienvenue {{ username }}</a>
-    <a href="{{ root }}/logout" class="w3-bar-item w3-button w3-mobile">Déconnexion</a>
+        {{ _self.navItem("profile", "Bienvenue {{ username }}") }}
+        {{ _self.navItem("logout", "Déconnexion") }}
     {% else %}
-    <a href="{{ root }}/register" class="w3-bar-item w3-button w3-mobile">Inscription</a>
-    <a href="{{ root }}/login" class="w3-bar-item w3-button w3-mobile">Connexion</a>
+        {{ _self.navItem("register", "Inscription") }}
+        {{ _self.navItem("login", "Connexion") }}
     {% endif %}
 
-    <a href="{{ root }}/users" class="w3-bar-item w3-button w3-mobile">Communauté</a>
-    <a href="{{ root }}/themes" class="w3-bar-item w3-button w3-mobile">Listes</a>
-
-    <a href="{{ root }}/tests" class="w3-bar-item w3-button w3-mobile">TESTS</a>
+    {{ _self.navItem("users", "Communauté") }}
+    {{ _self.navItem("themes", "Listes") }}
+    {{ _self.navItem("tests", "TESTS") }}
 </nav>

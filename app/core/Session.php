@@ -27,6 +27,14 @@ class Session {
         $_SESSION[$name] = Security::clean($variable);
     }
 
+    // Génération d'un token CSRF (session)
+
+    public static function setToken() {
+        self::start();
+
+        $_SESSION["token"] = bin2hex(random_bytes(50));
+    }
+
     // Variable de session
 
     public static function get($parameter) {

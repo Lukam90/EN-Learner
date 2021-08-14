@@ -1,0 +1,17 @@
+{# Jeton CSRF #}
+
+{% macro csrf() %}
+<input type="hidden" name="token" value="{{ token }}">
+{% endmacro %}
+
+{# Bouton de validation #}
+
+{% macro button(color, title) %}
+<button class="w3-btn w3-{{ color }}">{{ title }}</button>
+{% endmacro %}
+
+{# Messages d'indication (info, erreur) #}
+
+{% macro tip(value, color) %}
+<p class="w3-text-{{ color }}">{{ value }}</p>
+{% endmacro %}

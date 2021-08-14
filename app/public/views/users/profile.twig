@@ -28,6 +28,12 @@
 
                 <p class="w3-text-red">{{ errors.email }}</p>
 
+                {# Jeton CSRF #}
+
+                <input type="hidden" name="token" value="{{ token }}">
+
+                {# Bouton #}
+
                 <button class="w3-btn w3-blue">Editer</button>
             </form>
 
@@ -60,6 +66,12 @@
                 <input type="password" name="confirm" id="confirm" value="{{ confirm }}" class="w3-input w3-border w3-margin-bottom">
 
                 <p class="w3-text-red">{{ errors.confirm }}</p>
+
+                {# Jeton CSRF #}
+
+                <input type="hidden" name="token" value="{{ token }}">
+
+                {# Bouton #}
 
                 <button class="w3-btn w3-blue">Editer</button>
 

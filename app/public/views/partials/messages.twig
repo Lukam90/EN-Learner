@@ -1,19 +1,19 @@
-{# Success Messages #}
+{% macro flash(type, color) %}
 
-{% if session.success %}
-    <div class="w3-panel w3-pale-blue w3-display-container w3-border">
+{% if type %}
+    <div class="w3-panel w3-pale-{{ color }} w3-display-container w3-border">
         <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
         
-        <p>{{ session.success }}</p>
+        <p>{{ type }}</p>
     </div>
 {% endif %}
+
+{% endmacro %}
+
+{# Success Messages #}
+
+{{ _self.flash(session.success, "blue") }}
 
 {# Error Messages #}
 
-{% if session.alert %}
-    <div class="w3-panel w3-pale-red w3-display-container w3-border">
-        <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
-        
-        <p>{{ session.alert }}</p>
-    </div>
-{% endif %}
+{{ _self.flash(session.alert, "red") }}

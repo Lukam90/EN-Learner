@@ -14,6 +14,8 @@
 
             <p class="w3-text-red">{{ errors.title }}</p>
 
+            <input type="hidden" name="token" value="{{ token }}">
+
             <button class="w3-btn w3-blue">Ajouter</button>
         </form>
     {% else %}

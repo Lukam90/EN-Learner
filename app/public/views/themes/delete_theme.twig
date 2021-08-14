@@ -7,6 +7,8 @@
         <form action="{{ root }}/themes/delete/1" class="w3-container w3-third" method="post">
             <p>Voulez-vous supprimer ce thème ?</p>
 
+            <input type="hidden" name="token" value="{{ token }}">
+
             <button class="w3-btn w3-red">Confirmer</button>
         </form>
     {% else %}

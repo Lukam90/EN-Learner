@@ -7,7 +7,7 @@
 
     {% if 1 %}
         <form action="{{ root }}/expressions/new" class="w3-container w3-third" method="post">
-            <!-- Expression (FR) -->
+            {# Expression (FR) #}
 
             <label for="french">Expression</label>
             <input type="text" name="french" id="french" value="{{ french }}" class="w3-input w3-border w3-margin-bottom">
@@ -16,7 +16,7 @@
 
             <p class="w3-text-red">{{ errors.french }}</p>
 
-            <!-- Traduction (EN) -->
+            {# Traduction (EN) #}
 
             <label for="english">Traduction</label>
             <input type="text" name="english" id="english" value="{{ english }}" class="w3-input w3-border w3-margin-bottom">
@@ -25,7 +25,7 @@
 
             <p class="w3-text-red">{{ errors.english }}</p>
 
-            <!-- Phonétique -->
+            {# Phonétique #}
 
             <label for="phonetics">Phonétique</label>
             <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="w3-input w3-border w3-margin-bottom">
@@ -34,7 +34,11 @@
 
             <p class="w3-text-red">{{ errors.phonetics }}</p>
 
-            <!-- Bouton -->
+            {# Jeton CSRF #}
+
+            <input type="hidden" name="token" value="{{ token }}">
+
+            {# Bouton #}
 
             <button class="w3-btn w3-blue">Ajouter</button>
         </form>
