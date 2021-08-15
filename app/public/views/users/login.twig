@@ -11,17 +11,21 @@
         <form action="{{ root }}/login" class="w3-container w3-half" method="post">
             {# Adresse e-mail #}
 
-            <label for="email">Adresse e-mail</label>
-            <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.text("email", email, "Adresse e-mail") }}
 
-            {{ forms.tip(email) }}
+            {#<label for="email">Adresse e-mail</label>
+            <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">#}
+
+            {{ forms.message("red", errors.email) }}
 
             {# Mot de passe #}
 
-            <label for="password">Mot de passe</label>
-            <input type="password" name="password" id="password" value="{{ password }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.password("password", password, "Mot de passe") }}
 
-            <p class="w3-text-red">{{ errors.password }}</p>
+            {#<label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" value="{{ password }}" class="w3-input w3-border w3-margin-bottom">#}
+
+            {{ forms.message("red", errors.password) }}
 
             {# Jeton CSRF #}
 

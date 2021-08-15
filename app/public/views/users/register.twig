@@ -8,51 +8,39 @@
     <h2>Inscription</h2>
 
     {% if not loggedIn %}
-        <form action="{{ root }}/register" class="w3-container w3-half" method="post">
-            {# Pseudo #}
+        {{ forms.start("register") }}
+            {{ forms.text("username", username, "Pseudo") }}
 
-            <label for="username">Pseudo</label>
-            <input type="text" name="username" id="username" value="{{ username }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.message("blue", tips.username) }}
 
-            {{ forms.tip(tips.username, "blue") }}}
-
-            {{ forms.tip(errors.username, "red") }}
+            {{ forms.message("red", errors.username) }}
 
             {# Adresse e-mail #}
 
-            <label for="email">Adresse e-mail</label>
-            <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.email(email, "Adresse e-mail") }}
 
-            {{ forms.tip(tips.email, "blue") }}}
+            {{ forms.message("blue", tips.email) }}
 
-            {{ forms.tip(errors.email, "red") }}
+            {{ forms.message("red", errors.email) }}
 
             {# Mot de passe #}
 
-            <label for="password">Mot de passe</label>
-            <input type="password" name="password" id="password" value="{{ password }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.password("password", password, "Mot de passe") }}
 
-            {{ forms.tip(tips.password, "blue") }}}
+            {{ forms.message("blue", tips.password) }}
 
-            {{ forms.tip(errors.password, "red") }}
+            {{ forms.message("red", errors.password) }}
 
             {# Confirmation du mot de passe #}
 
-            <label for="confirm">Confirmer le mot de passe</label>
-            <input type="password" name="confirm" id="confirm" value="{{ confirm }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.password("confirm", confirm, "Confirmer le mot de passe") }}
 
-            {{ forms.tip(errors.confirm, "red") }}
-
-            {# Jeton CSRF #}
-
-            <input type="hidden" name="token" value="{{ token }}">
+            {{ forms.message("red", errors.confirm) }}
 
             {# Bouton #}
 
-            {{ forms.tip(errors.confirm, "red") }}
-
-            <button class="w3-btn w3-blue">S'inscrire</button>
-        </form>
+            {{ forms.submit("S'inscrire") }}
+        {{ form.end }}
     {% else %}
         <p>Vous êtes déjà inscrit(e).</p>
     {% endif %}

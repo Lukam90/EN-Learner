@@ -1,17 +1,88 @@
+{# Formulaires %}
+
+{# Début d'un formulaire #}
+
+{% macro start(link, size = "half") %}
+    <form action="{{ root }}/{{ link }}" class="w3-container w3-{{ size }}" method="post">
+{% endmacro %}
+
+{# Fin d'un formulaire #}
+
+{% macro end() %}
+    </form>
+{% endmacro %}
+
 {# Jeton CSRF #}
 
 {% macro csrf() %}
-<input type="hidden" name="token" value="{{ token }}">
+    <input type="hidden" name="token" value="{{ token }}">
+{% endmacro %}
+
+{# Boutons #}
+
+{% macro button(color, title) %}
+    <button class="w3-btn w3-{{ color }}">{{ title }}</button>
 {% endmacro %}
 
 {# Bouton de validation #}
 
-{% macro button(color, title) %}
-<button class="w3-btn w3-{{ color }}">{{ title }}</button>
+{% macro submit(title) %}
+    {{ _self.button("blue", title) }}
+{% endmacro %}
+
+{# Bouton de suppression #}
+
+{% macro delete() %}
+    {{ _self.button("red", "Confirmer") }}
 {% endmacro %}
 
 {# Messages d'indication (info, erreur) #}
 
-{% macro tip(value, color) %}
-<p class="w3-text-{{ color }}">{{ value }}</p>
+{% macro message(color, value) %}
+    <p class="w3-text-{{ color }}">{{ value }}</p>
+{% endmacro %}
+
+{# Champs #}
+
+{% macro field(type, name, value, title) %}
+    <label for="{{ name }}">{{ title }}</label>
+    <input type="{{ type }}" name="{{ name }}" id="{{ name }}" value="{{ value }}" class="w3-input w3-border w3-margin-bottom">
+{% endmacro %}
+
+{# Champ texte #}
+
+{% macro text(name, value, title) %}
+    {{ _self.field("text", name, value, title) }}
+{% endmacro %}
+
+{# Champ e-mail #}
+
+{% macro email(value, title) %}
+    {{ _self.field("text", "email", value, title) }}
+{% endmacro %}
+
+{# Champ mot de passe #}
+
+{% macro password(name, value, title) %}
+    {{ _self.field("password", name, value, title) }}
+{% endmacro %}
+
+{# Case à cocher #}
+
+{% macro checkbox(name, title) %}
+    <p>
+        <label class="w3-margin-right" for="{{ name }}">{{ title }}</label>
+        <input class="w3-check" type="checkbox" name="{{ name }}" id="{{ name }}">
+    </p>
+{% endmacro %}
+
+{# Choix multiples #}
+
+{% macro choices() %}
+    <select class="w3-select" name="option">
+        <option value="" disabled selected>Rôle de l'utilisateur</option>
+        <option value="Membre">Membre</option>
+        <option value="Modérateur">Modérateur</option>
+        <option value="Administrateur">Administrateur</option>
+    </select>
 {% endmacro %}

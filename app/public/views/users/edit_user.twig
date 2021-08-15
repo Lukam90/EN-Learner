@@ -1,3 +1,5 @@
+{% import "macros/forms.twig" as forms %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Edition du statut de {{ username }}{% endblock %}
@@ -6,23 +8,15 @@
     <h2>Edition du statut de {{ username }}</h2>
 
     {% if 1 %}
-        <form action="{{ root }}/users/edit/1" class="w3-container w3-quarter" method="post">
-            <select class="w3-select" name="option">
-                <option value="" disabled selected>Rôle de l'utilisateur</option>
-                <option value="Membre">Membre</option>
-                <option value="Modérateur">Modérateur</option>
-                <option value="Administrateur">Administrateur</option>
-            </select>
+        {{ forms.start("users/edit/1", "quarter") }}
+            {{ forms.choices }}
 
-            <p>
-                <label class="w3-margin-right" for="banned">Banni</label>
-                <input class="w3-check" type="checkbox" name="banned" id="banned">
-            </p>
+            {{ forms.checkbox("banned", "Banni") }}
 
-            <input type="hidden" name="token" value="{{ token }}">
+            {{ forms.csrf }}
 
-            <button class="w3-btn w3-blue">Editer</button>
-        </form>
+            {{ forms.submit("Editer") }}
+        {{ forms.end }}
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
 
