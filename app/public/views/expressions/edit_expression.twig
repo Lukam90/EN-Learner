@@ -1,3 +1,6 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Edition de l'expression : {{ title }}{% endblock %}
@@ -6,45 +9,42 @@
     <h2>Edition de l'expression : {{ title }}</h2>
 
     {% if 1 %}
-        <form action="{{ root }}/expressions/edit/1" class="w3-container w3-third" method="post">
+        {{ forms.start("expressions/edit/1", "third") }}
             {# Expression (FR) #}
 
-            <label for="french">Expression</label>
-            <input type="text" name="french" id="french" value="{{ french }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.text("french", french, "Expression") }}
 
-            <p class="w3-text-blue">{{ tips.french }}</p>
+            {{ forms.info(tips.french) }}
 
-            <p class="w3-text-red">{{ errors.french }}</p>
+            {{ forms.error(errors.french) }}
 
             {# Traduction (EN) #}
 
-            <label for="english">Traduction</label>
-            <input type="text" name="english" id="english" value="{{ english }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.text("english", english, "Traduction") }}
 
-            <p class="w3-text-blue">{{ tips.english }}</p>
+            {{ forms.info(tips.english) }}
 
-            <p class="w3-text-red">{{ errors.english }}</p>
+            {{ forms.error(errors.english) }}
 
             {# Phonétique #}
 
-            <label for="phonetics">Phonétique</label>
-            <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="w3-input w3-border w3-margin-bottom">
+            {{ forms.text("phonetics", phonetics, "Phonétique") }}
 
-            <p class="w3-text-blue">{{ tips.phonetics }}</p>
+            {{ forms.info(tips.phonetics) }}
 
-            <p class="w3-text-red">{{ errors.phonetics }}</p>
+            {{ forms.error(errors.phonetics) }}
 
             {# Jeton CSRF #}
 
-            <input type="hidden" name="token" value="{{ token }}">
+            {{ forms.csrf }}
 
             {# Bouton #}
 
-            <button class="w3-btn w3-blue">Editer</button>
-        </form>
+            {{ forms.submit("Editer") }}
+        {{ forms.end }}
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à éditer cette expression.</p>
 
-        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/themes/show/2">liste des expressions</a>.</p>
+        <p>Veuillez revenir à la {{ links.hypertext("themes/show/2", "liste des expressions") }}.</p>
     {% endif %}
 {% endblock %}

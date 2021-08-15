@@ -1,3 +1,5 @@
+{% import "macros/tables.twig" as tables %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Listes{% endblock %}
@@ -14,7 +16,7 @@
     {% endif %}
 
     {% if themes %}
-        <table class="w3-table w3-striped w3-hoverable">
+        {{ tables.start }}
             <thead>
                 <tr>
                     <th>Nom</th>
@@ -49,11 +51,11 @@
                             </a>
                         </button>
                     </td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        {{ tables.end }}
     {% else %}
         <p>Aucun thème n'est enregistré.</p>
     {% endif %}

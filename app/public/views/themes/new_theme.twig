@@ -1,3 +1,6 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Ajouter un thème{% endblock %}
@@ -6,19 +9,18 @@
     <h2>Ajout d'un thème</h2>
 
     {% if loggedIn %}
-        <form action="{{ root }}/themes/new" class="w3-container w3-third" method="post">
-            <label for="title">Titre</label>
-            <input type="text" name="title" id="title" value="{{ title }}" class="w3-input w3-border w3-margin-bottom">
+        {{ forms.start("themes/new", "third") }}
+            {{ forms.text("title", "Titre") }}
 
-            <p class="w3-text-blue">{{ tips.title }}</p>
+            {{ forms.info(tips.title) }}
 
-            <p class="w3-text-red">{{ errors.title }}</p>
+            {{ forms.error(errors.title) }}
 
-            <input type="hidden" name="token" value="{{ token }}">
+            {{ forms.csrf }}
 
-            <button class="w3-btn w3-blue">Ajouter</button>
-        </form>
+            {{ forms.submit("Ajouter") }}
+        {{ forms.end }}
     {% else %}
-        <p>Vous devez être <a class="w3-text-blue" href="{{ root }}/login">connecté(e)</a> pour ajouter un thème.</p>
+        <p>Vous devez être {{ links.hypertext("login", "connecté(e)") }} pour ajouter un thème.</p>
     {% endif %}
 {% endblock %}

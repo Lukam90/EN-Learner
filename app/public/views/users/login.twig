@@ -1,4 +1,5 @@
 {% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
 
 {% extends "layout.twig" %}
 
@@ -8,24 +9,18 @@
     <h2>Connexion</h2>
 
     {% if not loggedIn %}
-        <form action="{{ root }}/login" class="w3-container w3-half" method="post">
+        {{ forms.start("login") }}
             {# Adresse e-mail #}
 
             {{ forms.text("email", email, "Adresse e-mail") }}
 
-            {#<label for="email">Adresse e-mail</label>
-            <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">#}
-
-            {{ forms.message("red", errors.email) }}
+            {{ forms.error(errors.email) }}
 
             {# Mot de passe #}
 
             {{ forms.password("password", password, "Mot de passe") }}
 
-            {#<label for="password">Mot de passe</label>
-            <input type="password" name="password" id="password" value="{{ password }}" class="w3-input w3-border w3-margin-bottom">#}
-
-            {{ forms.message("red", errors.password) }}
+            {{ forms.error(errors.password) }}
 
             {# Jeton CSRF #}
 
@@ -37,19 +32,15 @@
 
             {# Lien d'inscription #}
 
-            <p>
-                <a class="w3-text-blue" href="{{ root }}/register">Pas encore inscrit(e) ?</a>
-            </p>
+            <p>{{ links.hypertext("register", "Pas encore inscrit(e) ?") }}</p>
 
             {#
-            <p>
-                <a class="w3-text-blue" href="{{ root }}/reset">Mot de passe oublié ?</a>
-            </p>
+            <p>{{ links.hypertext("reset", "Mot de passe oublié ?") }}</p>
             #}
-        </form>
+        {{ forms.end }}
     {% else %}
         <p>Vous êtes déjà connecté(e).</p>
 
-        <p>Veuillez revenir sur la <a href="{{ root }}">page d'accueil</a>.</p>
+        <p>Veuillez revenir sur la {{ links.home }}.</p>
     {% endif %}
 {% endblock %}

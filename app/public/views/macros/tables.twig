@@ -1,0 +1,19 @@
+{# Tableaux #}
+
+{% macro start() %}
+    <table class="w3-table w3-striped w3-hoverable">
+{% endmacro %}
+
+{% macro end() %}
+    </table>
+{% endmacro %}
+
+{# Boutons #}
+
+{% macro add(type, text) %}
+    <button class="w3-btn w3-green w3-margin-bottom">
+        <a href="{{ root }}/{{ type }}/new">
+            <i class="fa fa-plus"></i> Ajouter un thème
+        </a>
+    </button>
+{% endmacro %}

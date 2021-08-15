@@ -11,31 +11,31 @@
         {{ forms.start("register") }}
             {{ forms.text("username", username, "Pseudo") }}
 
-            {{ forms.message("blue", tips.username) }}
+            {{ forms.info(tips.username) }}
 
-            {{ forms.message("red", errors.username) }}
+            {{ forms.error(errors.username) }}
 
             {# Adresse e-mail #}
 
             {{ forms.email(email, "Adresse e-mail") }}
 
-            {{ forms.message("blue", tips.email) }}
+            {{ forms.info(tips.email) }}
 
-            {{ forms.message("red", errors.email) }}
+            {{ forms.error(errors.email) }}
 
             {# Mot de passe #}
 
             {{ forms.password("password", password, "Mot de passe") }}
 
-            {{ forms.message("blue", tips.password) }}
+            {{ forms.info(tips.password) }}
 
-            {{ forms.message("red", errors.password) }}
+            {{ forms.error(errors.password) }}
 
             {# Confirmation du mot de passe #}
 
             {{ forms.password("confirm", confirm, "Confirmer le mot de passe") }}
 
-            {{ forms.message("red", errors.confirm) }}
+            {{ forms.error(errors.confirm) }}
 
             {# Bouton #}
 

@@ -42,6 +42,18 @@
     <p class="w3-text-{{ color }}">{{ value }}</p>
 {% endmacro %}
 
+{# Message d'info #}
+
+{% macro info(value) %}
+    {{ _self.message("blue", value) }}
+{% endmacro %}
+
+{# Message d'erreur #}
+
+{% macro error(value) %}
+    {{ _self.message("red", value) }}
+{% endmacro %}
+
 {# Champs #}
 
 {% macro field(type, name, value, title) %}

@@ -1,3 +1,6 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Edition du thème : {{ title }}{% endblock %}
@@ -6,21 +9,20 @@
     <h2>Edition du thème : {{ title }}</h2>
 
     {% if 0 %}
-        <form action="{{ root }}/themes/edit/1" class="w3-container w3-third" method="post">
-            <label for="title">Titre</label>
-            <input type="text" name="title" id="title" value="{{ title }}" class="w3-input w3-border w3-margin-bottom">
+        {{ forms.start("themes/edit/1", "third") }}
+            {{ forms.text("title", "Titre") }}
 
-            <p class="w3-text-blue">{{ tips.title }}</p>
+            {{ forms.info(tips.title) }}
 
-            <p class="w3-text-red">{{ errors.title }}</p>
+            {{ forms.error(errors.title) }}
 
-            <input type="hidden" name="token" value="{{ token }}">
+            {{ forms.csrf }}
 
-            <button class="w3-btn w3-blue">Editer</button>
-        </form>
+            {{ forms.submit("Editer") }}
+        {{ forms.end }}
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à éditer ce thème.</p>
 
-        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/themes">liste des thèmes</a>.</p>
+        <p>Veuillez revenir à la {{ links.hypertext("themes", "liste des thèmes") }}.</p>
     {% endif %}
 {% endblock %}

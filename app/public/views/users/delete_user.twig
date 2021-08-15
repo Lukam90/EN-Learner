@@ -1,5 +1,5 @@
-{% import "macros/format.twig" as format %}
 {% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
 
 {% extends "layout.twig" %}
 
@@ -17,6 +17,6 @@
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à supprimer cet utilisateur.</p>
 
-        <p>Veuillez revenir sur la {{ format.link("", "page d'accueil") }}.</p>
+        <p>Veuillez revenir sur la {{ links.home }}.</p>
     {% endif %}
 {% endblock %}

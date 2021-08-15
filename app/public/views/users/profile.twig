@@ -1,3 +1,6 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Profil de l'utilisateur {{ username }}{% endblock %}
@@ -12,29 +15,27 @@
             <form action="{{ root }}/users/profile/1" method="post">
                 {# Pseudo #}
 
-                <label for="username">Pseudo</label>
-                <input type="text" name="username" id="username" value="{{ username }}" class="w3-input w3-border w3-margin-bottom">
+                {{ forms.text("username", username, "Pseudo") }}
 
-                <p class="w3-text-blue">{{ tips.username }}</p>
+                {{ forms.info(tips.username) }}
 
-                <p class="w3-text-red">{{ errors.username }}</p>
+                {{ forms.error(errors.username) }}
 
                 {# Adresse e-mail #}
 
-                <label for="email">E-mail</label>
-                <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
+                {{ forms.email(email, "Adresse e-mail") }}
 
-                <p class="w3-text-blue">{{ tips.email }}</p>
+                {{ forms.info(tips.email) }}
 
-                <p class="w3-text-red">{{ errors.email }}</p>
+                {{ forms.error(errors.email) }}
 
                 {# Jeton CSRF #}
 
-                <input type="hidden" name="token" value="{{ token }}">
+                {{ forms.csrf }}
 
                 {# Bouton #}
 
-                <button class="w3-btn w3-blue">Editer</button>
+                {{ forms.submit("Editer") }}
             </form>
 
             <hr>
@@ -44,47 +45,42 @@
             <form action="{{ root }}/users/profile/1" method="post">
                 {# Ancien mot de passe #}
 
-                <label for="old">Ancien mot de passe</label>
-                <input type="password" name="old" id="old" value="{{ old }}" class="w3-input w3-border w3-margin-bottom">
+                {{ forms.password("old", old, "Ancien mot de passe") }}
 
-                <p class="w3-text-blue">{{ tips.old }}</p>
+                {{ forms.info(tips.old) }}
 
-                <p class="w3-text-red">{{ errors.old }}</p>
+                {{ forms.error(errors.old) }}
 
                 {# Nouveau mot de passe #}
 
-                <label for="new">Nouveau mot de passe</label>
-                <input type="password" name="new" id="new" value="{{ new }}" class="w3-input w3-border w3-margin-bottom">
+                {{ forms.password("new", new, "Nouveau mot de passe") }}
 
-                <p class="w3-text-blue">{{ tips.new }}</p>
+                {{ forms.info(tips.new) }}
 
-                <p class="w3-text-red">{{ errors.new }}</p>
+                {{ forms.error(errors.new) }}
 
                 {# Confirmation de mot de passe #}
 
-                <label for="confirm">Confirmer le nouveau mot de passe</label>
-                <input type="password" name="confirm" id="confirm" value="{{ confirm }}" class="w3-input w3-border w3-margin-bottom">
+                {{ forms.password("confirm", confirm, "Confirmer le nouveau mot de passe") }}
 
-                <p class="w3-text-red">{{ errors.confirm }}</p>
+                {{ forms.error(errors.confirm) }}
 
                 {# Jeton CSRF #}
 
-                <input type="hidden" name="token" value="{{ token }}">
+                {{ forms.csrf }}
 
                 {# Bouton #}
 
-                <button class="w3-btn w3-blue">Editer</button>
+                {{ forms.submit("Editer") }}
 
                 {#
-                <p>
-                    <a class="w3-text-blue" href="{{ root }}/reset">Ancien mot de passe oublié ?</a>
-                </p>
+                <p>{{ links.hypertext("reset", "Ancien mot de passe oublié ?") }}</p>
                 #}
             </form>
         </div>
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à consulter cette page de profil.</p>
 
-        <p>Veuillez revenir à la <a href="{{ root }}">page d'accueil</a>.</p>
+        <p>Veuillez revenir à la {{ links.home }}.</p>
     {% endif %}
 {% endblock %}

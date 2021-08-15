@@ -1,0 +1,11 @@
+{# Liens hypertexte #}
+
+{% macro hypertext(page, content) %}
+    <a class="w3-text-blue" href="{{ root }}/{{ page }}">{{ content }}</a>
+{% endmacro %}
+
+{# Page d'accueil #}
+
+{% macro home(page, content) %}
+    {{ self.hypertext("", "page d'accueil") }}
+{% endmacro %}

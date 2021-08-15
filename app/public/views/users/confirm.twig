@@ -1,3 +1,5 @@
+{% import "macros/links.twig" as links %}
+
 {% extends "layout.twig" %}
 
 {% block title %}Confirmation du changement de mot de passe{% endblock %}
@@ -8,10 +10,10 @@
     {% if 0 %}
         <p>Votre mot de passe a bien été changé.</p>
 
-        <p>Vous pouvez à nouveau vous <a class="w3-text-blue" href="{{ root }}/login">connecter</a>.</p>
+        <p>Vous pouvez à nouveau vous {{ links.hypertext("login", "connecter") }}.</p>
     {% else %}
         <p>Vous n'avez pas fait de demande de réinitialisation de mot de passe.</p>
 
-        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}">page d'accueil</a>.</p>
+        <p>Veuillez revenir à la {{ links.home }}.</p>
     {% endif %}
 {% endblock %}
