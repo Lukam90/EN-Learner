@@ -1,0 +1,24 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block title %}Suppression de l'expression : {{ title }}{% endblock %}
+
+{% block content %}
+    <h2>Suppression de l'expression : {{ title }}</h2>
+
+    {% if 0 %}
+        {{ forms.start("expressions/delete/1", "third") }}
+            <p>Voulez-vous supprimer cette expression ?</p>
+
+            {{ forms.csrf }}
+
+            {{ forms.delete }}
+        {{ forms.end }}
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à supprimer cette expression.</p>
+
+        <p>Veuillez revenir sur la {{ links.home }}.</p>
+    {% endif %}
+{% endblock %}

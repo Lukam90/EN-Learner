@@ -78,6 +78,7 @@ Il s'agit d'un moteur de template présentant des avantages comme :
 - une intégration facilitée des variables
 - des instructions de contrôles de flux (conditions, boucles)
 - la séparation de parties en blocs (titre, contenu, feuilles de style, scripts JS)
+- la création de composants réutilisables ou macros
 - l'inclusion de parties (barre de navigation, pied de page)
 
 ### Composer

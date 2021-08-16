@@ -241,6 +241,7 @@ Il s'agit d'un moteur de template présentant des avantages comme :
 - une intégration facilitée des variables
 - des instructions de contrôles de flux (conditions, boucles)
 - la séparation de parties en blocs (titre, contenu, feuilles de style, scripts JS)
+- la création de composants réutilisables ou macros
 - l'inclusion de parties (barre de navigation, pied de page)
 
 ### Composer
@@ -1000,7 +1001,11 @@ Le framework a été conçu pour respecter des principes de sécurité et ainsi 
 Le mot de passe d'un utilisateur est automatiquement haché selon la méthode **BCrypt** lors de sa création.
 
 ```php
-include password-hash
+// Cryptage des mots de passe
+
+public static function hash($string) {
+    return password_hash($string, PASSWORD_BCRYPT);
+}
 ```
 
 ## La faille XSS (Cross-Site Scripting)
@@ -1012,7 +1017,19 @@ On doit ainsi veiller à transformer les caractères spéciaux, voire à les int
 Voici un exemple avec la fonction **clean()** de la classe utilitaire **RandomString** :
 
 ```php
-include clean-xss
+abstract class Security {
+    // Nettoyage des caractères spéciaux (XSS)
+
+    public static function clean($string) {
+        $string = trim($string);
+        $string = stripslashes($string);
+        $string = htmlspecialchars($string);
+
+        return $string;
+    }
+
+    ...
+}
 ```
 
 ## La faille DDoS (Denial of Service Attack)
@@ -1020,10 +1037,6 @@ include clean-xss
 Une attaque DDoS consiste à envoyer de multiples requêtes sur une même page dans le but d'entraver la capacité d'un site ou d'une application web.
 
 L'intérêt d'une ligne comme `sleep(1);` est de ralentir volontairement un utilisateur malintentionné, en multipliant le nombre de requêtes par 1 000 pour une seconde.
-
-```php
-include post-ddos
-```
 
 ## L'injection SQL
 
@@ -1034,7 +1047,23 @@ Des fonctions natives permettent de protéger les requêtes définies selon des 
 Voici un extrait de fonction de construction d'une requête :
 
 ```php
-include injection-sql
+// Sélection d'une ligne par un attribut
+
+public function findBy($attribute, $value) {
+    $statement = $this->dbHandler
+                        ->prepare("SELECT * FROM :table
+                                    WHERE :attribute = :value");
+
+    $statement->bindValue(":table", $this->tableName);
+    $statement->bindValue(":attribute", $attribute);
+    $statement->bindValue(":value", $value);
+    
+    $statement->execute();
+
+    $statement->closeCursor();
+
+    return $statement->fetch(\PDO::FETCH_OBJ);
+}
 ```
 
 ## La faille CSRF (Cross Site Request Forgery)
@@ -1047,13 +1076,208 @@ Le meilleur moyen de s'en prémunir est de gérer l'authentification avec un jet
 
 Ce même jeton est vérifié à chaque modification dans un formulaire.
 
-En voici un exemple :
+Voici une illustration en deux fonctions :
 
 ```php
-include jeton-csrf
+// Génération d'un token CSRF (session)
+
+public static function setToken() {
+    self::start();
+
+    $_SESSION["token"] = bin2hex(random_bytes(50));
+}
+
+// Correspondance du jeton CSRF
+
+public static function checkCSRF() {
+    return $_POST["token"] == $_SESSION["token"];
+}
 ```
 
 <div class="page-break"></div>
+
+# Extraits de code
+
+Voici quelques extraits de code supplémentaires pour détailler certaines parties de l'application :
+
+## public > index.php
+
+Il s'agit de la page de base de l'application.
+
+On y initialise le routeur.
+
+```php
+// Importation de la classe du routeur
+
+use app\core\Router;
+
+// Gestion (automatique) des espaces de noms (ou namespaces)
+
+require_once "../../vendor/autoload.php";
+
+// Initialisation du routeur
+
+Router::init();
+```
+
+## public > views > layout.twig
+
+Il s'agit de la page de définition de l'interface graphique en Twig.
+
+```html
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {# Styles #}
+
+        <link rel="stylesheet" href="{{ public }}/css/font-awesome.min.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
+
+        <link href="{{ public }}/css/w3.css" rel="stylesheet">
+        <link href="{{ public }}/css/style.css" rel="stylesheet">
+
+        {% block styles %}
+        {% endblock %}
+
+        {# Title #}
+
+        <title>English Learner - {% block title %}{% endblock %}</title>
+    </head>
+
+    <body>
+        {# Navigation #}
+
+        {% include "partials/navbar.twig" %}
+
+        {# Main #}
+
+        <main class="w3-container">
+            <noscript>
+                <h3 class="w3-text-red">JavaScript doit être activé pour accéder à l'ensemble des fonctionnalités.</h3>
+            </noscript>
+
+            {# Flash Messages #}
+
+            {% include "partials/messages.twig" %}
+
+            {# Content #}
+
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        {# Footer #}
+
+        {% include "partials/footer.twig" %}
+
+        {# Scripts #}
+
+        <script src="{{ public }}/js/navbar.js"></script>
+
+        {% block scripts %}
+        {% endblock %}
+    </body>
+</html>
+```
+
+## models > Theme.php
+
+Il s'agit de la classe modèle de la table des thèmes, avec une définition des requêtes.
+
+En voici des exemples :
+
+```php
+class Theme extends Model {
+    // Sélection d'un thème par le titre
+
+    public function findByTitle($title) {
+        return $this->findBy("title", $title);
+    }
+
+    // Expressions d'un thème
+
+    public function findExpressions($themeId) {
+        $statement = $this->dbHandler
+                            ->prepare("
+                                SELECT e.*
+                                FROM expressions e, themes t
+                                WHERE e.theme_id = t.id
+                                AND t.id = :id
+                            ");
+
+        $statement->bindValue(":id", $themeId);
+
+        $statement->execute();
+
+        $statement->closeCursor();
+
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    ...
+}
+```
+
+## controllers > HomeController.php
+
+Il s'agit du contrôleur de la page d'accueil, où on définit le nombre d'utilisateurs, de thèmes et d'expressions.
+
+```php
+namespace app\controllers;
+
+use app\core\Session;
+
+use app\models\User;
+use app\models\Theme;
+use app\models\Expression;
+
+use app\controllers\Controller;
+
+class HomeController extends Controller {
+    private $userModel;
+    private $themeModel;
+    private $expressionModel;
+
+    // Constructeur
+
+    public function __construct() {
+        $this->init();
+
+        $this->userModel = new User();
+        $this->themeModel = new Theme();
+        $this->expressionModel = new Expression();
+    }
+
+    // Page d'accueil
+
+    public function index() {
+        // Stats
+
+        $nbUsers = $this->userModel->count();
+        $nbThemes = $this->themeModel->count();
+        $nbExpressions = $this->expressionModel->count();
+
+        // Rendu
+
+        echo $this->twig->render("home.twig", [
+            "session" => Session::all(),
+            
+            "title"         => "Accueil",
+            "nbUsers"       => $nbUsers,
+            "nbThemes"      => $nbThemes,
+            "nbExpressions" => $nbExpressions
+        ]);
+    }
+}
+```
 
 # Les axes d'améliorations
 

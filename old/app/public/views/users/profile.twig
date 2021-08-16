@@ -1,0 +1,86 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block title %}Profil de l'utilisateur {{ username }}{% endblock %}
+
+{% block content %}
+    <h2>Profil de l'utilisateur {{ username }}</h2>
+
+    {% if not loggedIn %}
+        <div class="w3-container w3-half">
+            <h3>Identifiants</h3>
+
+            <form action="{{ root }}/users/profile/1" method="post">
+                {# Pseudo #}
+
+                {{ forms.text("username", username, "Pseudo") }}
+
+                {{ forms.info(tips.username) }}
+
+                {{ forms.error(errors.username) }}
+
+                {# Adresse e-mail #}
+
+                {{ forms.email(email, "Adresse e-mail") }}
+
+                {{ forms.info(tips.email) }}
+
+                {{ forms.error(errors.email) }}
+
+                {# Jeton CSRF #}
+
+                {{ forms.csrf }}
+
+                {# Bouton #}
+
+                {{ forms.submit("Editer") }}
+            </form>
+
+            <hr>
+
+            <h3>Mot de passe</h3>
+
+            <form action="{{ root }}/users/profile/1" method="post">
+                {# Ancien mot de passe #}
+
+                {{ forms.password("old", old, "Ancien mot de passe") }}
+
+                {{ forms.info(tips.old) }}
+
+                {{ forms.error(errors.old) }}
+
+                {# Nouveau mot de passe #}
+
+                {{ forms.password("new", new, "Nouveau mot de passe") }}
+
+                {{ forms.info(tips.new) }}
+
+                {{ forms.error(errors.new) }}
+
+                {# Confirmation de mot de passe #}
+
+                {{ forms.password("confirm", confirm, "Confirmer le nouveau mot de passe") }}
+
+                {{ forms.error(errors.confirm) }}
+
+                {# Jeton CSRF #}
+
+                {{ forms.csrf }}
+
+                {# Bouton #}
+
+                {{ forms.submit("Editer") }}
+
+                {#
+                <p>{{ links.hypertext("reset", "Ancien mot de passe oublié ?") }}</p>
+                #}
+            </form>
+        </div>
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à consulter cette page de profil.</p>
+
+        <p>Veuillez revenir à la {{ links.home }}.</p>
+    {% endif %}
+{% endblock %}

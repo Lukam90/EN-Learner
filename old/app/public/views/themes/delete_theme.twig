@@ -1,0 +1,22 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block content %}
+    <h2>Suppression du thème : {{ title }}</h2>
+
+    {% if 1 %}
+        {{ forms.start("themes/delete/1", "third") }}
+            <p>Voulez-vous supprimer ce thème ?</p>
+
+            {{ forms.csrf }}
+
+            {{ forms.delete }}
+        {{ forms.end }}
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à supprimer ce thème.</p>
+
+        <p>Veuillez revenir à la {{ links.hypertext("themes", "liste des thèmes") }}.</p>
+    {% endif %}
+{% endblock %}

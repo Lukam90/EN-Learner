@@ -1,0 +1,26 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block title %}Ajouter un thème{% endblock %}
+
+{% block content %}
+    <h2>Ajout d'un thème</h2>
+
+    {% if loggedIn %}
+        {{ forms.start("themes/new", "third") }}
+            {{ forms.text("title", "Titre") }}
+
+            {{ forms.info(tips.title) }}
+
+            {{ forms.error(errors.title) }}
+
+            {{ forms.csrf }}
+
+            {{ forms.submit("Ajouter") }}
+        {{ forms.end }}
+    {% else %}
+        <p>Vous devez être {{ links.hypertext("login", "connecté(e)") }} pour ajouter un thème.</p>
+    {% endif %}
+{% endblock %}

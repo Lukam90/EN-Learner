@@ -1,0 +1,13 @@
+abstract class Security {
+    // Nettoyage des caractères spéciaux (XSS)
+
+    public static function clean($string) {
+        $string = trim($string);
+        $string = stripslashes($string);
+        $string = htmlspecialchars($string);
+
+        return $string;
+    }
+
+    ...
+}

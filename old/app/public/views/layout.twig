@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        {# Styles #}
+
+        <link rel="stylesheet" href="{{ public }}/css/font-awesome.min.css">
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap" rel="stylesheet">
+
+        <link href="{{ public }}/css/w3.css" rel="stylesheet">
+        <link href="{{ public }}/css/style.css" rel="stylesheet">
+
+        {% block styles %}
+        {% endblock %}
+
+        {# Title #}
+
+        <title>English Learner - {% block title %}{% endblock %}</title>
+    </head>
+
+    <body>
+        {# Navigation #}
+
+        {% include "partials/navbar.twig" %}
+
+        {# Main #}
+
+        <main class="w3-container">
+            <noscript>
+                <h3 class="w3-text-red">JavaScript doit être activé pour accéder à l'ensemble des fonctionnalités.</h3>
+            </noscript>
+
+            {# Flash Messages #}
+
+            {% include "partials/messages.twig" %}
+
+            {# Content #}
+
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        {# Footer #}
+
+        {% include "partials/footer.twig" %}
+
+        {# Scripts #}
+
+        <script src="{{ public }}/js/navbar.js"></script>
+
+        {% block scripts %}
+        {% endblock %}
+    </body>
+</html>

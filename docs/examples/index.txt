@@ -1,27 +1,11 @@
-<?php
-namespace App;
+// Importation de la classe du routeur
 
-use App\Router;
+use app\core\Router;
 
-session_start();
+// Gestion (automatique) des espaces de noms (ou namespaces)
 
-define("DS", DIRECTORY_SEPARATOR);
-define("ROOT_DIR", "." . DS);
+require_once "../../vendor/autoload.php";
 
-// ...
+// Initialisation du routeur
 
-require_once "app/Autoloader.php";
-
-Autoloader::register();
-
-$result = Router::handleRequest($_GET);
-
-ob_start();
-
-include $result['view'];
-
-$page = ob_get_contents();
-
-ob_end_clean();
-
-include VIEW_PATH . "layout.php";
+Router::init();

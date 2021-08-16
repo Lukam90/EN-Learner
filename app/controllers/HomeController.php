@@ -2,11 +2,12 @@
 
 namespace app\controllers;
 
-use app\models\User;
-
 use app\core\Session;
+
+use app\models\User;
 use app\models\Theme;
 use app\models\Expression;
+
 use app\controllers\Controller;
 
 class HomeController extends Controller {

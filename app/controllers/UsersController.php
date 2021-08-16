@@ -120,6 +120,8 @@ class UsersController extends Controller {
         $errors = [];
 
         if (Request::isPost()) {
+            sleep(1);
+
             var_dump($_POST);
 
             $username = $validator->username();

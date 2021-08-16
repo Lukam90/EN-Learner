@@ -1,0 +1,25 @@
+{# Navbar > Items #}
+
+{% macro navItem(page, title, id = "") %}
+
+<a href="{{ root }}/{{ page }}" id="{{ id }}" class="w3-bar-item w3-button w3-mobile">{{ title }}</a>
+
+{% endmacro %}
+
+{# *** #}
+
+<nav id="navbar" class="w3-bar w3-blue">
+    {{ _self.navItem("", "English Learner", "nav-title") }}
+
+    {% if user %}
+        {{ _self.navItem("profile", "Bienvenue {{ username }}") }}
+        {{ _self.navItem("logout", "Déconnexion") }}
+    {% else %}
+        {{ _self.navItem("register", "Inscription") }}
+        {{ _self.navItem("login", "Connexion") }}
+    {% endif %}
+
+    {{ _self.navItem("users", "Communauté") }}
+    {{ _self.navItem("themes", "Listes") }}
+    {{ _self.navItem("tests", "TESTS") }}
+</nav>

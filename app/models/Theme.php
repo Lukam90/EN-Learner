@@ -42,6 +42,8 @@ class Theme extends Model {
 
         $statement->execute();
 
+        $statement->closeCursor();
+
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 

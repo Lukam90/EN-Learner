@@ -1,0 +1,27 @@
+<?php
+namespace App;
+
+use App\Router;
+
+session_start();
+
+define("DS", DIRECTORY_SEPARATOR);
+define("ROOT_DIR", "." . DS);
+
+// ...
+
+require_once "app/Autoloader.php";
+
+Autoloader::register();
+
+$result = Router::handleRequest($_GET);
+
+ob_start();
+
+include $result['view'];
+
+$page = ob_get_contents();
+
+ob_end_clean();
+
+include VIEW_PATH . "layout.php";

@@ -1,0 +1,22 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block content %}
+    <h2>Suppression de l'utilisateur {{ username }}</h2>
+
+    {% if 1 %}
+        {{ forms.start("/users/delete/1", "third") }}
+            <p>Voulez-vous supprimer cet utilisateur ?</p>
+
+            {{ forms.csrf }}
+
+            {{ forms.delete }}
+        {{ forms.end }}
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à supprimer cet utilisateur.</p>
+
+        <p>Veuillez revenir sur la {{ links.home }}.</p>
+    {% endif %}
+{% endblock %}

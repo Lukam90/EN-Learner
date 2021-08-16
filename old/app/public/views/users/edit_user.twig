@@ -1,0 +1,26 @@
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block title %}Edition du statut de {{ username }}{% endblock %}
+
+{% block content %}
+    <h2>Edition du statut de {{ username }}</h2>
+
+    {% if 1 %}
+        {{ forms.start("users/edit/1", "quarter") }}
+            {{ forms.choices }}
+
+            {{ forms.checkbox("banned", "Banni") }}
+
+            {{ forms.csrf }}
+
+            {{ forms.submit("Editer") }}
+        {{ forms.end }}
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
+
+        <p>Veuillez revenir sur la {{ links.home }}.</p>
+    {% endif %}
+{% endblock %}

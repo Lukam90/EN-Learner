@@ -1,0 +1,19 @@
+{% macro flash(type, color) %}
+
+{% if type %}
+    <div class="w3-panel w3-pale-{{ color }} w3-display-container w3-border">
+        <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
+        
+        <p>{{ type }}</p>
+    </div>
+{% endif %}
+
+{% endmacro %}
+
+{# Success Messages #}
+
+{{ _self.flash(session.success, "blue") }}
+
+{# Error Messages #}
+
+{{ _self.flash(session.alert, "red") }}

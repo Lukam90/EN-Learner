@@ -1,10 +1,13 @@
-<?php
-$_SESSION['token'] = bin2hex(random_bytes(32));
-?>
+// Génération d'un token CSRF (session)
 
-<input type="hidden" name="token" value="<?=$_SESSION['token']?>"/>
+public static function setToken() {
+    self::start();
 
-<?php
-if ($_POST['token'] == $_SESSION['token']) {
-    // ...
+    $_SESSION["token"] = bin2hex(random_bytes(50));
+}
+
+// Correspondance du jeton CSRF
+
+public static function checkCSRF() {
+    return $_POST["token"] == $_SESSION["token"];
 }
