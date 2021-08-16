@@ -20,20 +20,20 @@ Il s'agit de la page de définition de l'interface graphique en Twig.
 @include layout
 ```
 
-## models > Theme.php
+## core > Router.php
 
-Il s'agit de la classe modèle de la table des thèmes, avec une définition des requêtes.
-
-En voici des exemples :
+Il s'agit de la classe du routeur pour gérer les redirections d'une manière générale.
 
 ```php
-@include model-theme
+@include router
 ```
 
-## controllers > HomeController.php
+## core > Session.php
 
-Il s'agit du contrôleur de la page d'accueil, où on définit le nombre d'utilisateurs, de thèmes et d'expressions.
+Il s'agit de la classe des sessions liée à la superglobale `$_SESSION`.
 
 ```php
-@include home-controller
+@include session
 ```
+
+<div class="page-break"></div>

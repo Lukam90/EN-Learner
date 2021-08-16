@@ -91,8 +91,7 @@ Elan Formation est un organisme de formation local, proposant des formations dan
 
 Leurs locaux sont présents dans la région Grand Est sur Strasbourg, Colmar, Haguenau, Metz, Mulhouse, Nancy, Saverne, Sélestat, Molsheim, Forbach, Wissembourg et Epinal, afin de dispenser des cours en présentiel.
 
-La force d’Elan Formation est de proposer des cursus personnalisés et totalement individualisés aux
-stagiaires, dans le but de leur remettre une attestation en fin de cycle.
+La force d’Elan Formation est de proposer des cursus personnalisés et totalement individualisés aux stagiaires, dans le but de leur remettre une attestation en fin de cycle.
 
 <div class="page-break"></div>
 
@@ -870,7 +869,35 @@ Chaque modèle correspond à une table.
 Voici un exemple avec le modèle Theme :
 
 ```php
-include model-theme
+class Theme extends Model {
+    // Sélection d'un thème par le titre
+
+    public function findByTitle($title) {
+        return $this->findBy("title", $title);
+    }
+
+    // Expressions d'un thème
+
+    public function findExpressions($themeId) {
+        $statement = $this->dbHandler
+                            ->prepare("
+                                SELECT e.*
+                                FROM expressions e, themes t
+                                WHERE e.theme_id = t.id
+                                AND t.id = :id
+                            ");
+
+        $statement->bindValue(":id", $themeId);
+
+        $statement->execute();
+
+        $statement->closeCursor();
+
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    ...
+}
 ```
 
 ### La vue
@@ -882,7 +909,54 @@ Le langage de templating utilisé est Twig.
 Voici un exemple avec la liste des thèmes :
 
 ```php
-include vue-themes
+{% import "macros/tables.twig" as table %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block title %}Listes{% endblock %}
+
+{% block content %}
+    <h2>La liste des thèmes</h2>
+
+    {% if 1 %}
+        {{ table.add("themes", "Ajouter un thème") }}
+    {% endif %}
+
+    {% if themes %}
+        {{ table.start }}
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Auteur</th>
+                    <th>Nb Expressions</th>
+                    {% if canAdd %}
+                    <th></th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for theme in themes %}
+                <tr>
+                    <td>{{ links.hypertext("themes/show/{{ theme.id }}", theme.title) }}</td>
+                    <td>{{ theme.author }}</td>
+                    <td>{{ theme.nbExpressions }}</td>
+
+                    {% if canEdit %}
+                    <td>
+                        {{ table.edit("themes", theme.id) }}
+                        {{ table.delete("themes", theme.id) }}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        {{ table.end }}
+    {% else %}
+        <p>Aucun thème n'est enregistré.</p>
+    {% endif %}
+{% endblock %}
 ```
 
 ### Le contrôleur
@@ -893,10 +967,55 @@ Le routeur gère une route existante avec des paramètres validés, et appelle e
 
 Cette partie est le coeur du code et de la logique de l'application.
 
-Voici un exemple pour l'affichage des thèmes :
+Voici un exemple pour l'affichage de la page d'accueil :
 
 ```php
-include controleur-themes
+namespace app\controllers;
+
+use app\core\Session;
+
+use app\models\User;
+use app\models\Theme;
+use app\models\Expression;
+
+use app\controllers\Controller;
+
+class HomeController extends Controller {
+    private $userModel;
+    private $themeModel;
+    private $expressionModel;
+
+    // Constructeur
+
+    public function __construct() {
+        $this->init();
+
+        $this->userModel = new User();
+        $this->themeModel = new Theme();
+        $this->expressionModel = new Expression();
+    }
+
+    // Page d'accueil
+
+    public function index() {
+        // Stats
+
+        $nbUsers = $this->userModel->count();
+        $nbThemes = $this->themeModel->count();
+        $nbExpressions = $this->expressionModel->count();
+
+        // Rendu
+
+        echo $this->twig->render("home.twig", [
+            "session" => Session::all(),
+            
+            "title"         => "Accueil",
+            "nbUsers"       => $nbUsers,
+            "nbThemes"      => $nbThemes,
+            "nbExpressions" => $nbExpressions
+        ]);
+    }
+}
 ```
 
 ## La structure du framework
@@ -1188,96 +1307,106 @@ Il s'agit de la page de définition de l'interface graphique en Twig.
 </html>
 ```
 
-## models > Theme.php
+## core > Router.php
 
-Il s'agit de la classe modèle de la table des thèmes, avec une définition des requêtes.
-
-En voici des exemples :
+Il s'agit de la classe du routeur pour gérer les redirections d'une manière générale.
 
 ```php
-class Theme extends Model {
-    // Sélection d'un thème par le titre
+abstract class Router {
+    // Redirection de la page
 
-    public function findByTitle($title) {
-        return $this->findBy("title", $title);
-    }
+    public static function init() {
+        $url = self::url();
+        $page = self::page($url);
 
-    // Expressions d'un thème
+        switch ($page) {
+            case "home":
+                Redirection::home();
+                
+                break;
 
-    public function findExpressions($themeId) {
-        $statement = $this->dbHandler
-                            ->prepare("
-                                SELECT e.*
-                                FROM expressions e, themes t
-                                WHERE e.theme_id = t.id
-                                AND t.id = :id
-                            ");
+            ...
 
-        $statement->bindValue(":id", $themeId);
+            default:
+                Redirection::notFound();
 
-        $statement->execute();
-
-        $statement->closeCursor();
-
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
+                break;
+        }
     }
 
     ...
 }
 ```
 
-## controllers > HomeController.php
+## core > Session.php
 
-Il s'agit du contrôleur de la page d'accueil, où on définit le nombre d'utilisateurs, de thèmes et d'expressions.
+Il s'agit de la classe des sessions liée à la superglobale `$_SESSION`.
 
 ```php
-namespace app\controllers;
+class Session {
+    // Démarrage d'une session
 
-use app\core\Session;
-
-use app\models\User;
-use app\models\Theme;
-use app\models\Expression;
-
-use app\controllers\Controller;
-
-class HomeController extends Controller {
-    private $userModel;
-    private $themeModel;
-    private $expressionModel;
-
-    // Constructeur
-
-    public function __construct() {
-        $this->init();
-
-        $this->userModel = new User();
-        $this->themeModel = new Theme();
-        $this->expressionModel = new Expression();
+    public static function start() {
+        if (! self::exists()) {
+            session_start();
+        }
     }
 
-    // Page d'accueil
+    // Existence d'une session
 
-    public function index() {
-        // Stats
-
-        $nbUsers = $this->userModel->count();
-        $nbThemes = $this->themeModel->count();
-        $nbExpressions = $this->expressionModel->count();
-
-        // Rendu
-
-        echo $this->twig->render("home.twig", [
-            "session" => Session::all(),
-            
-            "title"         => "Accueil",
-            "nbUsers"       => $nbUsers,
-            "nbThemes"      => $nbThemes,
-            "nbExpressions" => $nbExpressions
-        ]);
+    public static function exists() {
+        return isset($_SESSION);
     }
+
+    // Enregistrement d'une session
+
+    public static function set($name, $variable) {
+        self::start();
+
+        $_SESSION[$name] = Security::clean($variable);
+    }
+
+    ...
 }
 ```
+
+<div class="page-break"></div>
+
+# Jeu d'essai
+
+Un invité doit respecter certaines règles de validation pour s'inscrire en tant que nouveau membre.
+
+|||
+|Entrée|Résultat|
+|le nom d'utilisateur (ou pseudo)||
+|||
+|Le pseudo n'est pas renseigné|erreur|
+|Le pseudo comporte un caractère non alphanumérique|erreur|
+|Le pseudo comporte moins de 2 caractères|erreur|
+|Le pseudo comporte entre 2 et 32 caractères|**validé**|
+|Le pseudo comporte plus de 32 caractères|erreur|
+|||
+|l'adresse e-mail||
+|||
+|L'adresse e-mail n'est pas renseignée|erreur|
+|L'adresse e-mail n'a pas un format valide|erreur|
+|L'adresse e-mail a un format valide|**validé**|
+|L'adresse e-mail comporte plus de 100 caractères|erreur|
+|||
+|le mot de passe||
+|||
+|Le mot de passe n'est pas renseigné|erreur|
+|Le mot de passe comporte un caractère non alphanumérique|erreur|
+|Le mot de passe comporte moins de 8 caractères|erreur|
+|Le mot de passe comporte entre 8 et 32 caractères|**validé**|
+|Le mot de passe comporte plus de 32 caractères|erreur|
+|||
+|la confirmation du mot de passe||
+|||
+|La confirmation est différente du mot de passe renseigné précédemment|erreur|
+|La confirmation est égale au mot de passe renseigné précédemment|**validé**|
+
+# Recherches et sources anglophones
 
 # Les axes d'améliorations
 
@@ -1287,6 +1416,26 @@ Il me reste à revoir certains aspects comme :
 - l'affichage de données par pages et filtres de recherche
 - la réinitialisation du mot de passe d'un utilisateur avec envoi par e-mail
 - le développement du jeu de flashcards aléatoires d'un thème
+
+# Conclusion
+
+Le développement de cette application m'a motivé dans le sens où je suis à la fois passionné par l'apprentissage des langues et le développement web, à commencer par l'anglais.
+
+J'ai même commencé à me former en autodidacte dans le milieu du développement grâce à cette même langue, indispensable dans le milieu, et inversement.
+
+J'ai aussi pris en compte le souhait de certains amis et membres de la famille d'apprendre l'anglais avec une méthode simple, tout en contournant les limites de l'audio, qui ne suffit pas toujours à maîtriser la prononciation.
+
+L'aspect communautaire peut aussi être considéré comme un élément motivateur.
+
+L'application s'inspire également de la solution existante Memrise.
+
+La réalisation de ce projet m'aura permis d'appliquer mes connaissances en HTML, CSS, JS, PHP, SQL et Twig dans le cadre d'une application réaliste et multi-utilisateurs.
+
+J'ai aussi relevé le défi de concevoir mon propre framework PHP, en reprenant les meilleurs éléments de frameworks célèbres comme Symfony, Laravel et Code Igniter à mon sens.
+
+Ce projet m'aura beaucoup appris et me motive à poursuivre avec diverses améliorations à intégrer au fil du temps.
+
+Un futur déploiement est à envisager.
 
 
 

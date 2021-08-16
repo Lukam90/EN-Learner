@@ -63,7 +63,6 @@ Elan Formation est un organisme de formation local, proposant des formations dan
 
 Leurs locaux sont présents dans la région Grand Est sur Strasbourg, Colmar, Haguenau, Metz, Mulhouse, Nancy, Saverne, Sélestat, Molsheim, Forbach, Wissembourg et Epinal, afin de dispenser des cours en présentiel.
 
-La force d’Elan Formation est de proposer des cursus personnalisés et totalement individualisés aux
-stagiaires, dans le but de leur remettre une attestation en fin de cycle.
+La force d’Elan Formation est de proposer des cursus personnalisés et totalement individualisés aux stagiaires, dans le but de leur remettre une attestation en fin de cycle.
 
 <div class="page-break"></div>
