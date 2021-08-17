@@ -36,13 +36,9 @@ Il s'agit d'un logiciel de création de diagrammes et de schémas polyvalent et 
 
 Il s'agit du langage de balisage utilisé pour définir la structure sémantique des pages d'un site.
 
-C'est l'équivalent des murs pour une maison.
-
 ### CSS (Cascading Style Sheets)
 
 Il s'agit du langage utilisé pour définir le style des éléments d'une page structurée par des balises HTML.
-
-C'est l'équivalent de la décoration dans une maison.
 
 ### W3.CSS
 
@@ -60,8 +56,6 @@ Il s'agit du langage orienté client dédié à la gestion des intéractions sur
 - l'affichage d'une fenêtre modale pour confirmer la suppression d'une donnée
 - le tri dynamique de données d'une liste selon une colonne
 - la validation de champs d'un formulaire avant l'envoi de données
-
-C'est aussi l'équivalent des éléments fonctionnels d'une maison, comme l'électricité et la plomberie.
 
 ## Le développement back-end
 

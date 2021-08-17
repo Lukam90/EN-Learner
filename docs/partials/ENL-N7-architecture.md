@@ -57,6 +57,7 @@ Le framework se divise en plusieurs dossiers :
 - models
 - public
 - tests
+- validation
 
 ### Le dossier controllers
 
@@ -78,11 +79,14 @@ Il regroupe le coeur du fonctionnement du framework avec des classes et des fonc
 |**Controller.php**|la classe de base des contrôleurs|
 |**Cookie.php**|la classe utilitaire des cookies|
 |**Database.php**|la classe utilitaire de l'objet **PDO** (**PHP D**ata **O**bject) pour la connexion à la base de données|
+|**Faker.php**|la classe utilitaire des chaînes de caractères aléatoires pour les tests|
 |**Get.php**|la classe utilitaire de la méthode **GET**|
 |**Model.php**|la classe de base des modèles|
 |**Post.php**|la classe utilitaire de la méthode **POST**|
-|**RandomString.php**|la classe utilitaire des chaînes de caractères aléatoires pour les tokens CSRF et les tests|
+|**Redirection.php**|la classe utilitaire des redirections|
+|**Request.php**|la classe utilitaire des types de requêtes (ou méthodes)|
 |**Router.php**|la classe utilitaire du routeur|
+|**Security.php**|la classe utilitaire de la sécurité de l'application|
 |**Session.php**|la classe utilitaire de la session|
 |**Validator.php**|la classe utilitaire de la validation des formulaires|
 
@@ -123,8 +127,9 @@ On retrouve ensuite les dossiers suivants :
 
 |||
 |-|-|
-|**errors**|les pages d'erreur (404)|
+|**errors**|les pages d'erreur (403 et 404)|
 |**expressions**|les pages des expressions (ajout, édition et suppression)|
+|**macros**|les composants utilitaires (ou macros)|
 |**partials**|les composants récurrents (barre de navigation, pied de page, messages flash)|
 |**themes**|les pages des thèmes|
 |**users**|les pages des utilisateurs|
@@ -135,8 +140,20 @@ Il regroupe l'ensemble des classes de tests automatisés.
 
 |||
 |-|-|
+|**ModelTest.php**|classe de base des tests des modèles|
 |**ExpressionTest.php**|tests des fonctions liées à la table des expressions|
 |**ThemeTest.php**|tests des fonctions liées à la table des thèmes|
 |**UserTest.php**|tests des fonctions liées à la table des utilisateurs|
 
 <div class="page-break"></div>
+
+### Le dossier validation
+
+Il regroupe les classes de validation des formulaires :
+
+|||
+|-|-|
+|**Validation.php**|classe de base pour la validation d'un type de données|
+|**ExpressionValidation.php**|classe de validation des expressions|
+|**ThemeValidation.php**|classe de validation des thèmes|
+|**UserValidation.php**|classe de validation des utilisateurs|

@@ -198,13 +198,9 @@ Il s'agit d'un logiciel de création de diagrammes et de schémas polyvalent et 
 
 Il s'agit du langage de balisage utilisé pour définir la structure sémantique des pages d'un site.
 
-C'est l'équivalent des murs pour une maison.
-
 ### CSS (Cascading Style Sheets)
 
 Il s'agit du langage utilisé pour définir le style des éléments d'une page structurée par des balises HTML.
-
-C'est l'équivalent de la décoration dans une maison.
 
 ### W3.CSS
 
@@ -222,8 +218,6 @@ Il s'agit du langage orienté client dédié à la gestion des intéractions sur
 - l'affichage d'une fenêtre modale pour confirmer la suppression d'une donnée
 - le tri dynamique de données d'une liste selon une colonne
 - la validation de champs d'un formulaire avant l'envoi de données
-
-C'est aussi l'équivalent des éléments fonctionnels d'une maison, comme l'électricité et la plomberie.
 
 ## Le développement back-end
 
@@ -396,7 +390,7 @@ Les autres blocs contiennent un lien vers la liste des thèmes.
 
 ### L'inscription d'un nouvel utilisateur
 
-**Route** : /register
+**Route** : /users/register
 
 **Vue** : users/register.twig
 
@@ -407,9 +401,9 @@ Les autres blocs contiennent un lien vers la liste des thèmes.
 Un utilisateur doit s'inscrire s'il souhaite contribuer à la base de vocabulaire.
 
 Il devra indiquer :
-- son pseudo (requis, unique, alphanumérique, espaces inclus, sans accents, de 2 à 50 caractères)
-- son adresse e-mail (requis, unique, e-mail valide, 180 caractères max)
-- son mot de passe (requis, 8 à 32 caractères avec minuscules, majuscules et chiffres)
+- son pseudo (requis, unique, alphanumérique, espaces inclus, sans accents, de 2 à 32 caractères)
+- son adresse e-mail (requis, unique, e-mail valide, 100 caractères max)
+- son mot de passe (requis, 8 à 32 caractères alphanumériques, avec au moins une minuscule, une majuscule et un chiffre)
 - sa confirmation du mot de passe
 
 Des messages d'erreur s'afficheront en-dessous de chaque champ mal renseigné.
@@ -424,7 +418,7 @@ Le formulaire de connexion s'affiche dans une fenêtre modale.
 
 ### La connexion d'un utilisateur
 
-**Route** : /login
+**Route** : /users/login
 
 **Vue** : users/login.twig
 
@@ -436,19 +430,43 @@ Un utilisateur a le droit de se connecter suivant ces conditions :
 - il n'a pas été banni par un administrateur
 - son compte n'a pas été supprimé
 
-Un utilisateur est invité à se connecter avec son e-mail et son mot de passe.
+Il est invité à se connecter avec son e-mail et son mot de passe.
 
 **Améliorations**
 
 Le formulaire de connexion se trouve dans une fenêtre modale.
 
+### (+) La demande d'un nouveau mot de passe
+
+**Route** : /users/reset
+
+**Vue** : users/reset.twig
+
+**Contrôleur** : UserController (reset)
+
+**Rôle** : invité
+
 Un utilisateur peut demander un nouveau mot de passe si nécessaire en cliquant sur un lien **Mot de passe oublié**.
 
 Il reçoit ensuite un e-mail avec son nouveau mot de passe.
 
+### (+) La confirmation de la demande d'un nouveau mot de passe
+
+**Route** : /users/confirm
+
+**Vue** : users/confirm.twig
+
+**Contrôleur** : UserController (confirm)
+
+**Rôle** : invité
+
+L'utilisateur est invité à cliquer sur le lien de confirmation de son e-mail indiquant son nouveau mot de passe.
+
+Il est ensuite redirigé vers une page de confirmation de demande d'un nouveau mot de passe.
+
 ### La déconnexion d'un utilisateur
 
-**Route** : /logout
+**Route** : /users/logout
 
 **Redirection** : / (**home**)
 
@@ -462,7 +480,7 @@ Il est ensuite redirigé vers la page d'accueil avec un message de confirmation.
 
 ### La page profil d'un utilisateur
 
-**Route** : /profile/{id}
+**Route** : /users/profile/{id}
 
 **Vue** : users/profile.twig
 
@@ -523,7 +541,7 @@ On peut filtrer l'ensemble des utilisateurs avec une barre de recherche.
 
 ### L'édition d'un utilisateur
 
-**Route** : /users/{id}/update
+**Route** : /users/update/{id}
 
 **Vue** : users/edit_user.twig
 
@@ -534,7 +552,7 @@ On peut filtrer l'ensemble des utilisateurs avec une barre de recherche.
 **Rôle** : administrateur
 
 Un administrateur est redirigé vers un formulaire d'édition d'un utilisateur avec :
-- le rôle de l'utilisateur (membre, modérateur, administrateur)
+- le rôle de l'utilisateur (Membre, Modérateur, Administrateur)
 - le statut de bannissement (case à cocher)
 
 **Améliorations**
@@ -543,7 +561,7 @@ Le formulaire d'édition est intégré dans une fenêtre modale.
 
 ### La suppression d'un utilisateur
 
-**Route** : /users/{id}/delete
+**Route** : /users/delete/{id}
 
 **Vue** : users/delete_user.twig (*)
 
@@ -553,9 +571,13 @@ Le formulaire d'édition est intégré dans une fenêtre modale.
 
 **Rôle** : administrateur
 
-Un administrateur déclenche une fenêtre modale (*) de confirmation de suppression de l'utilisateur concerné.
+Un administrateur est redirigé vers la page de suppression de l'utilisateur concerné.
 
 La suppression d'un utilisateur entraîne également la suppression de l'ensemble de ses thèmes et expressions.
+
+**Améliorations**
+
+Un administrateur déclenche une fenêtre modale (*) de confirmation de suppression de l'utilisateur concerné.
 
 ## La gestion des thèmes
 
@@ -611,7 +633,7 @@ La validation du formulaire (titre obligatoire) se fait en temps réel.
 
 ### L'édition d'un thème
 
-**Route** : /themes/{id}/edit
+**Route** : /themes/edit/{id}
 
 **Vue** : themes/edit_theme.twig
 
@@ -633,9 +655,9 @@ La validation du formulaire (titre obligatoire) se fait en temps réel.
 
 ### La suppression d'un thème
 
-**Route** : /themes/{id}/delete
+**Route** : /themes/delete/{id}
 
-**Vue** : themes/delete_theme.twig (*)
+**Vue** : themes/delete_theme.twig
 
 **Redirection** : /themes
 
@@ -645,15 +667,19 @@ La validation du formulaire (titre obligatoire) se fait en temps réel.
 
 Un modérateur, un administrateur ou un même utilisateur peut supprimer un thème.
 
-Une fenêtre modale (*) s'affiche pour confirmer la suppression du thème.
+Il est ensuite redirigé vers la page de suppression du thème.
 
 La suppression d'un thème entraîne également la suppression de l'ensemble de ses expressions.
+
+**Améliorations**
+
+Une fenêtre modale s'affiche pour confirmer la suppression du thème.
 
 ## La gestion des expressions
 
 ### La liste des expressions d'un thème
 
-**Route** : /themes/{id}/show
+**Route** : /themes/show/{id}
 
 **Vue** : themes/show_theme.twig
 
@@ -680,11 +706,11 @@ On peut aussi filtrer l'ensemble des thèmes avec une barre de recherche.
 
 ### La génération de flashcards d'un thème
 
-**Route** : /themes/{id}/start
+**Route** : /themes/start/{id}
 
 **Vue** : themes/game.twig
 
-**Redirection** : /themes/{id}/show
+**Redirection** : /themes/show/{id}
 
 **Contrôleur** : ThemeController (start)
 
@@ -727,11 +753,11 @@ La validation du formulaire se fait en temps réel.
 
 ### L'édition d'une expression
 
-**Route** : /expressions/{id}/edit
+**Route** : /expressions/edit/{id}
 
 **Vue** : expressions/edit_expression.twig
 
-**Redirection** : /themes/{id}/show
+**Redirection** : /themes/show/{id}
 
 **Contrôleur** : ExpressionController (update)
 
@@ -752,17 +778,21 @@ La validation du formulaire (champs obligatoires) se fait en temps réel.
 
 ### La suppression d'une expression
 
-**Route** : /expressions/{id}/delete
+**Route** : /expressions/delete/{id}
 
 **Vue** : expressions/delete_expression.twig
 
-**Redirection** : /themes/{id}/show
+**Redirection** : /themes/show/{id}
 
 **Contrôleur** : ExpressionController (delete)
 
 **Rôle** : (même) utilisateur
 
 Un modérateur, un administrateur ou un même utilisateur peut supprimer une expression.
+
+Il est ensuite redirigé vers la page de suppression d'une expression.
+
+**Améliorations**
 
 Une fenêtre modale s'affiche pour confirmer la suppression d'une expression.
 
@@ -820,6 +850,18 @@ Un utilisateur publie aucune ou plusieurs expressions. (0,n)
 |**created_at**|la date d'inscription d'un utilisateur (au format JJ/MM/AAAA)|
 |**banned**|le statut de bannissement d'un utilisateur|
 
+```sql
+CREATE TABLE users (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	username VARCHAR(32) UNIQUE NOT NULL,
+	email VARCHAR(100) UNIQUE NOT NULL,
+	`password` VARCHAR(255) NOT NULL,
+	role VARCHAR(20) NOT NULL DEFAULT 'Membre',
+	created_at DATE DEFAULT CURRENT_TIMESTAMP,
+	banned BOOLEAN DEFAULT 0
+);
+```
+
 ### Les thèmes
 
 Un thème appartient à un seul utilisateur. (1,1)
@@ -831,6 +873,16 @@ Un thème contient aucune ou plusieurs expressions. (0,n)
 |**id**|l'identifiant d'un thème|
 |**title**|le titre d'un thème|
 |**user_id**|l'identifiant d'un utilisateur|
+
+```sql
+CREATE TABLE themes (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(50) UNIQUE NOT NULL,
+    user_id INTEGER NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+    ON DELETE CASCADE
+);
+```
 
 ### Les expressions
 
@@ -847,6 +899,19 @@ Une expression est classée dans un seul thème. (1,1)
 |**user_id**|l'identifiant d'un utilisateur|
 |**theme_id**|l'identifiant d'un thème|
 
+```sql
+CREATE TABLE expressions (
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	french VARCHAR(255) UNIQUE NOT NULL,
+	english VARCHAR(255) UNIQUE NOT NULL,
+	phonetics VARCHAR(255) UNIQUE NOT NULL,
+	user_id INTEGER NOT NULL,
+	theme_id INTEGER NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES users (id),
+	FOREIGN KEY (theme_id) REFERENCES themes (id)
+	ON DELETE CASCADE
+);
+```
 
 # L'architecture
 
@@ -1029,6 +1094,7 @@ Le framework se divise en plusieurs dossiers :
 - models
 - public
 - tests
+- validation
 
 ### Le dossier controllers
 
@@ -1050,11 +1116,14 @@ Il regroupe le coeur du fonctionnement du framework avec des classes et des fonc
 |**Controller.php**|la classe de base des contrôleurs|
 |**Cookie.php**|la classe utilitaire des cookies|
 |**Database.php**|la classe utilitaire de l'objet **PDO** (**PHP D**ata **O**bject) pour la connexion à la base de données|
+|**Faker.php**|la classe utilitaire des chaînes de caractères aléatoires pour les tests|
 |**Get.php**|la classe utilitaire de la méthode **GET**|
 |**Model.php**|la classe de base des modèles|
 |**Post.php**|la classe utilitaire de la méthode **POST**|
-|**RandomString.php**|la classe utilitaire des chaînes de caractères aléatoires pour les tokens CSRF et les tests|
+|**Redirection.php**|la classe utilitaire des redirections|
+|**Request.php**|la classe utilitaire des types de requêtes (ou méthodes)|
 |**Router.php**|la classe utilitaire du routeur|
+|**Security.php**|la classe utilitaire de la sécurité de l'application|
 |**Session.php**|la classe utilitaire de la session|
 |**Validator.php**|la classe utilitaire de la validation des formulaires|
 
@@ -1095,8 +1164,9 @@ On retrouve ensuite les dossiers suivants :
 
 |||
 |-|-|
-|**errors**|les pages d'erreur (404)|
+|**errors**|les pages d'erreur (403 et 404)|
 |**expressions**|les pages des expressions (ajout, édition et suppression)|
+|**macros**|les composants utilitaires (ou macros)|
 |**partials**|les composants récurrents (barre de navigation, pied de page, messages flash)|
 |**themes**|les pages des thèmes|
 |**users**|les pages des utilisateurs|
@@ -1107,11 +1177,23 @@ Il regroupe l'ensemble des classes de tests automatisés.
 
 |||
 |-|-|
+|**ModelTest.php**|classe de base des tests des modèles|
 |**ExpressionTest.php**|tests des fonctions liées à la table des expressions|
 |**ThemeTest.php**|tests des fonctions liées à la table des thèmes|
 |**UserTest.php**|tests des fonctions liées à la table des utilisateurs|
 
 <div class="page-break"></div>
+
+### Le dossier validation
+
+Il regroupe les classes de validation des formulaires :
+
+|||
+|-|-|
+|**Validation.php**|classe de base pour la validation d'un type de données|
+|**ExpressionValidation.php**|classe de validation des expressions|
+|**ThemeValidation.php**|classe de validation des thèmes|
+|**UserValidation.php**|classe de validation des utilisateurs|
 
 # La sécurité
 
@@ -1331,7 +1413,7 @@ abstract class Router {
                 
                 break;
 
-            ...
+            // ...
 
             default:
                 Redirection::notFound();
@@ -1532,9 +1614,9 @@ Différents loaders sont disponibles et on peut aussi écrire le nôtre si on so
 
 *Note*
 
-A noter que le second argument de l'application est un tableau d'options. L'option **cache** est un répertoire de cache de compilation, où Twig met en cache les modèles compilés pour éviter la phase d'analyse syntaxique des requêtes sous-jacentes.
+A noter que le second argument de l'application est un tableau d'options. L'option **cache** est un répertoire de cache de compilation, où Twig met en cache les templates compilés pour éviter la phase d'analyse syntaxique des requêtes sous-jacentes.
 
-Elle est très différente du cache que l'on souhaiterait ajouter pour les modèles compilés. Afin de satisfaire un tel besoin, toute librairie de cache en PHP s'avère utile.
+Elle est très différente du cache que l'on souhaiterait ajouter pour les templates compilés. Afin de satisfaire un tel besoin, toute librairie de cache en PHP s'avère utile.
 
 # Les axes d'améliorations
 
@@ -1567,5 +1649,101 @@ Ce projet m'aura beaucoup appris et me motive à poursuivre avec diverses améli
 
 Un futur déploiement est à envisager.
 
+# Annexes
+
+## Aperçu de la base de données sur PHPMyAdmin
+
+![](images/bonus/apercu-phpmyadmin.png)
+
+![](images/bonus/table-expressions.png)
+
+## Fichiers de données de test (CSV)
+
+### users.csv
+
+```csv
+username;email;password;role
+Lukas;lukas@admin.com;Admin007;Administrateur
+Mario64;mario64@user.com;MarioN64;Membre
+Mister Bean;mister@bean.com;MrBean123;Membre
+Johnny English;johnny@english.com;JEnglish123;Membre
+David Goodenough;david@goodenough.com;David123;Membre
+Vigibello;vgibello@admin.com;React123;Modérateur
+Mika;mika@admin.com;Kaamelot123;Modérateur
+JM Codage;jean.michel@codage.com;JMCode123;Membre
+Joeystar;joey@star.com;Joestar123;Membre
+```
+
+### themes.csv
+
+```csv
+title;user_id
+Expressions de base;1
+Jours de la semaine;2
+Mois;3
+```
+
+### expressions.csv
+
+```csv
+french;english;phonetics;theme_id;user_id
+Bonjour ! (le matin);Good morning !;goud mor-ning;1;1
+Bonjour ! (l'après-midi);Good afternoon !;goud af-teu-noun;1;1
+Bonsoir !;Good evening !;goud ive-nin-gue;1;1
+Bonne nuit !;Good night !;goud naït;1;1
+Au revoir !;Goodbye !;goud baï;1;1
+Salut !;Hello !;hélo-ou;1;1
+oui;yes;yés;1;1
+non;no;no-ou;1;1
+S'il te / vous plaît !;Please !;plize;1;1
+Merci !;Thank you !;fénk you;1;1
+Merci beaucoup !;Thank you very much !;fénk you véwi meutch;1;1
+Vous parlez anglais ?;Do you speak English ?;dou you spik in-glich ?;1;1
+Je suis français(e).;I am French.;ay am fwénch;1;1
+lundi;Monday;mone-déï;2;3
+mardi;Tuesday;tiouz-déï;2;3
+mercredi;Wednesday;wénz-déï;2;3
+jeudi;Thursday;feurs-déï;2;3
+vendredi;Friday;fouaï-déï;2;3
+samedi;Saturday;sa-teu-déï;2;3
+dimanche;Sunday;seun-déï;2;3
+janvier;January;dja-niu-wi;3;5
+février;February;fé-bwu-wi;3;5
+mars;March;mar-tch;3;5
+avril;April;éï-pweul;3;5
+mai;May;méï;3;5
+juin;June;dju-ne;3;5
+juillet;July;dju-laï;3;5
+août;August;o-ou-geust;3;5
+septembre;September;sép-tém-beur;3;5
+octobre;October;ok-to-ou-beur;3;5
+novembre;November;no-vém-beur;3;5
+décembre;December;di-sém-beur;3;5
+```
+
+## Exemple de liste de progression
+
+Voici un exemple avec l'ajout d'un thème :
+
+|||
+|-|-|
+|Route **/themes/new** (même membre, modérateur, admin)|X|
+|Erreur si non autorisé|X|
+|Formulaire d'ajout d'un thème|B|
+|(+) Fenêtre modale d'ajout d'un thème|TD|
+|Validation simple|TD|
+|(+) Validation en temps réel|TD|
+|Ajout d'un thème|TD|
+|Redirection vers la liste des thèmes|TD|
+|Message d'ajout d'un thème|TD|
+
+Les lettres et symbôles se traduisent par :
+
+|||
+|-|-|
+|B|base|
+|TD|à faire (todo)|
+|X|fait|
+|(+)|amélioration|
 
 

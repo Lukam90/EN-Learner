@@ -16,6 +16,8 @@ Un menu de navigation du site est visible tout en haut de chaque page et contien
     - Communauté (liste des utilisateurs)
     - Listes (liste des thèmes)
 
+![](images/screens/home-stats.png)
+
 ### Le pied de page
 
 **Vue** : partials/footer.twig

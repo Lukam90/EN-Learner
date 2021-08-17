@@ -2,7 +2,7 @@
 
 ### La liste des expressions d'un thème
 
-**Route** : /themes/{id}/show
+**Route** : /themes/show/{id}
 
 **Vue** : themes/show_theme.twig
 
@@ -29,11 +29,11 @@ On peut aussi filtrer l'ensemble des thèmes avec une barre de recherche.
 
 ### La génération de flashcards d'un thème
 
-**Route** : /themes/{id}/start
+**Route** : /themes/start/{id}
 
 **Vue** : themes/game.twig
 
-**Redirection** : /themes/{id}/show
+**Redirection** : /themes/show/{id}
 
 **Contrôleur** : ThemeController (start)
 
@@ -76,11 +76,11 @@ La validation du formulaire se fait en temps réel.
 
 ### L'édition d'une expression
 
-**Route** : /expressions/{id}/edit
+**Route** : /expressions/edit/{id}
 
 **Vue** : expressions/edit_expression.twig
 
-**Redirection** : /themes/{id}/show
+**Redirection** : /themes/show/{id}
 
 **Contrôleur** : ExpressionController (update)
 
@@ -101,16 +101,20 @@ La validation du formulaire (champs obligatoires) se fait en temps réel.
 
 ### La suppression d'une expression
 
-**Route** : /expressions/{id}/delete
+**Route** : /expressions/delete/{id}
 
 **Vue** : expressions/delete_expression.twig
 
-**Redirection** : /themes/{id}/show
+**Redirection** : /themes/show/{id}
 
 **Contrôleur** : ExpressionController (delete)
 
 **Rôle** : (même) utilisateur
 
 Un modérateur, un administrateur ou un même utilisateur peut supprimer une expression.
+
+Il est ensuite redirigé vers la page de suppression d'une expression.
+
+**Améliorations**
 
 Une fenêtre modale s'affiche pour confirmer la suppression d'une expression.

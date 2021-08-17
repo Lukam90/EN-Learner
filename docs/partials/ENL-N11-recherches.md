@@ -64,6 +64,6 @@ Différents loaders sont disponibles et on peut aussi écrire le nôtre si on so
 
 *Note*
 
-A noter que le second argument de l'application est un tableau d'options. L'option **cache** est un répertoire de cache de compilation, où Twig met en cache les modèles compilés pour éviter la phase d'analyse syntaxique des requêtes sous-jacentes.
+A noter que le second argument de l'application est un tableau d'options. L'option **cache** est un répertoire de cache de compilation, où Twig met en cache les templates compilés pour éviter la phase d'analyse syntaxique des requêtes sous-jacentes.
 
-Elle est très différente du cache que l'on souhaiterait ajouter pour les modèles compilés. Afin de satisfaire un tel besoin, toute librairie de cache en PHP s'avère utile.
+Elle est très différente du cache que l'on souhaiterait ajouter pour les templates compilés. Afin de satisfaire un tel besoin, toute librairie de cache en PHP s'avère utile.

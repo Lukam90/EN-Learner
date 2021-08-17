@@ -2,7 +2,7 @@
 
 ### L'inscription d'un nouvel utilisateur
 
-**Route** : /register
+**Route** : /users/register
 
 **Vue** : users/register.twig
 
@@ -13,9 +13,9 @@
 Un utilisateur doit s'inscrire s'il souhaite contribuer à la base de vocabulaire.
 
 Il devra indiquer :
-- son pseudo (requis, unique, alphanumérique, espaces inclus, sans accents, de 2 à 50 caractères)
-- son adresse e-mail (requis, unique, e-mail valide, 180 caractères max)
-- son mot de passe (requis, 8 à 32 caractères avec minuscules, majuscules et chiffres)
+- son pseudo (requis, unique, alphanumérique, espaces inclus, sans accents, de 2 à 32 caractères)
+- son adresse e-mail (requis, unique, e-mail valide, 100 caractères max)
+- son mot de passe (requis, 8 à 32 caractères alphanumériques, avec au moins une minuscule, une majuscule et un chiffre)
 - sa confirmation du mot de passe
 
 Des messages d'erreur s'afficheront en-dessous de chaque champ mal renseigné.
@@ -30,7 +30,7 @@ Le formulaire de connexion s'affiche dans une fenêtre modale.
 
 ### La connexion d'un utilisateur
 
-**Route** : /login
+**Route** : /users/login
 
 **Vue** : users/login.twig
 
@@ -42,19 +42,43 @@ Un utilisateur a le droit de se connecter suivant ces conditions :
 - il n'a pas été banni par un administrateur
 - son compte n'a pas été supprimé
 
-Un utilisateur est invité à se connecter avec son e-mail et son mot de passe.
+Il est invité à se connecter avec son e-mail et son mot de passe.
 
 **Améliorations**
 
 Le formulaire de connexion se trouve dans une fenêtre modale.
 
+### (+) La demande d'un nouveau mot de passe
+
+**Route** : /users/reset
+
+**Vue** : users/reset.twig
+
+**Contrôleur** : UserController (reset)
+
+**Rôle** : invité
+
 Un utilisateur peut demander un nouveau mot de passe si nécessaire en cliquant sur un lien **Mot de passe oublié**.
 
 Il reçoit ensuite un e-mail avec son nouveau mot de passe.
 
+### (+) La confirmation de la demande d'un nouveau mot de passe
+
+**Route** : /users/confirm
+
+**Vue** : users/confirm.twig
+
+**Contrôleur** : UserController (confirm)
+
+**Rôle** : invité
+
+L'utilisateur est invité à cliquer sur le lien de confirmation de son e-mail indiquant son nouveau mot de passe.
+
+Il est ensuite redirigé vers une page de confirmation de demande d'un nouveau mot de passe.
+
 ### La déconnexion d'un utilisateur
 
-**Route** : /logout
+**Route** : /users/logout
 
 **Redirection** : / (**home**)
 
@@ -68,7 +92,7 @@ Il est ensuite redirigé vers la page d'accueil avec un message de confirmation.
 
 ### La page profil d'un utilisateur
 
-**Route** : /profile/{id}
+**Route** : /users/profile/{id}
 
 **Vue** : users/profile.twig
 
@@ -129,7 +153,7 @@ On peut filtrer l'ensemble des utilisateurs avec une barre de recherche.
 
 ### L'édition d'un utilisateur
 
-**Route** : /users/{id}/update
+**Route** : /users/update/{id}
 
 **Vue** : users/edit_user.twig
 
@@ -140,7 +164,7 @@ On peut filtrer l'ensemble des utilisateurs avec une barre de recherche.
 **Rôle** : administrateur
 
 Un administrateur est redirigé vers un formulaire d'édition d'un utilisateur avec :
-- le rôle de l'utilisateur (membre, modérateur, administrateur)
+- le rôle de l'utilisateur (Membre, Modérateur, Administrateur)
 - le statut de bannissement (case à cocher)
 
 **Améliorations**
@@ -149,7 +173,7 @@ Le formulaire d'édition est intégré dans une fenêtre modale.
 
 ### La suppression d'un utilisateur
 
-**Route** : /users/{id}/delete
+**Route** : /users/delete/{id}
 
 **Vue** : users/delete_user.twig (*)
 
@@ -159,6 +183,10 @@ Le formulaire d'édition est intégré dans une fenêtre modale.
 
 **Rôle** : administrateur
 
-Un administrateur déclenche une fenêtre modale (*) de confirmation de suppression de l'utilisateur concerné.
+Un administrateur est redirigé vers la page de suppression de l'utilisateur concerné.
 
 La suppression d'un utilisateur entraîne également la suppression de l'ensemble de ses thèmes et expressions.
+
+**Améliorations**
+
+Un administrateur déclenche une fenêtre modale (*) de confirmation de suppression de l'utilisateur concerné.

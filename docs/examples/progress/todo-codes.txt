@@ -1,0 +1,6 @@
+|||
+|-|-|
+|B|base|
+|TD|à faire (todo)|
+|X|fait|
+|(+)|amélioration|

@@ -52,6 +52,10 @@ Un utilisateur publie aucune ou plusieurs expressions. (0,n)
 |**created_at**|la date d'inscription d'un utilisateur (au format JJ/MM/AAAA)|
 |**banned**|le statut de bannissement d'un utilisateur|
 
+```sql
+@include tables/create-users
+```
+
 ### Les thèmes
 
 Un thème appartient à un seul utilisateur. (1,1)
@@ -63,6 +67,10 @@ Un thème contient aucune ou plusieurs expressions. (0,n)
 |**id**|l'identifiant d'un thème|
 |**title**|le titre d'un thème|
 |**user_id**|l'identifiant d'un utilisateur|
+
+```sql
+@include tables/create-themes
+```
 
 ### Les expressions
 
@@ -78,3 +86,7 @@ Une expression est classée dans un seul thème. (1,1)
 |**phonetics**|la transcription phonétique|
 |**user_id**|l'identifiant d'un utilisateur|
 |**theme_id**|l'identifiant d'un thème|
+
+```sql
+@include tables/create-expressions
+```

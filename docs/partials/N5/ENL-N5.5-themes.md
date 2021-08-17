@@ -52,7 +52,7 @@ La validation du formulaire (titre obligatoire) se fait en temps réel.
 
 ### L'édition d'un thème
 
-**Route** : /themes/{id}/edit
+**Route** : /themes/edit/{id}
 
 **Vue** : themes/edit_theme.twig
 
@@ -74,9 +74,9 @@ La validation du formulaire (titre obligatoire) se fait en temps réel.
 
 ### La suppression d'un thème
 
-**Route** : /themes/{id}/delete
+**Route** : /themes/delete/{id}
 
-**Vue** : themes/delete_theme.twig (*)
+**Vue** : themes/delete_theme.twig
 
 **Redirection** : /themes
 
@@ -86,6 +86,10 @@ La validation du formulaire (titre obligatoire) se fait en temps réel.
 
 Un modérateur, un administrateur ou un même utilisateur peut supprimer un thème.
 
-Une fenêtre modale (*) s'affiche pour confirmer la suppression du thème.
+Il est ensuite redirigé vers la page de suppression du thème.
 
 La suppression d'un thème entraîne également la suppression de l'ensemble de ses expressions.
+
+**Améliorations**
+
+Une fenêtre modale s'affiche pour confirmer la suppression du thème.

@@ -13,7 +13,7 @@ abstract class Router {
                 
                 break;
 
-            ...
+            // ...
 
             default:
                 Redirection::notFound();

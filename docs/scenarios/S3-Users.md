@@ -5,12 +5,14 @@
 |||
 |-|-|
 |Route **/users/register** (invité)|B|
+|Erreur si utilisateur connecté|TD|
 |Formulaire d'inscription|X|
 |(+) Fenêtre modale d'inscription|TD|
 |Validation simple|X|
 |(+) Validation en temps réel|TD|
 |Enregistrement d'un utilisateur|TD|
 |Redirection vers la page de connexion|TD|
+|Message d'inscription|TD|
 
 ### La connexion d'un utilisateur
 
@@ -18,43 +20,51 @@
 |-|-|
 |Route **/users/login** (invité)|X|
 |Lien "Connexion" (invité)|X|
+|Erreur si utilisateur non autorisé|TD|
 |Affichage simple du formulaire de connexion|X|
 |Affichage du formulaire pour un invité (non connecté)|X|
 |Erreur si mauvais e-mail ou mot de passe|TD|
-|Erreur si utilisateur banni|TD|
 |Redirection vers la page d'accueil|TD|
+|Message de connexion|TD|
 
-### L'oubli de mot de passe|améliorations
+### (+) L'oubli de mot de passe
 
 |||
 |-|-|
-|La route /users/reset fonctionne|amélioration|
-|Le lien "Mot de passe oublié" fonctionne|X|
-|Page de demande de mot de passe oublié|bases|
-|Fenêtre modale de demande de mot de passe oublié|amélioration|
-|Envoi d'un e-mail avec nouveau mot de passe|amélioration|
-|Confirmation de l'e-mail avec le nouveau mot de passe|amélioration|
+|(+) Route **/users/reset** (invité)|TD|
+|(+) Erreur si connecté|TD|
+|(+) Lien "Mot de passe oublié"|B|
+|(+) Page de demande de mot de passe oublié|B|
+|(+) Fenêtre modale de demande de mot de passe oublié|TD|
+|(+) Envoi d'un e-mail avec nouveau mot de passe|TD|
+|(+) Confirmation de l'e-mail avec le nouveau mot de passe|TD|
+|(+) Message de confirmation de nouveau mot de passe|TD|
 
 ### La déconnexion d'un utilisateur
 
 |||
 |-|-|
-|La route /users/logout fonctionne|
-|Le lien "Déconnexion" fonctionne|
-|Redirection vers la page d'accueil|
-|Message de succès de déconnexion|
+|Route **/users/logout** (membre)|TD|
+|Lien "Déconnexion" (membre)|B|
+|Redirection vers la page d'accueil|TD|
+|Message de déconnexion|TD|
+|Message d'erreur si déjà déconnecté|TD|
 
 ### La page profil d'un utilisateur
 
 |||
 |-|-|
-|La route /users/profile/{id} fonctionne|
-|Le lien "e-mail" fonctionne|
-|L'accès fonctionne pour un utilisateur précis et autorisé|
-|Le formulaire de changement de pseudo et d'e-mail fonctionne|
-|(+) Le formulaire de changement d'e-mail fonctionne en temps réel|
-|Le formulaire de changement de mot de passe fonctionne|
-|(+) Le formulaire de changement de mot de passe fonctionne en temps réel|
+|Route **/users/profile/{id}** (même membre)|TD|
+|Lien de profil avec nom d'utilisateur|B|
+|Erreur si non autorisé|TD|
+|Formulaire de changement de pseudo et d'e-mail|B|
+|Validation simple pseudo - e-mail|TD|
+|(+) Validation en temps réel pseudo - e-mail|TD|
+|Message de confirmation de nouveaux identifiants|TD|
+|Formulaire de changement de mot de passe|B|
+|Validation du nouveau mot de passe|B|
+|(+) Validation en temps réel du nouveau mot de passe|TD|
+|Message de confirmation de nouveau mot de passe|TD|
 
 ### La liste des utilisateurs
 
@@ -62,12 +72,11 @@
 |-|-|
 |Route **/users**|X|
 |Lien "Communauté"|X|
+|Erreur si non autorisé|TD|
 |Liste des utilisateurs|B|
-|Erreur si utilisateur banni|TD|
-|Bouton d'ajout (membre)|
-|Le bouton "Ajouter" est visible pour un utilisateur connecté et autorisé|
-|Message d'absence d'utilisateur|
-|Boutons d'édition / suppression visibles par un admin|
+|Absence d'utilisateur|B|
+|Bouton d'édition d'un utilisateur (admin)|TD|
+|Bouton de suppression d'un utilisateur (admin)|TD|
 |(+) Ordre d'affichage pour chaque colonne|TD|
 |(+) Pagination avec 50 résultats par défaut|TD|
 |(+) Filtrage des utilisateurs par pseudo|TD|
@@ -76,16 +85,18 @@
 
 |||
 |-|-|
-|Route **/users/{id}/update** (admin)|B|
-|Bouton d'édition (admin)|B|
+|Route **/users/update/{id}** (admin)|B|
+|Bouton d'édition d'un utilisateur (admin)|B|
 |Edition d'un utilisateur (admin)|TD|
-|(+) Fenêtre modale d'édition|TD|
+|(+) Fenêtre modale d'édition d'un utilisateur|TD|
+|Message d'édition d'un utilisateur|TD|
 
 ### La suppression d'un utilisateur
 
 |||
 |-|-|
-|Route **/users/{id}/delete** (admin)|TD|
-|Bouton de suppression|B|
+|Route **/users/delete/{id}** (admin)|TD|
+|Bouton de suppression d'un utilisateur|B|
 |Suppression d'un utilisateur|TD|
 |(+) Fenêtre modale de suppression|TD|
+|Message de suppression d'un utilisateur|TD|
