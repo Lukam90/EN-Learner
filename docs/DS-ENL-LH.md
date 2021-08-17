@@ -870,6 +870,8 @@ Voici un exemple avec le modèle Theme :
 
 ```php
 class Theme extends Model {
+    // ...
+
     // Sélection d'un thème par le titre
 
     public function findByTitle($title) {
@@ -896,7 +898,7 @@ class Theme extends Model {
         return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
-    ...
+    // ...
 }
 ```
 
@@ -1137,6 +1139,8 @@ Voici un exemple avec la fonction **clean()** de la classe utilitaire **RandomSt
 
 ```php
 abstract class Security {
+    // ...
+
     // Nettoyage des caractères spéciaux (XSS)
 
     public static function clean($string) {
@@ -1147,7 +1151,7 @@ abstract class Security {
         return $string;
     }
 
-    ...
+    // ...
 }
 ```
 
@@ -1313,6 +1317,8 @@ Il s'agit de la classe du routeur pour gérer les redirections d'une manière g�
 
 ```php
 abstract class Router {
+    // ...
+
     // Redirection de la page
 
     public static function init() {
@@ -1334,7 +1340,7 @@ abstract class Router {
         }
     }
 
-    ...
+    // ...
 }
 ```
 
@@ -1344,6 +1350,8 @@ Il s'agit de la classe des sessions liée à la superglobale `$_SESSION`.
 
 ```php
 class Session {
+    // ...
+
     // Démarrage d'une session
 
     public static function start() {
@@ -1366,7 +1374,49 @@ class Session {
         $_SESSION[$name] = Security::clean($variable);
     }
 
-    ...
+    // ...
+}
+```
+
+## validation > UserValidation.php
+
+Il s'agit de la classe de validation liée aux pages des utilisateurs.
+
+```php
+class UserValidation extends Validation {
+    // ...
+
+    // Pseudo
+
+    public function username() {
+        $username = "";
+
+        if (! Post::empty("username")) {
+            sleep(1);
+
+            $username = Post::var("username");
+
+            $regex = "/^[a-z0-9\s]{2,32}$/i";
+    
+            if (preg_match($regex, $username)) {
+                $exists = $this->userModel->findByName($username);
+    
+                if (! $exists) {
+                    $this->setTip("username", "");
+                } else {
+                    $this->setError("username", "Le pseudo existe déjà. Veuillez en choisir un autre.");
+                }
+            } else {
+                $this->setError("username", "Le pseudo doit être valide.");
+            }
+        } else {
+            $this->setError("username", "Le pseudo doit être renseigné.");
+        }
+
+        return $username;
+    }
+
+    // ...
 }
 ```
 
@@ -1494,6 +1544,8 @@ Il me reste à revoir certains aspects comme :
 - l'affichage de données par pages et filtres de recherche
 - la réinitialisation du mot de passe d'un utilisateur avec envoi par e-mail
 - le développement du jeu de flashcards aléatoires d'un thème
+- la revue du design en CSS en étant indépendant de tout framework CSS
+- l'écriture du CSS avec Sass
 
 # Conclusion
 

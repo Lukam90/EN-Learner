@@ -1,125 +1,91 @@
-# T - La gestion des utilisateurs
+## S3 - Les utilisateurs
 
-## T - L'inscription d'un nouvel utilisateur
+### L'inscription d'un nouvel utilisateur
 
-La route **/register** fonctionne []
+|||
+|-|-|
+|Route **/users/register** (invité)|B|
+|Formulaire d'inscription|X|
+|(+) Fenêtre modale d'inscription|TD|
+|Validation simple|X|
+|(+) Validation en temps réel|TD|
+|Enregistrement d'un utilisateur|TD|
+|Redirection vers la page de connexion|TD|
 
-Affichage du formulaire d'inscription []
+### La connexion d'un utilisateur
 
-Pseudo - Email - Mot de passe + Confirmation - Bouton "S'inscrire" (Vertical)
+|||
+|-|-|
+|Route **/users/login** (invité)|X|
+|Lien "Connexion" (invité)|X|
+|Affichage simple du formulaire de connexion|X|
+|Affichage du formulaire pour un invité (non connecté)|X|
+|Erreur si mauvais e-mail ou mot de passe|TD|
+|Erreur si utilisateur banni|TD|
+|Redirection vers la page d'accueil|TD|
 
-Affichage du formulaire d'inscription / invité seulement []
+### L'oubli de mot de passe|améliorations
 
-Validation simple du formulaire d'inscription []
+|||
+|-|-|
+|La route /users/reset fonctionne|amélioration|
+|Le lien "Mot de passe oublié" fonctionne|X|
+|Page de demande de mot de passe oublié|bases|
+|Fenêtre modale de demande de mot de passe oublié|amélioration|
+|Envoi d'un e-mail avec nouveau mot de passe|amélioration|
+|Confirmation de l'e-mail avec le nouveau mot de passe|amélioration|
 
-pseudo (2 à 50) - email (180 max), mot de passe (8 à 32, alphanum), confirmation
+### La déconnexion d'un utilisateur
 
-L'unicité du pseudo et de l'e-mail est prise en compte []
+|||
+|-|-|
+|La route /users/logout fonctionne|
+|Le lien "Déconnexion" fonctionne|
+|Redirection vers la page d'accueil|
+|Message de succès de déconnexion|
 
-(+) Validation temps réel du formulaire d'inscription []
+### La page profil d'un utilisateur
 
-(+) Fenêtre modale d'inscription []
+|||
+|-|-|
+|La route /users/profile/{id} fonctionne|
+|Le lien "e-mail" fonctionne|
+|L'accès fonctionne pour un utilisateur précis et autorisé|
+|Le formulaire de changement de pseudo et d'e-mail fonctionne|
+|(+) Le formulaire de changement d'e-mail fonctionne en temps réel|
+|Le formulaire de changement de mot de passe fonctionne|
+|(+) Le formulaire de changement de mot de passe fonctionne en temps réel|
 
-## T - La connexion d'un utilisateur
+### La liste des utilisateurs
 
-La route **/login** fonctionne []
+|||
+|-|-|
+|Route **/users**|X|
+|Lien "Communauté"|X|
+|Liste des utilisateurs|B|
+|Erreur si utilisateur banni|TD|
+|Bouton d'ajout (membre)|
+|Le bouton "Ajouter" est visible pour un utilisateur connecté et autorisé|
+|Message d'absence d'utilisateur|
+|Boutons d'édition / suppression visibles par un admin|
+|(+) Ordre d'affichage pour chaque colonne|TD|
+|(+) Pagination avec 50 résultats par défaut|TD|
+|(+) Filtrage des utilisateurs par pseudo|TD|
 
-Le lien "Connexion" fonctionne []
+### L'édition d'un utilisateur
 
-Affichage simple du formulaire de connexion []
+|||
+|-|-|
+|Route **/users/{id}/update** (admin)|B|
+|Bouton d'édition (admin)|B|
+|Edition d'un utilisateur (admin)|TD|
+|(+) Fenêtre modale d'édition|TD|
 
-Le formulaire de connexion est inaccessible à un utilisateur connecté []
+### La suppression d'un utilisateur
 
-Le formulaire de connexion est inaccessible à un utilisateur banni []
-
-Connexion validée []
-
-Erreur si mauvais e-mail ou mot de passe []
-
-Redirection vers la page d'accueil [] : dossier
-
-## T - (+) L'oubli de mot de passe
-
-La route **/reset** fonctionne []
-
-Le lien "Mot de passe oublié" fonctionne []
-
-Page de demande de mot de passe oublié [] : précisions dossier
-
-Fenêtre modale de demande de mot de passe oublié [] : précisions dossier
-
-Envoi d'un e-mail avec nouveau mot de passe []
-
-Confirmation de l'e-mail avec le nouveau mot de passe []
-
-## T - La déconnexion d'un utilisateur
-
-La route **/logout** fonctionne []
-
-Le lien "Déconnexion" fonctionne []
-
-Redirection vers la page d'accueil []
-
-Message de succès de déconnexion []
-
-## T - La page profil d'un utilisateur
-
-La route **/profile** fonctionne []
-
-Le lien "e-mail" fonctionne []
-
-L'accès fonctionne pour un utilisateur précis et autorisé []
-
-Le formulaire de changement de pseudo et d'e-mail fonctionne []
-
-Unicité du pseudo et de l'e-mail
-
-(+) Le formulaire de changement d'e-mail fonctionne en temps réel []
-
-Le formulaire de changement de mot de passe fonctionne []
-
-(+) Le formulaire de changement de mot de passe fonctionne en temps réel []
-
-## T - La liste des utilisateurs
-
-La route **/users** fonctionne []
-
-Le lien "Communauté" fonctionne []
-
-La liste des utilisateurs s'affiche correctement []
-
-Le bouton "Ajouter" est visible pour un utilisateur connecté et autorisé []
-
-Les rôles sont coloriés []
-
-Modérateur = vert, Admin = Rouge
-
-Message d'absence d'utilisateur []
-
-Boutons d'édition / suppression visibles par un admin []
-
-(+) Ordre d'affichage pour chaque colonne []
-
-(+) Pagination avec 50 par défaut []
-
-(+) Filtrage des utilisateurs par pseudo []
-
-## T - L'édition d'un utilisateur
-
-La route **/users/{id}/update** fonctionne []
-
-Le bouton d'édition fonctionne []
-
-L'édition d'un utilisateur fonctionne []
-
-(+) L'édition d'un utilisateur fonctionne en modal []
-
-## T - La suppression d'un utilisateur
-
-La route **/users/{id}/delete** fonctionne pour un admin seul []
-
-Le bouton de suppression fonctionne []
-
-La suppression d'un utilisateur fonctionne []
-
-Cascade > Suppression des expressions, suivi des thèmes associés
+|||
+|-|-|
+|Route **/users/{id}/delete** (admin)|TD|
+|Bouton de suppression|B|
+|Suppression d'un utilisateur|TD|
+|(+) Fenêtre modale de suppression|TD|

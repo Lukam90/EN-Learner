@@ -1,61 +1,59 @@
-# T - La gestion des expressions
+## S5 - La gestion des expressions
 
-## T - La liste des expressions d'un thème
+### La liste des expressions d'un thème
 
-Route **/themes/{id}/show** valide []
+|||
+|-|-|
+|Route **/themes/{id}/show**|B|
+|Erreur si banni|TD|
+|Liste des expressions|B|
+|Absence d'expression|B|
+|Bouton d'ajout (membre)|B|
+|(+) Ordre d'affichage / colonne|TD|
+|(+) Pagination avec 50 résultats par défaut|TD|
+|(+) Filtre par expression (français et anglais)|TD|
 
-Affichage de la liste []
+### (+) La génération de flashcards d'un thème
 
-Bouton d'ajout / user autorisé []
+|||
+|-|-|
+|Route **/themes/{id}/start**|TD|
+|Erreur si banni|TD|
+|Bouton de jeu (N > 10)|TD|
+|Niveaux facile - moyen (N >= 15)|TD|
+|Niveau difficile (N >= 20)|TD|
+|Génération de N flashcards aléatoires|TD|
+|Proposition de revanche|TD|
 
-Absence d'expression []
+### L'ajout d'une expression
 
-Ordre d'affichage / colonne []
+|||
+|-|-|
+|Route **/expressions/new**|B|
+|Erreur si banni|TD|
+|Formulaire d'ajout|B|
+|(+) Fenêtre modale d'ajout|TD|
+|Validation simple|TD|
+|(+) Validation en temps réel|TD|
+|Ajout de thème|TD|
 
-Pagination avec n = 50 []
+### L'édition d'une expression
 
-Filtre par expression (FR) []
+|||
+|-|-|
+|Route /expressions/edit/{id} (même membre, modérateur, admin)|B|
+|Erreur si banni|TD|
+|Formulaire d'édition|B|
+|(+) Fenêtre modale d'édition|TD|
+|Validation simple|TD|
+|(+) Validation en temps réel|TD|
+|Edition d'une expression|TD|
 
-## T - (+) La génération de flashcards d'un thème
+### La suppression d'une expression
 
-Route **/themes/{id}/start** valide [] : invité ?
-
-Bouton de jeu si N > 10 []
-
-Niveau de difficulté dès 15 (facile - moyen) []
-
-Niveau difficile dès N >= 20 []
-
-Génération de N flashcards aléatoires []
-
-Revanche []
-
-## T - L'ajout d'une expression
-
-Route **/expressions/new** valide []
-
-Formulaire d'ajout + validation []
-
-(+) Validation en temps réel []
-
-(+) Ajout en modal []
-
-## T - L'édition d'une expression
-
-Route **/expressions/:id/edit** valide []
-
-\- user autorisé =, modo, admin
-
-Formulaire d'édition + validation []
-
-(+) Validation en temps réel []
-
-(+) Edition en modal []
-
-## T - La suppression d'une expression
-
-Route **/expressions/:id/delete** valide []
-
-\- user autorisé =, modo, admin
-
-Suppression en modal []
+|||
+|-|-|
+|Route **/expressions/delete/{id}** (même membre, modérateur, admin)|B|
+|Erreur si banni|TD|
+|Suppression d'un utilisateur|TD|
+|(+) Fenêtre modale de suppression|TD|
