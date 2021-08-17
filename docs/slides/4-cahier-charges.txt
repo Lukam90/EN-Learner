@@ -1,0 +1,46 @@
+Cahier des charges
+
+1)
+
+Les règles de base
+
+- Navigation simple
+- Norme RGPD
+- Sécurité
+- Communauté
+
+2)
+
+L'accueil
+
+- Nombre de thèmes
+- Nombre d'utilisateurs
+- Nombre d'expressions
+
+3)
+
+Les utilisateurs
+
+- Inscription et (dé)connexion
+- Liste (Communauté)
+- Rôles (Membre, Modérateur, Administrateur)
+- Edition et suppression
+- Contributions
+- Page de profil
+
+4)
+
+Les thèmes
+
+- Listes (vocabulaire)
+- Ajout, édition et suppression
+- Liés aux utilisateurs
+
+5)
+
+Les expressions
+
+- Listes (par thème)
+- Ajout, édition et suppression
+- Liés aux utilisateurs
+- Jeu avec flashcards

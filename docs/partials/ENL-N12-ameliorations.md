@@ -1,4 +1,4 @@
-# Les axes d'améliorations
+# Les axes d'amélioration
 
 Il me reste à revoir certains aspects comme :
 - l'intégration de fenêtres modales pour la connexion, l'inscription, l'ajout, l'édition et la suppression de données

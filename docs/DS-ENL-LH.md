@@ -1618,7 +1618,7 @@ A noter que le second argument de l'application est un tableau d'options. L'opti
 
 Elle est très différente du cache que l'on souhaiterait ajouter pour les templates compilés. Afin de satisfaire un tel besoin, toute librairie de cache en PHP s'avère utile.
 
-# Les axes d'améliorations
+# Les axes d'amélioration
 
 Il me reste à revoir certains aspects comme :
 - l'intégration de fenêtres modales pour la connexion, l'inscription, l'ajout, l'édition et la suppression de données
@@ -1661,65 +1661,42 @@ Un futur déploiement est à envisager.
 
 ### users.csv
 
-```csv
-username;email;password;role
-Lukas;lukas@admin.com;Admin007;Administrateur
-Mario64;mario64@user.com;MarioN64;Membre
-Mister Bean;mister@bean.com;MrBean123;Membre
-Johnny English;johnny@english.com;JEnglish123;Membre
-David Goodenough;david@goodenough.com;David123;Membre
-Vigibello;vgibello@admin.com;React123;Modérateur
-Mika;mika@admin.com;Kaamelot123;Modérateur
-JM Codage;jean.michel@codage.com;JMCode123;Membre
-Joeystar;joey@star.com;Joestar123;Membre
-```
+|username|email|password|role|
+|-|-|-|-|
+|Lukas|lukas@admin.com|Admin007|Administrateur|
+|Mario64|mario64@user.com|MarioN64|Membre|
+|Mister Bean|mister@bean.com|MrBean123|Membre|
+|Johnny English|johnny@english.com|JEnglish123|Membre|
+|David Goodenough|david@goodenough.com|David123|Membre|
+|Vigibello|vgibello@admin.com|React123|Modérateur|
+|Mika|mika@admin.com|Kaamelot123|Modérateur|
+|JM Codage|jean.michel@codage.com|JMCode123|Membre|
+|Joeystar|joey@star.com|Joestar123|Membre|
 
 ### themes.csv
 
-```csv
-title;user_id
-Expressions de base;1
-Jours de la semaine;2
-Mois;3
-```
+|title|user_id|
+|-|-|
+|Expressions de base|1|
+|Jours de la semaine|2|
+|Mois|3|
 
 ### expressions.csv
 
-```csv
-french;english;phonetics;theme_id;user_id
-Bonjour ! (le matin);Good morning !;goud mor-ning;1;1
-Bonjour ! (l'après-midi);Good afternoon !;goud af-teu-noun;1;1
-Bonsoir !;Good evening !;goud ive-nin-gue;1;1
-Bonne nuit !;Good night !;goud naït;1;1
-Au revoir !;Goodbye !;goud baï;1;1
-Salut !;Hello !;hélo-ou;1;1
-oui;yes;yés;1;1
-non;no;no-ou;1;1
-S'il te / vous plaît !;Please !;plize;1;1
-Merci !;Thank you !;fénk you;1;1
-Merci beaucoup !;Thank you very much !;fénk you véwi meutch;1;1
-Vous parlez anglais ?;Do you speak English ?;dou you spik in-glich ?;1;1
-Je suis français(e).;I am French.;ay am fwénch;1;1
-lundi;Monday;mone-déï;2;3
-mardi;Tuesday;tiouz-déï;2;3
-mercredi;Wednesday;wénz-déï;2;3
-jeudi;Thursday;feurs-déï;2;3
-vendredi;Friday;fouaï-déï;2;3
-samedi;Saturday;sa-teu-déï;2;3
-dimanche;Sunday;seun-déï;2;3
-janvier;January;dja-niu-wi;3;5
-février;February;fé-bwu-wi;3;5
-mars;March;mar-tch;3;5
-avril;April;éï-pweul;3;5
-mai;May;méï;3;5
-juin;June;dju-ne;3;5
-juillet;July;dju-laï;3;5
-août;August;o-ou-geust;3;5
-septembre;September;sép-tém-beur;3;5
-octobre;October;ok-to-ou-beur;3;5
-novembre;November;no-vém-beur;3;5
-décembre;December;di-sém-beur;3;5
-```
+|french|english|phonetics|theme_id|user_id|
+|-|-|-|-|-|
+|janvier|January|dja-niu-wi|3|5|
+|février|February|fé-bwu-wi|3|5|
+|mars|March|mar-tch|3|5|
+|avril|April|éï-pweul|3|5|
+|mai|May|méï|3|5|
+|juin|June|dju-ne|3|5|
+|juillet|July|dju-laï|3|5|
+|août|August|o-ou-geust|3|5|
+|septembre|September|sép-tém-beur|3|5|
+|octobre|October|ok-to-ou-beur|3|5|
+|novembre|November|no-vém-beur|3|5|
+|décembre|December|di-sém-beur|3|5|
 
 ## Exemple de liste de progression
 

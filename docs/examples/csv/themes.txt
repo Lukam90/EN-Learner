@@ -1,4 +1,5 @@
-title;user_id
-Expressions de base;1
-Jours de la semaine;2
-Mois;3
+|title|user_id|
+|-|-|
+|Expressions de base|1|
+|Jours de la semaine|2|
+|Mois|3|

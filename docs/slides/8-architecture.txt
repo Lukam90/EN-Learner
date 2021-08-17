@@ -1,0 +1,8 @@
+Le framework se divise en plusieurs dossiers :
+- controllers
+- core
+- database
+- models
+- public (views)
+- tests
+- validation

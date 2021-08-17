@@ -1,0 +1,46 @@
+Le cas de Twig
+
+1) La syntaxe (et bien plus encore !)
+
+{% import "macros/forms.twig" as forms %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block title %}Edition du thème : {{ title }}{% endblock %}
+
+{% block content %}
+    <h2>Edition du thème : {{ title }}</h2>
+
+    {% if 0 %}
+        {{ forms.start("themes/edit/1", "third") }}
+            {{ forms.text("title", "Titre") }}
+
+            {{ forms.info(tips.title) }}
+
+            {{ forms.error(errors.title) }}
+
+            {{ forms.csrf }}
+
+            {{ forms.submit("Editer") }}
+        {{ forms.end }}
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à éditer ce thème.</p>
+
+        <p>Veuillez revenir à la {{ links.hypertext("themes", "liste des thèmes") }}.</p>
+    {% endif %}
+{% endblock %}
+
+2) Les composants (ou macros)
+
+{% macro stats(page, id, count, name) %}
+<div class="w3-third">
+    <a href="{{ root }}/{{ page }}">
+        <div id="{{ id }}" class="w3-card w3-container w3-center w3-margin-right">
+            <h1>{{ count }}</h1>
+
+            <h2>{{ name }}</h2>
+        </div>
+    </a>
+</div>
+{% endmacro %}

@@ -10,21 +10,15 @@
 
 ### users.csv
 
-```csv
 @include csv/users
-```
 
 ### themes.csv
 
-```csv
 @include csv/themes
-```
 
 ### expressions.csv
 
-```csv
 @include csv/expressions
-```
 
 ## Exemple de liste de progression
 
