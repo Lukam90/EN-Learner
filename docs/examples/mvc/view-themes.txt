@@ -1,0 +1,48 @@
+{% import "macros/tables.twig" as table %}
+{% import "macros/links.twig" as links %}
+
+{% extends "layout.twig" %}
+
+{% block title %}Listes{% endblock %}
+
+{% block content %}
+    <h2>La liste des thèmes</h2>
+
+    {% if 1 %}
+        {{ table.add("themes", "Ajouter un thème") }}
+    {% endif %}
+
+    {% if themes %}
+        {{ table.start }}
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Auteur</th>
+                    <th>Nb Expressions</th>
+                    {% if canAdd %}
+                    <th></th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for theme in themes %}
+                <tr>
+                    <td>{{ links.hypertext("themes/show/{{ theme.id }}", theme.title) }}</td>
+                    <td>{{ theme.author }}</td>
+                    <td>{{ theme.nbExpressions }}</td>
+
+                    {% if canEdit %}
+                    <td>
+                        {{ table.edit("themes", theme.id) }}
+                        {{ table.delete("themes", theme.id) }}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        {{ table.end }}
+    {% else %}
+        <p>Aucun thème n'est enregistré.</p>
+    {% endif %}
+{% endblock %}

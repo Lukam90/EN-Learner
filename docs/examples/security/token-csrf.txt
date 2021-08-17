@@ -1,0 +1,13 @@
+// Génération d'un token CSRF (session)
+
+public static function setToken() {
+    self::start();
+
+    $_SESSION["token"] = bin2hex(random_bytes(50));
+}
+
+// Correspondance du jeton CSRF
+
+public static function checkCSRF() {
+    return $_POST["token"] == $_SESSION["token"];
+}

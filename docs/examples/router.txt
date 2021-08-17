@@ -1,4 +1,6 @@
 abstract class Router {
+    // ...
+
     // Redirection de la page
 
     public static function init() {
@@ -20,5 +22,5 @@ abstract class Router {
         }
     }
 
-    ...
+    // ...
 }

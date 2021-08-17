@@ -5,13 +5,13 @@ Un invité doit respecter certaines règles de validation pour s'inscrire en tan
 |Entrée|Résultat|
 |-|-|
 |le nom d'utilisateur (ou pseudo)||
-|<br>||
+|||
 |Le pseudo n'est pas renseigné|erreur|
 |Le pseudo comporte un caractère non alphanumérique|erreur|
 |Le pseudo comporte moins de 2 caractères|erreur|
 |Le pseudo comporte entre 2 et 32 caractères|**validé**|
 |Le pseudo comporte plus de 32 caractères|erreur|
-|<br>||
+|||
 |l'adresse e-mail||
 |||
 |L'adresse e-mail n'est pas renseignée|erreur|

@@ -7,7 +7,7 @@ Le framework a été conçu pour respecter des principes de sécurité et ainsi 
 Le mot de passe d'un utilisateur est automatiquement haché selon la méthode **BCrypt** lors de sa création.
 
 ```php
-@include password-hash
+@include security/password-hash
 ```
 
 ## La faille XSS (Cross-Site Scripting)
@@ -19,7 +19,7 @@ On doit ainsi veiller à transformer les caractères spéciaux, voire à les int
 Voici un exemple avec la fonction **clean()** de la classe utilitaire **RandomString** :
 
 ```php
-@include clean-xss
+@include security/clean-xss
 ```
 
 ## La faille DDoS (Denial of Service Attack)
@@ -37,7 +37,7 @@ Des fonctions natives permettent de protéger les requêtes définies selon des 
 Voici un extrait de fonction de construction d'une requête :
 
 ```php
-@include injection-sql
+@include security/injection-sql
 ```
 
 ## La faille CSRF (Cross Site Request Forgery)
@@ -53,7 +53,7 @@ Ce même jeton est vérifié à chaque modification dans un formulaire.
 Voici une illustration en deux fonctions :
 
 ```php
-@include jeton-csrf
+@include security/token-csrf
 ```
 
 <div class="page-break"></div>

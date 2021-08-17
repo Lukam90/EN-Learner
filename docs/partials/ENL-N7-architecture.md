@@ -19,7 +19,7 @@ Chaque modèle correspond à une table.
 Voici un exemple avec le modèle Theme :
 
 ```php
-@include model-theme
+@include mvc/model-theme
 ```
 
 ### La vue
@@ -31,7 +31,7 @@ Le langage de templating utilisé est Twig.
 Voici un exemple avec la liste des thèmes :
 
 ```php
-@include view-themes
+@include mvc/view-themes
 ```
 
 ### Le contrôleur
@@ -45,7 +45,7 @@ Cette partie est le coeur du code et de la logique de l'application.
 Voici un exemple pour l'affichage de la page d'accueil :
 
 ```php
-@include controller-home
+@include mvc/controller-home
 ```
 
 ## La structure du framework

@@ -36,4 +36,12 @@ Il s'agit de la classe des sessions liée à la superglobale `$_SESSION`.
 @include session
 ```
 
+## validation > UserValidation.php
+
+Il s'agit de la classe de validation liée aux pages des utilisateurs.
+
+```php
+@include user-validation
+```
+
 <div class="page-break"></div>

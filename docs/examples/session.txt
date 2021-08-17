@@ -1,4 +1,6 @@
 class Session {
+    // ...
+
     // Démarrage d'une session
 
     public static function start() {
@@ -21,5 +23,5 @@ class Session {
         $_SESSION[$name] = Security::clean($variable);
     }
 
-    ...
+    // ...
 }
