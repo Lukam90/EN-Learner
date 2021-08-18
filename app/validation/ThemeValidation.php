@@ -31,8 +31,7 @@ class ThemeValidation extends Validation {
                 $exists = $this->themeModel->findByTitle($title);
     
                 if (! $exists) {
-                    $this->setTip("title", "");
-                    $this->setError("title", "");
+                    $this->unset("title");
                 } else {
                     $this->setError("title", "Le thème existe déjà. Veuillez saisir un autre titre.");
                 }

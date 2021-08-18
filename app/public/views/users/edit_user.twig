@@ -1,26 +1,43 @@
-{% import "macros/forms.twig" as forms %}
-{% import "macros/links.twig" as links %}
+<div id="editUser" class="w3-modal">
+    <div class="w3-modal-content w3-card-4" style="max-width: 500px;">
+        <div class="w3-center">
+            <div class="w3-container">
+                <span onclick="closeModal('editUser');" class="w3-button w3-display-topright">&times;</span>
 
-{% extends "layout.twig" %}
+                <h2>Edition du statut de {{ username }}</h2>
 
-{% block title %}Edition du statut de {{ username }}{% endblock %}
+                {% if 1 %}
+                    <form action="{{ root }}/users/edit/1" class="w3-container" method="post">
+                        {# Rôle #}
 
-{% block content %}
-    <h2>Edition du statut de {{ username }}</h2>
+                        <select class="w3-select" name="option">
+                            <option value="" disabled selected>Rôle de l'utilisateur</option>
+                            <option value="Membre">Membre</option>
+                            <option value="Modérateur">Modérateur</option>
+                            <option value="Administrateur">Administrateur</option>
+                        </select>
 
-    {% if 1 %}
-        {{ forms.start("users/edit/1", "quarter") }}
-            {{ forms.choices }}
+                        {# Statut "Banni" #}
 
-            {{ forms.checkbox("banned", "Banni") }}
+                        <p>
+                            <label class="w3-margin-right" for="banned">Banni</label>
+                            <input class="w3-check" type="checkbox" name="banned" id="banned">
+                        </p>
 
-            {{ forms.csrf }}
+                        {# Token CSRF #}
 
-            {{ forms.submit("Editer") }}
-        {{ forms.end }}
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
+                        <input type="hidden" name="token" value="{{ token }}">
 
-        <p>Veuillez revenir sur la {{ links.home }}.</p>
-    {% endif %}
-{% endblock %}
+                        {# Bouton #}
+
+                        <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
+                    </form>
+                {% else %}
+                    <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
+
+                    <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

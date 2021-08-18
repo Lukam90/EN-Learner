@@ -1,28 +1,36 @@
-{% import "macros/forms.twig" as forms %}
-{% import "macros/links.twig" as links %}
+<div id="editTheme" class="w3-modal">
+    <div class="w3-modal-content w3-card-4" style="max-width: 500px;">
+        <div class="w3-center">
+            <div class="w3-container">
+                <span onclick="closeModal('editTheme');" class="w3-button w3-display-topright">&times;</span>
 
-{% extends "layout.twig" %}
+                <h2>Edition du thème : {{ title }}</h2>
 
-{% block title %}Edition du thème : {{ title }}{% endblock %}
+                {% if 1 %}
+                    <form action="{{ root }}/themes/edit/1" class="w3-container" method="post">
+                        {# Titre #}
 
-{% block content %}
-    <h2>Edition du thème : {{ title }}</h2>
+                        <label for="title">Titre</label>
+                        <input type="text" name="title" id="title" value="{{ title }}" class="w3-input w3-border w3-margin-bottom">
 
-    {% if 0 %}
-        {{ forms.start("themes/edit/1", "third") }}
-            {{ forms.text("title", "Titre") }}
+                        <p class="w3-text-blue">{{ tips.title }}</p>
 
-            {{ forms.info(tips.title) }}
+                        <p class="w3-text-red">{{ errors.title }}</p>
 
-            {{ forms.error(errors.title) }}
+                        {# Jeton CSRF #}
 
-            {{ forms.csrf }}
+                        <input type="hidden" name="token" value="{{ token }}">
 
-            {{ forms.submit("Editer") }}
-        {{ forms.end }}
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à éditer ce thème.</p>
+                        {# Bouton d'édition #}
 
-        <p>Veuillez revenir à la {{ links.hypertext("themes", "liste des thèmes") }}.</p>
-    {% endif %}
-{% endblock %}
+                        <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
+                    </form>
+                {% else %}
+                    <p>Vous n'êtes pas autorisé(e) à éditer ce thème.</p>
+
+                    <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/themes">liste des thèmes</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

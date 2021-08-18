@@ -1,5 +1,3 @@
-{% import "macros/tables.twig" as table %}
-
 {% extends "layout.twig" %}
 
 {% block title %}{{ title }}{% endblock %}
@@ -8,18 +6,20 @@
     <h2>{{ title }}</h2>
 
     {% if 1 %}
-        {{ table.add("expressions", "Ajouter une expression") }}
+        <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newExpression')">
+            <i class="fa fa-plus"></i> Ajouter une expression
+        </button>
     {% endif %}
 
     {% if expressions %}
-        {{ table.start }}
+        <table class="w3-table w3-striped w3-hoverable">
             <thead>
                 <tr>
                     <th>Mot</th>
                     <th>Traduction</th>
                     <th>Prononciation</th>
                     <th>Auteur</th>
-                    {% if canAdd %}
+                    {% if 1 %}
                     <th></th>
                     {% endif %}
                 </tr>
@@ -33,16 +33,21 @@
                     <td>{{ expression.phonetics }}</td>
                     <td>{{ expression.author }}</td>
 
-                    {% if expression.canEdit %}
+                    {% if 1 %}
                     <td>
-                        {{ table.edit("expressions", expression.id) }}
-                        {{ table.delete("expressions", expression.id) }}
+                        <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editExpression')">
+                            <i class="fa fa-pencil"></i> Editer
+                        </button>
+
+                        <button class="w3-btn w3-red" onclick="openModal('deleteExpression')">
+                            <i class="fa fa-pencil"></i> Supprimer
+                        </button>
                     </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
-        {{ table.end }}
+        </table>
     {% else %}
         <p>Aucune expression n'est enregistrée pour ce thème.</p>
     {% endif %}

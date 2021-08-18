@@ -2,6 +2,9 @@
 
 body {
     font-family: "Lato", sans-serif;
+    min-height: 100vh;
+    display: table;
+    width: 100%;
 }
 
 main {
@@ -10,11 +13,14 @@ main {
 }
 
 footer {
-    position: fixed;
+    /*position: fixed;*/
+    margin-top: 20px;
     left: 0;
     bottom: 0;
     color: white;
     width: 100%;
+    display: table-row;
+    height: 50px;
 }
 
 a {
@@ -46,3 +52,9 @@ a {
 #users:hover {
     background-color: rgba(255, 166, 0, 0.8);
 }
+
+/* Fenêtres modales */
+
+/*.w3-modal-content {
+    max-width: 100%;
+}*/

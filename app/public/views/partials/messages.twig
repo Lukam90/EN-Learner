@@ -1,19 +1,23 @@
-{% macro flash(type, color) %}
-
-{% if type %}
-    <div class="w3-panel w3-pale-{{ color }} w3-display-container w3-border">
-        <span class="w3-button w3-large w3-display-topright" onclick="this.parentElement.style.display='none';">&times;</span>
-        
-        <p>{{ type }}</p>
-    </div>
-{% endif %}
-
-{% endmacro %}
+{% set container = "w3-panel w3-display-container w3-border" %}
+{% set top = "w3-button w3-large w3-display-topright" %}
+{% set close = "this.parentElement.style.display='none';" %}
 
 {# Success Messages #}
 
-{{ _self.flash(session.success, "blue") }}
+{% if session.success %}
+    <div class="{{ container }} w3-pale-blue">
+        <span class="{{ top }}" onclick="{{ close }}">&times;</span>
+        
+        <p>{{ session.success }}</p>
+    </div>
+{% endif %}
 
 {# Error Messages #}
 
-{{ _self.flash(session.alert, "red") }}
+{% if session.alert %}
+    <div class="{{ container }} w3-pale-red">
+        <span class="{{ top }}" onclick="{{ close }}">&times;</span>
+        
+        <p>{{ session.alert }}</p>
+    </div>
+{% endif %}

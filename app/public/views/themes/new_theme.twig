@@ -1,26 +1,30 @@
-{% import "macros/forms.twig" as forms %}
-{% import "macros/links.twig" as links %}
+<div id="newTheme" class="w3-modal">
+    <div class="w3-modal-content w3-card-4" style="max-width: 500px">
+        <div class="w3-center">
+            <div class="w3-container">
+                <span onclick="closeModal('newTheme');" class="w3-button w3-display-topright">&times;</span>
 
-{% extends "layout.twig" %}
+                <h2>Ajout d'un thème</h2>
 
-{% block title %}Ajouter un thème{% endblock %}
+                {% if 1 %}
+                    <form action="themes/new" class="w3-container" method="post">
+                        <label for="title">{{ title }}</label>
+                        <input type="text" name="title" id="title" value="{{ title }}" class="w3-input w3-border w3-margin-bottom">
 
-{% block content %}
-    <h2>Ajout d'un thème</h2>
+                        <p class="w3-text-blue">{{ tips.title }}</p>
 
-    {% if 1 %}
-        {{ forms.start("themes/new", "half") }}
-            {{ forms.text("title", "", "Titre") }}
+                        <p class="w3-text-red">{{ errors.title }}</p>
 
-            {{ forms.info(tips.title) }}
+                        <input type="hidden" name="token" value="{{ token }}">
 
-            {{ forms.error(errors.title) }}
+                        <button class="w3-btn w3-blue">Ajouter</button>
+                    </form>
 
-            {{ forms.csrf }}
-
-            {{ forms.submit("Ajouter") }}
-        {{ forms.end }}
-    {% else %}
-        <p>Vous devez être {{ links.hypertext("login", "connecté(e)") }} pour ajouter un thème.</p>
-    {% endif %}
-{% endblock %}
+                    <div class="w3-margin-bottom"></div>
+                {% else %}
+                    <p>Vous devez être <a href="{{ root }}/login" class="w3-text-blue">connecté(e)</a> pour ajouter un thème.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

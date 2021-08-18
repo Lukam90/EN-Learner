@@ -1,5 +1,3 @@
-{% import "macros/tables.twig" as table %}
-
 {% extends "layout.twig" %}
 
 {% block title %}Communauté{% endblock %}
@@ -7,15 +5,20 @@
 {% block content %}
     <h2>Communauté</h2>
 
+    {% if 1 %}
+        {% include "users/edit_user.twig" %}
+        {% include "users/delete_user.twig" %}
+    {% endif %}
+
     {% if users %}
-        {{ table.start }}
+        <table class="w3-table w3-striped w3-hoverable">
             <thead>
                 <tr>
                     <th>Pseudo</th>
                     <th>Rôle</th>
                     <th>Inscrit(e) le</th>
                     <th>Contributions</th>
-                    {% if canEdit %}<th></th>{% endif %}
+                    {% if 1 %}<th></th>{% endif %}
                 </tr>
             </thead>
 
@@ -30,16 +33,21 @@
                         {{ user.nbExpressions }} expression{% if user.nbExpressions > 1 %}s{% endif %}
                     </td>
 
-                    {% if canEdit %}
+                    {% if 1 %}
                     <td>
-                        {{ table.edit("users", user.id) }}
-                        {{ table.delete("users", user.id) }}
+                        <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editUser')">
+                            <i class="fa fa-pencil"></i> Editer
+                        </button>
+
+                        <button class="w3-btn w3-red" onclick="openModal('deleteUser')">
+                            <i class="fa fa-pencil"></i> Supprimer
+                        </button>
                     </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
-        {{ table.end }}
+        </table>
     {% else %}
         <p>Aucun utilisateur n'est enregistré.</p>
     {% endif %}

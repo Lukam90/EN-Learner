@@ -35,8 +35,8 @@ abstract class Validation {
 
     // Suppression des indications et des erreurs
 
-    public function unset() {
-        $this->tips = [];
-        $this->errors = [];
+    public function unset($attribute) {
+        $this->setTip($attribute, "");
+        $this->setError($attribute, "");
     }
 }

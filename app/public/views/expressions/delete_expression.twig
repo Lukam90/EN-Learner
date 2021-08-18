@@ -1,6 +1,3 @@
-{% import "macros/forms.twig" as forms %}
-{% import "macros/links.twig" as links %}
-
 {% extends "layout.twig" %}
 
 {% block title %}Suppression de l'expression : {{ title }}{% endblock %}
@@ -9,16 +6,16 @@
     <h2>Suppression de l'expression : {{ title }}</h2>
 
     {% if 0 %}
-        {{ forms.start("expressions/delete/1", "third") }}
+        <form action="{{ root }}/expressions/delete/1" class="w3-container w3-third" method="post">
             <p>Voulez-vous supprimer cette expression ?</p>
 
-            {{ forms.csrf }}
+            <input type="hidden" name="token" value="{{ token }}">
 
-            {{ forms.delete }}
-        {{ forms.end }}
+            <button class="w3-btn w3-red">Confirmer</button>
+        </form>
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à supprimer cette expression.</p>
 
-        <p>Veuillez revenir sur la {{ links.home }}.</p>
+        <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}">page d'accueil</a>.</p>
     {% endif %}
 {% endblock %}

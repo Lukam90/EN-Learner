@@ -51,25 +51,4 @@
 
     <button onclick="document.getElementById('myModal').style.display='block'"
     class="w3-button w3-green">Open Modal</button>
-
-    {# Contenu de la fenêtre modale #}
-    
-    <div id="myModal" class="w3-modal">
-        <div class="w3-modal-content w3-card-4" style="max-width: 400px">
-            <div class="w3-center">
-                <div class="w3-container">
-                    <span onclick="document.getElementById('myModal').style.display='none'"
-                    class="w3-button w3-display-topright">&times;</span>
-
-                    <p>Tester les messages flash ?</p>
-
-                    <div class="w3-container w3-padding-16">
-                        <form action="{{ root }}/tests" method="post">
-                            <button class="w3-btn w3-red">Confirmer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}

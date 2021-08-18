@@ -9,6 +9,7 @@ use app\core\Session;
 
 use app\models\Theme;
 
+use app\core\Redirection;
 use app\controllers\Controller;
 use app\validation\ThemeValidation;
 
@@ -173,9 +174,11 @@ class ThemesController extends Controller {
 
             $errors = $validator->getErrors();
 
-            $valid = ! empty($errors); // && ! $loggedIn;
+            $valid = empty($errors["title"]); // && ! $loggedIn;
 
             var_dump($errors);
+
+            var_dump($valid);
 
             // Enregistrement
 
@@ -190,7 +193,9 @@ class ThemesController extends Controller {
                 if ($saved) {
                     Session::success("Le thème a bien été ajouté.");
 
-                    header("Location : ./themes");
+                    Redirection::themes("/");
+
+                    return;
                 } else {
                     Session::error();
                 }
@@ -203,7 +208,7 @@ class ThemesController extends Controller {
             "session" => Session::all(),
 
             "tips" => $validator->getTips(),
-            "errors" => $validator->getErrors(),
+            "errors" => $errors,
             "loggedIn" => true,
 
             "title" => $title,

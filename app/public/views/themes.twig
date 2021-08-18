@@ -1,6 +1,3 @@
-{% import "macros/tables.twig" as table %}
-{% import "macros/links.twig" as links %}
-
 {% extends "layout.twig" %}
 
 {% block title %}Listes{% endblock %}
@@ -9,17 +6,23 @@
     <h2>Thèmes</h2>
 
     {% if 1 %}
-        {{ table.add("themes", "Ajouter un thème") }}
+        <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newTheme')">
+            <i class="fa fa-plus"></i> Ajouter un thème
+        </button>
+
+        {% include "themes/new_theme.twig" %}
+        {% include "themes/edit_theme.twig" %}
+        {% include "themes/delete_theme.twig" %}
     {% endif %}
 
     {% if themes %}
-        {{ table.start }}
+        <table class="w3-table w3-striped w3-hoverable">
             <thead>
                 <tr>
                     <th>Titre</th>
                     <th>Auteur</th>
                     <th>Nb Expressions</th>
-                    {% if canAdd %}
+                    {% if 1 %}
                     <th></th>
                     {% endif %}
                 </tr>
@@ -28,21 +31,28 @@
             <tbody>
                 {% for theme in themes %}
                 <tr>
-                    {#<td> <a class="w3-text-blue" href="themes/show/{{ theme.id }}">{{ theme.title }}</a></td> #}
-                    <td>{{ links.show(theme.id, theme.title) }}</td>
+                    <td>
+                        <a class="w3-text-blue" href="themes/show/{{ theme.id }}">{{ theme.title }}</a>
+                    </td>
+
                     <td>{{ theme.author }}</td>
                     <td>{{ theme.nbExpressions }}</td>
 
                     {% if 1 %}
                     <td>
-                        {{ table.edit("themes", theme.id) }}
-                        {{ table.delete("themes", theme.id) }}
+                        <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editTheme')">
+                            <i class="fa fa-pencil"></i> Editer
+                        </button>
+
+                        <button class="w3-btn w3-red" onclick="openModal('deleteTheme')">
+                            <i class="fa fa-pencil"></i> Suppression
+                        </button>
                     </td>
                     {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
-        {{ table.end }}
+        </table>
     {% else %}
         <p>Aucun thème n'est enregistré.</p>
     {% endif %}

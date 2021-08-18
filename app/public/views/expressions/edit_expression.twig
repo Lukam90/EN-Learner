@@ -9,42 +9,51 @@
     <h2>Edition de l'expression : {{ title }}</h2>
 
     {% if 1 %}
-        {{ forms.start("expressions/edit/1", "third") }}
+        <form action="{{ root }}/expressions/edit/1" class="w3-container w3-third" method="post">
             {# Expression (FR) #}
+
+            <label for="french"></label>
+            <input type="text" name="french" id="french" value="{{ french }}" class="w3-input w3-border w3-margin-bottom">
 
             {{ forms.text("french", french, "Expression") }}
 
-            {{ forms.info(tips.french) }}
+            <p class="w3-text-blue">{{ tips.french }}</p>
 
-            {{ forms.error(errors.french) }}
+            <p class="w3-text-red">{{ errors.french }}</p>
 
             {# Traduction (EN) #}
 
-            {{ forms.text("english", english, "Traduction") }}
+            <label for="english">Traduction</label>
+            <input type="text" name="english" id="english" value="{{ english }}" class="w3-input w3-border w3-margin-bottom">
 
-            {{ forms.info(tips.english) }}
+            <p class="w3-text-blue">{{ tips.english }}</p>
 
-            {{ forms.error(errors.english) }}
+            <p class="w3-text-red">{{ errors.english }}</p>
 
             {# Phonétique #}
 
-            {{ forms.text("phonetics", phonetics, "Phonétique") }}
+            <label for="phonetics">Phonétique</label>
+            <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="w3-input w3-border w3-margin-bottom">
 
-            {{ forms.info(tips.phonetics) }}
+            <p class="w3-text-blue">{{ tips.phonetics }}</p>
 
-            {{ forms.error(errors.phonetics) }}
+            <p class="w3-text-red">{{ errors.phonetics }}</p>
 
             {# Jeton CSRF #}
 
-            {{ forms.csrf }}
+            <input type="hidden" name="token" value="{{ token }}">
 
             {# Bouton #}
 
-            {{ forms.submit("Editer") }}
-        {{ forms.end }}
+            <button class="w3-btn w3-margin-bottom w3-green ">
+                <a href="{{ root }}/expressions/edit/{{ id }}">
+                    <i class="fa fa-pencil"></i> Editer
+                </a>
+            </button>
+        </form>
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à éditer cette expression.</p>
 
-        <p>Veuillez revenir à la {{ links.hypertext("themes/show/2", "liste des expressions") }}.</p>
+        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/themes/show/1">liste des expressions</a>.</p>
     {% endif %}
 {% endblock %}
