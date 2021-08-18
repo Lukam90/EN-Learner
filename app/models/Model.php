@@ -107,16 +107,12 @@ abstract class Model {
 
     public function findBy($attribute, $value) {
         $statement = $this->dbHandler
-                          ->prepare("SELECT * FROM :table
-                                     WHERE :attribute = :value");
+                          ->prepare("SELECT * FROM {$this->tableName}
+                                     WHERE {$attribute} = :value");
 
-        $statement->bindValue(":table", $this->tableName);
-        $statement->bindValue(":attribute", $attribute);
-        $statement->bindValue(":value", $value);
+        $statement->bindParam(":value", $value);
         
         $statement->execute();
-
-        $statement->closeCursor();
 
         return $statement->fetch(\PDO::FETCH_OBJ);
     }

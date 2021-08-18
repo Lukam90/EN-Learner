@@ -23,6 +23,8 @@ class UserValidation extends Validation {
         $username = "";
 
         if (! Post::empty("username")) {
+            sleep(1);
+
             $username = Post::var("username");
 
             $regex = "/^[a-z0-9\s]{2,32}$/i";

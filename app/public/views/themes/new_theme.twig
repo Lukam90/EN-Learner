@@ -8,9 +8,9 @@
 {% block content %}
     <h2>Ajout d'un thème</h2>
 
-    {% if loggedIn %}
-        {{ forms.start("themes/new", "third") }}
-            {{ forms.text("title", "Titre") }}
+    {% if 1 %}
+        {{ forms.start("themes/new", "half") }}
+            {{ forms.text("title", "", "Titre") }}
 
             {{ forms.info(tips.title) }}
 

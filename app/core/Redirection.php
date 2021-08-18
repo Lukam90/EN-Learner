@@ -73,7 +73,7 @@ abstract class Redirection {
                     self::notFound();
                 }
             } else { // Route sans ID (ex : /users/edit)
-                self::notFound();
+                $controller->$methodName();
             }
         } else { // Liste des utilisateurs (/users)
             $controller->index();
@@ -129,7 +129,7 @@ abstract class Redirection {
                     $id = (int) $url[2];
 
                     $controller->$methodName($id);
-                } else {
+                } else { // Route sans ID (ex : /expressions/edit)
                     self::notFound();
                 }
             } else { // Route sans ID (ex : /expressions/edit)

@@ -6,7 +6,7 @@
 {% block title %}Listes{% endblock %}
 
 {% block content %}
-    <h2>La liste des thèmes</h2>
+    <h2>Thèmes</h2>
 
     {% if 1 %}
         {{ table.add("themes", "Ajouter un thème") }}
@@ -16,7 +16,7 @@
         {{ table.start }}
             <thead>
                 <tr>
-                    <th>Nom</th>
+                    <th>Titre</th>
                     <th>Auteur</th>
                     <th>Nb Expressions</th>
                     {% if canAdd %}
@@ -28,11 +28,12 @@
             <tbody>
                 {% for theme in themes %}
                 <tr>
-                    <td>{{ links.hypertext("themes/show/{{ theme.id }}", theme.title) }}</td>
+                    {#<td> <a class="w3-text-blue" href="themes/show/{{ theme.id }}">{{ theme.title }}</a></td> #}
+                    <td>{{ links.show(theme.id, theme.title) }}</td>
                     <td>{{ theme.author }}</td>
                     <td>{{ theme.nbExpressions }}</td>
 
-                    {% if canEdit %}
+                    {% if 1 %}
                     <td>
                         {{ table.edit("themes", theme.id) }}
                         {{ table.delete("themes", theme.id) }}

@@ -77,6 +77,12 @@ class Session {
         self::set("alert", $message);
     }
 
+    // Alerte (Message général)
+
+    public static function error() {
+        self::alert("Une erreur s'est produite. Veuillez contacter l'administrateur du site.");
+    }
+
     // Utilisateur connecté (ID)
 
     public static function isLoggedIn() {

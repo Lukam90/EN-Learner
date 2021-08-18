@@ -53,14 +53,6 @@ abstract class Router {
         switch ($page) {
             case "home":
                 Redirection::home();
-                
-                break;
-            case "login":
-            case "logout":
-            case "register":
-            case "reset":
-            case "confirm":
-                Redirection::auth($page);
 
                 break;
 

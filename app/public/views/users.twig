@@ -5,7 +5,7 @@
 {% block title %}Communauté{% endblock %}
 
 {% block content %}
-    <h2>Liste des utilisateurs</h2>
+    <h2>Communauté</h2>
 
     {% if users %}
         {{ table.start }}
@@ -25,7 +25,10 @@
                     <td>{{ user.username }}</td>
                     <td class="{{ user.color }}">{{ user.role }}</td>
                     <td>{{ user.createdAt }}</td>
-                    <td>{{ user.nbThemes }} thèmes<br>{{ user.nbExpressions }} expressions</td>
+                    <td>
+                        {{ user.nbThemes }} thème{% if user.nbThemes > 1 %}s{% endif %}<br>
+                        {{ user.nbExpressions }} expression{% if user.nbExpressions > 1 %}s{% endif %}
+                    </td>
 
                     {% if canEdit %}
                     <td>

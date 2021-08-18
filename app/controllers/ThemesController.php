@@ -2,12 +2,15 @@
 
 namespace app\controllers;
 
+use app\models\User;
+
+use app\core\Request;
 use app\core\Session;
 
 use app\models\Theme;
-use app\models\User;
 
 use app\controllers\Controller;
+use app\validation\ThemeValidation;
 
 class ThemesController extends Controller {
     private $themeModel;
@@ -143,12 +146,67 @@ class ThemesController extends Controller {
     public function new() {
         // titre, user_id
 
+        // Validation
+
+        $validator = new ThemeValidation();
+
+        // Indication
+
+        $validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
+
+        // Titre
+
+        $title = "";
+
+        // Envoi du formulaire
+
+        $errors = [];
+
+        if (Request::isPost()) {
+            //sleep(1);
+
+            var_dump($_POST);
+
+            $title = $validator->title();
+
+            // Validation
+
+            $errors = $validator->getErrors();
+
+            $valid = ! empty($errors); // && ! $loggedIn;
+
+            var_dump($errors);
+
+            // Enregistrement
+
+            if ($valid) {
+                $newTheme = [
+                    "title" => $title,
+                    "user_id" => 1,
+                ];
+
+                $saved = $this->themeModel->insert($newTheme);
+
+                if ($saved) {
+                    Session::success("Le thème a bien été ajouté.");
+
+                    header("Location : ./themes");
+                } else {
+                    Session::error();
+                }
+            }
+        }
+
         // Rendu
 
         echo $this->twig->render("themes/new_theme.twig", [
             "session" => Session::all(),
 
-            "key" => "value",
+            "tips" => $validator->getTips(),
+            "errors" => $validator->getErrors(),
+            "loggedIn" => true,
+
+            "title" => $title,
         ]);
     }
 

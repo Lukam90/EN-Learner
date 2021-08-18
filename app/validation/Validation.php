@@ -32,4 +32,11 @@ abstract class Validation {
     public function setError($name, $message) {
         $this->errors[$name] = $message;
     }
+
+    // Suppression des indications et des erreurs
+
+    public function unset() {
+        $this->tips = [];
+        $this->errors = [];
+    }
 }

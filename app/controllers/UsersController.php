@@ -98,7 +98,7 @@ class UsersController extends Controller {
 
         $loggedIn = Session::has("user_id");
 
-        /* Validation */
+        // Validation
 
         $validator = new UserValidation();
 
@@ -149,11 +149,9 @@ class UsersController extends Controller {
                 $registered = $this->userModel->insert($newUser);
 
                 if ($registered) {
-                    Session::set("success", "Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
-
-                    //header("Location : ./");
+                    Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
                 } else {
-                    Session::set("alert", "Une erreur s'est produite. Veuillez contacter l'administrateur du site.");
+                    Session::error();
                 }
             }
         }

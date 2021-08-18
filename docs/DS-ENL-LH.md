@@ -1256,12 +1256,10 @@ Voici un extrait de fonction de construction d'une requête :
 
 public function findBy($attribute, $value) {
     $statement = $this->dbHandler
-                        ->prepare("SELECT * FROM :table
-                                    WHERE :attribute = :value");
+                      ->prepare("SELECT * FROM {$this->tableName}
+                                 WHERE {$attribute} = :value");
 
-    $statement->bindValue(":table", $this->tableName);
-    $statement->bindValue(":attribute", $attribute);
-    $statement->bindValue(":value", $value);
+    $statement->bindParam(":value", $value, \PDO::PARAM_INT);
     
     $statement->execute();
 
@@ -1664,12 +1662,12 @@ Un futur déploiement est à envisager.
 |username|email|password|role|
 |-|-|-|-|
 |Lukas|lukas@admin.com|Admin007|Administrateur|
+|Vigibello|vgibello@admin.com|React123|Modérateur|
+|Mika|mika@admin.com|Kaamelot123|Modérateur|
 |Mario64|mario64@user.com|MarioN64|Membre|
 |Mister Bean|mister@bean.com|MrBean123|Membre|
 |Johnny English|johnny@english.com|JEnglish123|Membre|
 |David Goodenough|david@goodenough.com|David123|Membre|
-|Vigibello|vgibello@admin.com|React123|Modérateur|
-|Mika|mika@admin.com|Kaamelot123|Modérateur|
 |JM Codage|jean.michel@codage.com|JMCode123|Membre|
 |Joeystar|joey@star.com|Joestar123|Membre|
 
@@ -1723,4 +1721,21 @@ Les lettres et symbôles se traduisent par :
 |X|fait|
 |(+)|amélioration|
 
+## Captures d'écran
+
+### La page d'accueil
+
+![](images/screens/home-stats.png)
+
+### La liste des utilisateurs
+
+![](images/screens/list-users.png)
+
+### La liste des thèmes
+
+![](images/screens/list-themes.png)
+
+### La liste des expressions
+
+![](images/screens/list-expressions.png)
 

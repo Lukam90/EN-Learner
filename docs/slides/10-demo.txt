@@ -1,6 +1,12 @@
+Démonstration de l'application
+
+1)
+
 Un visiteur souhaite s'inscrire...
 ... mais remplit le formulaire d'une manière incorrecte
 ... et rempli le formulaire en respectant les règles de validation
+
+2)
 
 Un administrateur se connecte avec ses identifiants.
 
@@ -8,3 +14,13 @@ Il se rend ensuite sur la liste :
 - des utilisateurs
 - des thèmes
 - des expressions du thème Jours de la semaine
+
+3)
+
+L'administrateur créé le nouveau thème Conversations.
+
+Il créé 3 expressions liées à ce thème.
+
+Il édite l'expression du milieu.
+
+Il supprime l'expression du milieu.
