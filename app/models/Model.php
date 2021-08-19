@@ -78,37 +78,40 @@ abstract class Model {
         return $data;
     }
 
-    // Création d'une table
+    // Requête générale brute (ex : création)
 
-    public function create() {
+    public function raw($query) {
         return $this->dbHandler
-                    ->exec("
-                        CREATE TABLE IF NOT EXISTS {$this->tableName} (
-                        {$this->definition}
-                    )");
+                    ->exec($query);
     }
 
     // Suppression d'une table
 
-    public function drop() {
+    /*public function drop($tableName) {
         return $this->dbHandler
-                    ->exec("DROP TABLE IF EXISTS {$this->tableName}");
-    }
+                    ->exec("DROP TABLE IF EXISTS $tableName");
+    }*/
 
     // Sélection de l'ensemble des résultats
 
-    public function findAll() {
+    public function fetchAll($query) {
         return $this->dbHandler
-                    ->query("SELECT * FROM {$this->tableName}")
+                    ->query($query)
                     ->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    // Sélection d'une colonne (ex : nombre)
+
+    public function fetchColumn($query) {
+        return $this->dbHandler->query($query)
+                               ->fetchColumn();
     }
 
     // Sélection d'une ligne par un attribut
 
-    public function findBy($attribute, $value) {
+    public function findBy($query, $value) {
         $statement = $this->dbHandler
-                          ->prepare("SELECT * FROM {$this->tableName}
-                                     WHERE {$attribute} = :value");
+                          ->prepare($query);
 
         $statement->bindParam(":value", $value);
         
@@ -117,42 +120,26 @@ abstract class Model {
         return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
-    // Sélection d'une ligne par un ID
-
-    public function findById($id) {
-        return $this->findBy("id", $id);
-    }
-
     // Vérification d'une ligne par un attribut avec ID
 
-    public function is($id, $attribute, $value) {
+    public function is($query, $id) {
         $statement = $this->dbHandler
-                          ->prepare("SELECT id FROM {$this->tableName}
-                                     WHERE id = :id
-                                     AND $attribute = :value");
+                          ->prepare($query);
 
         $statement->bindValue(":id", $id);
-        $statement->bindValue(":value", $value);
+
         $statement->execute();
 
         return $statement->fetchColumn() != 0;
     }
 
-    // Nombre d'éléments d'une table
-
-    public function count() {
-        return $this->dbHandler->query("SELECT COUNT(id)
-                                        FROM {$this->tableName}")
-                               ->fetchColumn();
-    }
-
     // Ajout d'une nouvelle ligne
 
-    public function insert($data) {
+    public function insert($tableName, $data) {
         $values = $this->separate($data);
 
         return $this->dbHandler
-                    ->exec("INSERT INTO {$this->tableName}
+                    ->exec("INSERT INTO $tableName
                             SET $values");
     }
 

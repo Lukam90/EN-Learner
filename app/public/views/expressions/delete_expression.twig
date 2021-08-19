@@ -1,21 +1,25 @@
-{% extends "layout.twig" %}
+<div id="deleteExpression" class="w3-modal">
+    <div class="w3-modal-content w3-card-4" style="max-width: 600px;">
+        <div class="w3-center">
+            <div class="w3-container">
+                <span onclick="closeModal('deleteExpression');" class="w3-button w3-display-topright">&times;</span>
 
-{% block title %}Suppression de l'expression : {{ title }}{% endblock %}
+                <h2>Suppression de l'expression : {{ title }}</h2>
 
-{% block content %}
-    <h2>Suppression de l'expression : {{ title }}</h2>
+                {% if 1 %}
+                    <form action="{{ root }}/expressions/delete/1" class="w3-container" method="post">
+                        <h3>Voulez-vous supprimer cette expression ?</h3>
 
-    {% if 0 %}
-        <form action="{{ root }}/expressions/delete/1" class="w3-container w3-third" method="post">
-            <p>Voulez-vous supprimer cette expression ?</p>
+                        <input type="hidden" name="token" value="{{ token }}">
 
-            <input type="hidden" name="token" value="{{ token }}">
+                        <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
+                    </form>
+                {% else %}
+                    <p>Vous n'êtes pas autorisé(e) à supprimer cette expression.</p>
 
-            <button class="w3-btn w3-red">Confirmer</button>
-        </form>
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à supprimer cette expression.</p>
-
-        <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}">page d'accueil</a>.</p>
-    {% endif %}
-{% endblock %}
+                    <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}">page d'accueil</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

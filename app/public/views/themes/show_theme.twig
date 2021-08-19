@@ -9,6 +9,10 @@
         <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newExpression')">
             <i class="fa fa-plus"></i> Ajouter une expression
         </button>
+
+        {% include "expressions/new_expression.twig" %}
+        {% include "expressions/edit_expression.twig" %}
+        {% include "expressions/delete_expression.twig" %}
     {% endif %}
 
     {% if expressions %}
