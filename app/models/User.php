@@ -16,7 +16,7 @@ class User extends Model {
     // Création de la table
 
     public function create() {
-        $sql = "CREATE TABLE IF NOT EXISTS users (
+        $this->setQuery("CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTO_INCREMENT,
                     username VARCHAR(32) UNIQUE NOT NULL,
                     email VARCHAR(100) UNIQUE NOT NULL,
@@ -24,65 +24,71 @@ class User extends Model {
                     role VARCHAR(20) NOT NULL DEFAULT 'Membre',
                     created_at DATE DEFAULT CURRENT_TIMESTAMP,
                     banned BOOLEAN DEFAULT 0
-                )";
+                )");
 
-        return $this->raw($sql);
+        return $this->run();
     }
 
     // Suppression de la table
 
     public function drop() {
-        return $this->raw("DROP TABLE IF EXISTS users");
+        $this->setQuery("DROP TABLE IF EXISTS users");
+
+        return $this->run();
     }
 
     // Sélection de l'ensemble des résultats
 
     public function findAll() {
-        return $this->fetchAll("SELECT * FROM users");
+        $this->setQuery("SELECT * FROM users");
+
+        return $this->fetchAll();
     }
 
     // Nombre d'éléments de la table
 
     public function count() {
-        return $this->fetchColumn("SELECT COUNT(id) FROM users");
+        $this->setQuery("SELECT COUNT(id) FROM users");
+
+        return $this->fetchColumn();
     }
 
     // Sélection d'une ligne par un ID
 
     public function findById($id) {
-        $sql = "SELECT * FROM users
-                WHERE id = :id";
+        $this->setQuery("SELECT * FROM users
+                         WHERE id = :id");
 
-        return $this->fetchByID($sql, $id);
+        return $this->fetchByID($id);
     }
 
     // Sélection d'un utilisateur par son pseudo
 
     public function findByName($username) {
-        $sql = "SELECT * FROM users
-                WHERE username = :username";
+        $this->setQuery("SELECT * FROM users
+                         WHERE username = :username");
 
-        return $this->fetchBy($sql, $username);
+        return $this->fetchBy($username);
     }
 
     // Sélection d'un utilisateur par son e-mail
 
     public function findByEmail($email) {
-        $sql = "SELECT * FROM users
-                WHERE email = :email";
+        $this->setQuery("SELECT * FROM users
+                         WHERE email = :email");
 
-        return $this->fetchBy($sql, $email);
+        return $this->fetchBy($email);
     }
 
     // Thèmes d'un utilisateur
 
     public function findThemes($userId) {
-        $sql = "SELECT t.*
-                FROM themes t, users u
-                WHERE t.user_id = u.id
-                AND u.id = :id";
+        $this->setQuery("SELECT t.*
+                         FROM themes t, users u
+                         WHERE t.user_id = u.id
+                         AND u.id = :id");
 
-        return $this->fetchAllById($sql, $userId);
+        return $this->fetchAllById($userId);
     }
 
     // Nombre de thèmes d'un utilisateur
@@ -96,12 +102,12 @@ class User extends Model {
     // Expressions d'un utilisateur
 
     public function findExpressions($userId) {
-        $sql = "SELECT e.*
-                FROM expressions e, users u
-                WHERE e.user_id = u.id
-                AND u.id = :id";
+        $this->setQuery("SELECT e.*
+                         FROM expressions e, users u
+                         WHERE e.user_id = u.id
+                         AND u.id = :id");
 
-        return $this->fetchAllByID($sql, $userId);
+        return $this->fetchAllByID($userId);
     }
 
     // Nombre d'expressions d'un utilisateur
@@ -115,10 +121,10 @@ class User extends Model {
     // Connexion d'un utilisateur
 
     public function login($email, $password) {
-        $sql = "SELECT * FROM users
-                WHERE email = :email";
+        $this->setQuery("SELECT * FROM users
+                         WHERE email = :email");
 
-        $row = $this->findBy($sql, "email", $email);
+        $row = $this->findBy("email", $email);
 
         // On vérifie si les mots de passe correspondent
 
@@ -136,50 +142,50 @@ class User extends Model {
     // Rôle de modérateur
 
     public function isModerator($id) {
-        $sql = "SELECT id FROM users
-                WHERE role = 'Modérateur'
-                AND id = :id";
+        $this->setQuery("SELECT id FROM users
+                         WHERE role = 'Modérateur'
+                         AND id = :id");
 
-        return $this->is($sql, $id);
+        return $this->is($id);
     }
 
     // Rôle d'administrateur
 
     public function isAdmin($id) {
-        $sql = "SELECT id FROM users
-                WHERE role = 'Administrateur'
-                AND id = :id";
+        $this->setQuery("SELECT id FROM users
+                         WHERE role = 'Administrateur'
+                         AND id = :id");
 
-        return $this->is($sql, $id);
+        return $this->is($id);
     }
 
     // Rôle de modérateur ou d'administrateur
 
     public function isSuperUser($id) {
-        $sql = "SELECT id FROM users
-                WHERE role IN ('Modérateur', 'Administrateur')
-                AND id = :id";
+        $this->setQuery("SELECT id FROM users
+                         WHERE role IN ('Modérateur', 'Administrateur')
+                         AND id = :id");
 
-        return $this->is($sql, $id);
+        return $this->is($id);
     }
 
     // Utilisateur banni
 
     public function isBanned($id) {
-        $sql = "SELECT id FROM users
-                WHERE banned
-                AND id = :id";
+        $this->setQuery("SELECT id FROM users
+                         WHERE banned
+                         AND id = :id");
 
-        return $this->is($sql, $id);
+        return $this->is($id);
     }
 
     // Ajout d'une nouvelle ligne
 
     public function insert($data) {
-        $sql = "INSERT INTO users (username, email, password, role)
-                VALUES (:username, :email, :password, :role)";
+        $this->setQuery("INSERT INTO users (username, email, password, role)
+                         VALUES (:username, :email, :password, :role)");
 
-        return $this->withData($sql, $data);
+        return $this->withData($data);
     }
 
     // Edition d'un utilisateur existant
@@ -187,84 +193,84 @@ class User extends Model {
     // Changement de pseudo
 
     public function changeUsername($id, $username) {
-        $sql = "UPDATE users
-                SET username = :username
-                WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET username = :username
+                         WHERE id = :id");
 
         $data = [
             "id" => $id,
             "username" => $username
         ];
 
-        return $this->withData($sql, $data);
+        return $this->withData($data);
     }
 
     // Changement d'e-mail
 
     public function changeEmail($id, $email) {
-        $sql = "UPDATE users
-                SET email = :email
-                WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET email = :email
+                         WHERE id = :id");
 
         $data = [
             "id" => $id,
             "email" => $email
         ];
 
-        return $this->withData($sql, $data);
+        return $this->withData($data);
     }
 
     // Changement de mot de passe
 
     public function changePassword($id, $password) {
-        $sql = "UPDATE users
-                SET password = :password
-                WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET password = :password
+                         WHERE id = :id");
 
         $data = [
             "id" => $id,
             "password" => Security::hash($password)
         ];
 
-        return $this->withData($sql, $data);
+        return $this->withData($data);
     }
 
     // Changement de rôle
 
     public function changeRole($id, $role) {
-        $sql = "UPDATE users
-                SET role = :role
-                WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET role = :role
+                         WHERE id = :id");
 
         $data = [
             "id" => $id,
             "role" => $role
         ];
 
-        return $this->withData($sql, $data);
+        return $this->withData($data);
     }
 
     // Changement du statut de bannissement
 
     public function changeBanStatus($id, $banned) {
-        $sql = "UPDATE users
-                SET banned = :banned
-                WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET banned = :banned
+                         WHERE id = :id");
 
         $data = [
             "id" => $id,
             "banned" => $banned
         ];
 
-        return $this->withData($sql, $data);
+        return $this->withData($data);
     }
 
     // Suppression d'une ligne par un ID
 
     public function delete($id) {
-        $sql = "DELETE FROM users
-                WHERE id = :id";
+        $this->setQuery("DELETE FROM users
+                         WHERE id = :id");
 
-        return $this->withID($sql, $id);
+        return $this->withID($id);
     }
 }

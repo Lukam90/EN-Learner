@@ -3,6 +3,37 @@
 namespace app\core;
 
 abstract class Faker {
+    // Chargement de données de tests (CSV)
+
+    public static function loadCSV($tableName, $attributes) {
+        $length = 0;
+        $data = [];
+
+        $file = fopen("$tableName.csv", "r");
+        
+        while(! feof($file)) {
+            $line = Security::clean(fgets($file));
+            
+            $values = explode(";", $line);
+
+            $index = 0;
+
+            foreach ($attributes as $key) {
+                $value = $values[$index];
+
+                $data[$length][$key] = $value;
+
+                $index++;
+            }
+
+            $length++;
+        }
+        
+        fclose($file);
+        
+        return $data;
+    }
+
     public static function alphabet() {
         $alphabet = "0123456789";
         $alphabet .= "abcdefghijklmnopqrstuvwxyz";

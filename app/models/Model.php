@@ -7,6 +7,7 @@ use app\core\Security;
 
 abstract class Model {
     protected $dbHandler;
+    protected $query;
 
     // Initialisation de l'objet PDO
     // Connexion à la BDD
@@ -17,62 +18,43 @@ abstract class Model {
         return $db->getHandler();
     }
 
-    // Chargement de données de tests (CSV)
+    // Edition d'une requête
 
-    public function loadCSV($tableName, $attributes) {
-        $length = 0;
-        $data = [];
+    public function setQuery($value) {
+        $this->query = $value;
+    }
 
-        $file = fopen("$tableName.csv", "r");
-        
-        while(! feof($file)) {
-            $line = Security::clean(fgets($file));
-            
-            $values = explode(";", $line);
+    // Récupération d'une requête
 
-            $index = 0;
-
-            foreach ($attributes as $key) {
-                $value = $values[$index];
-
-                $data[$length][$key] = $value;
-
-                $index++;
-            }
-
-            $length++;
-        }
-        
-        fclose($file);
-        
-        return $data;
+    public function getQuery() {
+        return $this->query;
     }
 
     // Requête générale brute (ex : création)
 
-    public function raw($sql) {
+    public function run() {
         return $this->dbHandler
-                    ->exec($sql);
+                    ->exec($this->getQuery());
     }
 
     // Requête préparée
 
-    public function prepare($sql) {
+    public function prepare() {
         return $this->dbHandler
-                    ->prepare($sql);
+                    ->prepare($this->getQuery());
     }
 
     // Requête générale
 
-    public function query($sql) {
+    public function query() {
         return $this->dbHandler
-                    ->query($sql);
+                    ->query($this->getQuery());
     }
 
     // Requête préparée avec un attribut
 
-    public function withAttribute($sql, $attribute, $value) {
-        $statement = $this->prepare($sql);
+    public function withAttribute($attribute, $value) {
+        $statement = $this->prepare();
 
         $statement->bindValue(":$attribute", $value);
 
@@ -81,14 +63,14 @@ abstract class Model {
 
     // Requête préparée avec un ID
 
-    public function withID($sql, $id) {
-        return $this->withAttribute($sql, "id", $id);
+    public function withID($id) {
+        return $this->withAttribute("id", $id);
     }
 
     // Requête préparée avec données
 
-    public function withData($sql, $data) {
-        $statement = $this->prepare($sql);
+    public function withData($data) {
+        $statement = $this->prepare();
 
         foreach ($data as $key => $value) {
             if ($key == "password") {
@@ -103,22 +85,22 @@ abstract class Model {
 
     // Sélection de l'ensemble des résultats
 
-    public function fetchAll($sql) {
-        return $this->query($sql)
+    public function fetchAll() {
+        return $this->query()
                     ->fetchAll(\PDO::FETCH_OBJ);
     }
 
     // Sélection d'une colonne (ex : nombre)
 
-    public function fetchColumn($sql) {
-        return $this->query($sql)
+    public function fetchColumn() {
+        return $this->query()
                     ->fetchColumn();
     }
 
     // Sélection d'une ligne par un attribut
 
-    public function fetchBy($sql, $attribute, $value) {
-        $statement = $this->prepare($sql);
+    public function fetchBy($attribute, $value) {
+        $statement = $this->prepare();
 
         $statement->bindParam(":$attribute", $value);
         
@@ -129,14 +111,14 @@ abstract class Model {
 
     // Sélection d'une ligne par un ID
 
-    public function fetchByID($sql, $id) {
-        return $this->fetchBy($sql, "id", $id);
+    public function fetchByID($id) {
+        return $this->fetchBy("id", $id);
     }
 
     // Sélection de l'ensemble des lignes par un attribut
 
-    public function fetchAllBy($sql, $attribute, $value) {
-        $statement = $this->prepare($sql);
+    public function fetchAllBy($attribute, $value) {
+        $statement = $this->prepare();
 
         $statement->bindParam(":$attribute", $value);
         
@@ -147,19 +129,27 @@ abstract class Model {
 
     // Sélection de l'ensemble des lignes par un ID
 
-    public function fetchAllByID($sql, $id) {
-        return fetchAllBy($sql, "id", $id);
+    public function fetchAllByID($id) {
+        return $this->fetchAllBy("id", $id);
     }
 
     // Vérification d'une ligne par un attribut avec ID
 
-    public function is($sql, $id) {
-        $statement = $this->prepare($sql);
+    public function is($id) {
+        $statement = $this->prepare();
 
         $statement->bindValue(":id", $id);
 
         $statement->execute();
 
-        return $statement->fetchColumn() != 0;
+        return $statement->fetchColumn() > 0;
+    }
+
+    // Appartenance
+
+    public function belongsTo($data) {
+        $statement = $this->withData($data);
+
+        return $statement->fetchColumn() > 0;
     }
 }
