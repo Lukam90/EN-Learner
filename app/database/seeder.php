@@ -1,6 +1,6 @@
 <?php
 
-use app\core\Database;
+use app\core\Faker;
 
 use app\models\User;
 use app\models\Theme;
@@ -30,7 +30,7 @@ $userModel->create();
 
 // Données
 
-$users = $userModel->loadCSV("users", ["username", "email", "password", "role"]);
+$users = Faker::loadCSV("users", ["username", "email", "password", "role"]);
 
 foreach ($users as $user) {
     $userModel->insert($user);
@@ -44,7 +44,7 @@ $themeModel->create();
 
 // Données
 
-$themes = $themeModel->loadCSV("themes", ["title", "user_id"]);
+$themes = Faker::loadCSV("themes", ["title", "user_id"]);
         
 foreach ($themes as $theme) {
     $themeModel->insert($theme);
@@ -58,7 +58,7 @@ $expressionModel->create();
 
 // Données
 
-$expressions = $expressionModel->loadCSV("expressions", ["french", "english", "phonetics", "theme_id", "user_id"]);
+$expressions = Faker::loadCSV("expressions", ["french", "english", "phonetics", "theme_id", "user_id"]);
 
 foreach ($expressions as $expression) {
     $expressionModel->insert($expression);

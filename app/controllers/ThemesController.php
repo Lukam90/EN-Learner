@@ -54,12 +54,12 @@ class ThemesController extends Controller {
 
             $themeId = $theme->id;
             $title = $theme->title;
-            $author = $this->themeModel->findUser($themeId);
+            $author = $this->themeModel->findUser($themeId)->username;
             $nbExpressions = $this->themeModel->countExpressions($themeId);
 
             // Edition
 
-            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
+            $belongsTo = $this->themeModel->belongsToUser($userId, $themeId);
             $isSuperUser = $this->userModel->isSuperUser($userId);
 
             $canEdit = $canAdd && $belongsTo && $isSuperUser;
@@ -71,7 +71,7 @@ class ThemesController extends Controller {
                 "title" => $title,
                 "author" => $author,
                 "nbExpressions" => $nbExpressions,
-                "canEdit" => $canEdit
+                "canEdit" => true
             ];
         }
 
@@ -97,6 +97,9 @@ class ThemesController extends Controller {
 
         $list = $this->themeModel->findExpressions($themeId);
 
+        //var_dump($theme);
+        //var_dump($list);
+
         $expressions = [];
 
         $canAdd = true;
@@ -111,11 +114,16 @@ class ThemesController extends Controller {
             $english = $expression->english;
             $phonetics = $expression->phonetics;
 
-            $author = $this->themeModel->findUser($themeId);
+            $author = $this->themeModel->findUser($themeId)->username;
 
             $userId = $expression->user_id;
-            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
-            $isSuperUser = $this->userModel->isSuperUser($userId);
+
+            //$belongsTo = $this->themeModel->belongsTo($userId, $themeId);
+            //$isSuperUser = $this->userModel->isSuperUser($userId);
+
+            //var_dump($expression);
+            var_dump($userId);
+            var_dump($belongsTo);
 
             $canEdit = $belongsTo || $isSuperUser;
 
@@ -130,6 +138,8 @@ class ThemesController extends Controller {
                 "canEdit" => true,
             ];
         }
+
+        var_dump($expressions);
 
         // Rendu
 

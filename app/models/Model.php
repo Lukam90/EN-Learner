@@ -7,7 +7,9 @@ use app\core\Security;
 
 abstract class Model {
     protected $dbHandler;
-    protected $query;
+    protected $tableName;
+
+    /* Fonctions générales */
 
     // Initialisation de l'objet PDO
     // Connexion à la BDD
@@ -18,37 +20,40 @@ abstract class Model {
         return $db->getHandler();
     }
 
-    // Edition d'une requête
-
-    public function setQuery($value) {
-        $this->query = $value;
-    }
-
-    // Récupération d'une requête
-
-    public function getQuery() {
-        return $this->query;
-    }
-
     // Requête générale brute (ex : création)
 
-    public function run() {
+    public function run($query) {
         return $this->dbHandler
-                    ->exec($this->getQuery());
+                    ->exec();
     }
 
     // Requête préparée
 
-    public function prepare() {
+    public function prepare($query) {
         return $this->dbHandler
-                    ->prepare($this->getQuery());
+                    ->prepare($query);
     }
 
     // Requête générale
 
-    public function query() {
+    public function query($sql) {
         return $this->dbHandler
-                    ->query($this->getQuery());
+                    ->query($sql);
+    }
+
+    /* Fonctions CRUD */
+
+    // Suppression de la table
+
+    public function dropTable($tableName) {
+        return $this->run("DROP TABLE IF EXISTS $tableName");
+    }
+
+    // Sélection de l'ensemble des résultats
+
+    public function selectAll($tableName) {
+        return $this->query("SELECT * FROM $tableName")
+                    ->fetchAll(\PDO::FETCH_OBJ);
     }
 
     // Requête préparée avec un attribut
@@ -83,17 +88,12 @@ abstract class Model {
         return $statement->execute();
     }
 
-    // Sélection de l'ensemble des résultats
-
-    public function fetchAll() {
-        return $this->query()
-                    ->fetchAll(\PDO::FETCH_OBJ);
-    }
+    
 
     // Sélection d'une colonne (ex : nombre)
 
-    public function fetchColumn() {
-        return $this->query()
+    public function countLines($tableName) {
+        return $this->query("SELECT COUNT(id) FROM $tableName")
                     ->fetchColumn();
     }
 
@@ -148,8 +148,27 @@ abstract class Model {
     // Appartenance
 
     public function belongsTo($data) {
-        $statement = $this->withData($data);
+        $statement = $this->prepare();
+
+        foreach ($data as $key => $value) {
+            $statement->bindValue(":$key", $value);
+        }
+
+        $statement->execute();
 
         return $statement->fetchColumn() > 0;
+    }
+
+    // Suppression d'une ligne par un ID
+
+    public function deleteLine($tableName, $id) {
+        $query = "DELETE FROM $tableName
+                  WHERE id = :id";
+
+        $statement = $this->prepare($query);
+
+        $statement->bindValue(":id", $id);
+
+        return $statement->execute();
     }
 }

@@ -2,9 +2,11 @@
 
 namespace app\models;
 
-use app\models\Model;
+use PDO;
 
 use app\core\Security;
+
+use app\models\Model;
 
 class Theme extends Model {
     // Initialisation de l'objet PDO
@@ -16,68 +18,80 @@ class Theme extends Model {
     // Création de la table
 
     public function create() {
-        $this->setQuery("CREATE TABLE IF NOT EXISTS themes (
+        return $this->run("CREATE TABLE IF NOT EXISTS themes (
                             id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             title VARCHAR(50) UNIQUE NOT NULL,
                             user_id INTEGER NOT NULL,
                             FOREIGN KEY (user_id) REFERENCES users (id)
                             ON DELETE CASCADE
-                        )");
-
-        return $this->run();
+                         )");
     }
 
     // Suppression de la table
 
     public function drop() {
-        $this->setQuery("DROP TABLE IF EXISTS themes");
-
-        return $this->run();
+        return $this->dropTable("themes");
     }
 
     // Sélection de l'ensemble des résultats
 
     public function findAll() {
-        $this->setQuery("SELECT * FROM themes");
-
-        return $this->fetchAll();
+        return $this->selectAll("themes");
     }
 
     // Sélection d'une ligne par un ID
 
     public function findById($id) {
-        $this->setQuery("SELECT * FROM themes
-                         WHERE id = :id");
+        $query = "SELECT *
+                  FROM themes
+                  WHERE id = :id";
 
-        return $this->fetchByID($id);
+        $statement = $this->prepare($query);
+
+        $statement->bindValue(":id", $id);
+
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_OBJ);
     }
 
     // Sélection d'un thème par le titre
 
     public function findByTitle($title) {
-        $this->setQuery("SELECT * FROM themes
-                         WHERE title = :title");
+        $query = "SELECT *
+                  FROM themes
+                  WHERE title = :title";
 
-        return $this->fetchBy("title", $title);
+        $statement = $this->prepare($query);
+
+        $statement->bindValue(":title", $title);
+
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_OBJ);
     }
 
     // Nombre d'éléments de la table
 
     public function count() {
-        $this->setQuery("SELECT COUNT(id) FROM themes");
-
-        return $this->fetchColumn();
+        return $this->countLines("themes");
     }
 
     // Expressions d'un thème
 
     public function findExpressions($themeId) {
-        $this->setQuery("SELECT e.*
-                         FROM expressions e, themes t
-                         WHERE e.theme_id = t.id
-                         AND t.id = :id");
+        $query = "SELECT e.*
+                  FROM expressions e, themes t
+                  WHERE e.theme_id = t.id
+                  AND t.id = :id";
 
-        return $this->fetchAllByID($themeId);
+        $statement = $this->prepare($query);
+
+        $statement->bindValue(":id", $themeId);
+
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_OBJ);
     }
 
     // Nombre d'expressions d'un thème
@@ -91,61 +105,69 @@ class Theme extends Model {
     // Nom de l'utilisateur
 
     public function findUser($themeId) {
-        $this->setQuery("SELECT u.username
-                         FROM users u, themes t
-                         WHERE u.id = t.user_id
-                         AND t.id = :id");
+        $query = "SELECT u.username
+                  FROM users u, themes t
+                  WHERE u.id = t.user_id
+                  AND t.id = :id";
 
-        return $this->fetchByID($themeId);
+        $statement = $this->prepare($query);
+
+        $statement->bindValue(":id", $themeId);
+
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_OBJ);
     }
 
     // Appartenance à un utilisateur
 
     public function belongsToUser($userId, $themeId) {
-        $this->setQuery("SELECT t.id
-                         FROM themes t, users u
-                         WHERE t.user_id = u.id
-                         AND u.id = :userId
-                         AND t.id = :themeId");
+        $query = "SELECT t.id
+                  FROM themes t, users u
+                  WHERE t.user_id = u.id
+                  AND u.id = :userId
+                  AND t.id = :themeId";
 
-        $data = [
-            "userId" => $userId,
-            "themeId" => $themeId
-        ];
+        $statement = $this->prepare($query);
 
-        return $this->belongsTo($data);
+        $statement->bindValue(":userId", $userId);
+        $statement->bindValue(":themeId", $themeId);
+
+        return $statement->execute();
     }
 
     // Ajout d'une nouvelle ligne
 
     public function insert($data) {
-        $this->setQuery("INSERT INTO themes (title, user_id)
-                         VALUES (:title, :user_id)");
+        $query = "INSERT INTO themes (title, user_id)
+                  VALUES (:title, :userId)";
 
-        return $this->withData($data);
+        $statement = $this->prepare($query);
+
+        $statement->bindValue(":title", $data["title"]);
+        $statement->bindValue(":userId", $data["user_id"]);
+
+        return $statement->execute();
     }
 
     // Edition d'un thème
 
-    public function update($title, $id) {
-        $this->setQuery("INSERT INTO themes (title, user_id)
-                         VALUES (:title, :user_id)
-                         WHERE id = :id");
+    public function update($id, $title) {
+        $query = "UPDATE themes
+                  SET title = :title
+                  WHERE id = :id";
 
-        $data = [
-            "title" => $title,
-            "id" => $userId
-        ];
+        $statement = $this->prepare($query);
 
-        return $this->withData($data);
+        $statement->bindValue(":id", $data["id"]);
+        $statement->bindValue(":title", $data["title"]);
+
+        return $statement->execute();
     }
 
     // Suppression d'une ligne par un ID
 
     public function delete($id) {
-        $this->setQuery("DELETE FROM themes
-                         WHERE id = :id");
-
-        return $this->withID($id);
+        return $this->deleteLine("themes", $id);
     }
 }
