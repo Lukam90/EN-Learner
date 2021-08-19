@@ -16,15 +16,17 @@ class User extends Model {
     // Création de la table
 
     public function create() {
-        return $this->raw("CREATE TABLE IF NOT EXISTS users (
-                           id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                           username VARCHAR(32) UNIQUE NOT NULL,
-                           email VARCHAR(100) UNIQUE NOT NULL,
-                           `password` VARCHAR(255) NOT NULL,
-                           role VARCHAR(20) NOT NULL DEFAULT 'Membre',
-                           created_at DATE DEFAULT CURRENT_TIMESTAMP,
-                           banned BOOLEAN DEFAULT 0
-                        )");
+        $sql = "CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    username VARCHAR(32) UNIQUE NOT NULL,
+                    email VARCHAR(100) UNIQUE NOT NULL,
+                    `password` VARCHAR(255) NOT NULL,
+                    role VARCHAR(20) NOT NULL DEFAULT 'Membre',
+                    created_at DATE DEFAULT CURRENT_TIMESTAMP,
+                    banned BOOLEAN DEFAULT 0
+                )";
+
+        return $this->raw($sql);
     }
 
     // Suppression de la table
@@ -39,80 +41,48 @@ class User extends Model {
         return $this->fetchAll("SELECT * FROM users");
     }
 
-    // Sélection d'une ligne par un ID
-
-    public function findById($id) {
-        return $this->findBy("SELECT * FROM users
-                              WHERE id = :value",
-                            $id);
-    }
-
-    // Sélection d'un utilisateur par son pseudo
-
-    public function findByName($username) {
-        return $this->findBy("SELECT * FROM users
-                              WHERE username = :value",
-                            $username);
-    }
-
-    // Sélection d'un utilisateur par son e-mail
-
-    public function findByEmail($email) {
-        return $this->findBy("SELECT * FROM users
-                              WHERE email = :value",
-                            $email);
-    }
-
     // Nombre d'éléments de la table
 
     public function count() {
         return $this->fetchColumn("SELECT COUNT(id) FROM users");
     }
 
-    // Ajout d'une nouvelle ligne
+    // Sélection d'une ligne par un ID
 
-    public function insert($data) {
-        $values = $this->separate($data);
+    public function findById($id) {
+        $sql = "SELECT * FROM users
+                WHERE id = :id";
 
-        $statement = $this->dbHandler
-                          ->prepare("INSERT INTO users
-                                     SET (:username, :email, :password, :role)");
+        return $this->fetchByID($sql, $id);
+    }
 
-        $statement->bindValue(":username", $data["username"]);
-        $statement->bindValue(":email", $username["email"]);
-        $statement->bindValue(":password", Security::hash($username["password"]));
-        $statement->bindValue(":role", $username["role"]);
+    // Sélection d'un utilisateur par son pseudo
 
-        $statement->execute();
-        
-        return $this->raw("INSERT INTO users
-                           SET $values");
+    public function findByName($username) {
+        $sql = "SELECT * FROM users
+                WHERE username = :username";
+
+        return $this->fetchBy($sql, $username);
+    }
+
+    // Sélection d'un utilisateur par son e-mail
+
+    public function findByEmail($email) {
+        $sql = "SELECT * FROM users
+                WHERE email = :email";
+
+        return $this->fetchBy($sql, $email);
     }
 
     // Thèmes d'un utilisateur
 
     public function findThemes($userId) {
-        return $this->fetchAll("SELECT t.*
-                                FROM themes t, users u
-                                WHERE t.user_id = u.id
-                                AND u.id = :id",
-                                $userId
-                              );
-        /*
-        $statement = $this->dbHandler
-                          ->prepare("
-                                SELECT t.*
-                                FROM themes t, users u
-                                WHERE t.user_id = u.id
-                                AND u.id = :id
-                            ");
+        $sql = "SELECT t.*
+                FROM themes t, users u
+                WHERE t.user_id = u.id
+                AND u.id = :id";
 
-        $statement->bindValue(":id", $userId);
-
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
-        */
+        return $this->fetchAllById($sql, $userId);
     }
 
     // Nombre de thèmes d'un utilisateur
@@ -126,19 +96,12 @@ class User extends Model {
     // Expressions d'un utilisateur
 
     public function findExpressions($userId) {
-        $statement = $this->dbHandler
-                          ->prepare("
-                                SELECT e.*
-                                FROM expressions e, users u
-                                WHERE e.user_id = u.id
-                                AND u.id = :id
-                            ");
+        $sql = "SELECT e.*
+                FROM expressions e, users u
+                WHERE e.user_id = u.id
+                AND u.id = :id";
 
-        $statement->bindValue(":id", $userId);
-
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
+        return $this->fetchAllByID($sql, $userId);
     }
 
     // Nombre d'expressions d'un utilisateur
@@ -152,7 +115,10 @@ class User extends Model {
     // Connexion d'un utilisateur
 
     public function login($email, $password) {
-        $row = $this->findBy("email", $email);
+        $sql = "SELECT * FROM users
+                WHERE email = :email";
+
+        $row = $this->findBy($sql, "email", $email);
 
         // On vérifie si les mots de passe correspondent
 
@@ -167,77 +133,138 @@ class User extends Model {
         }
     }
 
-    // Edition d'un utilisateur existant
-
-    // Changement de pseudo
-
-    public function changeUsername($id, $username) {
-        return $this->update($id, ["username" => $username]);
-    }
-
-    // Changement d'e-mail
-
-    public function changeEmail($id, $email) {
-        return $this->update($id, ["email" => $email]);
-    }
-
-    // Changement de mot de passe
-
-    public function changePassword($id, $password) {
-        $password = password_hash($password, PASSWORD_BCRYPT);
-
-        return $this->update($id, ["password" => $password]);
-    }
-
-    // Changement de rôle
-
-    public function changeRole($id, $role) {
-        return $this->update($id, ["role" => $role]);
-    }
-
-    // Changement du statut de bannissement
-
-    public function changeBanStatus($id, $banned) {
-        return $this->update($id, ["banned" => $banned]);
-    }
-
     // Rôle de modérateur
 
     public function isModerator($id) {
-        return $this->is("SELECT id FROM users
-                   WHERE role = 'Modérateur'
-                   AND id = :id",
-                   $id
-                );
+        $sql = "SELECT id FROM users
+                WHERE role = 'Modérateur'
+                AND id = :id";
+
+        return $this->is($sql, $id);
     }
 
     // Rôle d'administrateur
 
     public function isAdmin($id) {
-        return $this->is("SELECT id FROM users
-                          WHERE role = 'Administrateur'
-                          AND id = :id",
-                          $id
-                        );
+        $sql = "SELECT id FROM users
+                WHERE role = 'Administrateur'
+                AND id = :id";
+
+        return $this->is($sql, $id);
     }
 
     // Rôle de modérateur ou d'administrateur
 
     public function isSuperUser($id) {
-        return $this->is("SELECT id FROM users
-                          WHERE role IN ('Modérateur', 'Administrateur')
-                          AND id = :id",
-                          $id
-                        );
+        $sql = "SELECT id FROM users
+                WHERE role IN ('Modérateur', 'Administrateur')
+                AND id = :id";
+
+        return $this->is($sql, $id);
     }
 
     // Utilisateur banni
 
     public function isBanned($id) {
-        return $this->is("SELECT id FROM users
-                          WHERE banned
-                          AND id = :id",
-                          $id
-                        );
+        $sql = "SELECT id FROM users
+                WHERE banned
+                AND id = :id";
+
+        return $this->is($sql, $id);
+    }
+
+    // Ajout d'une nouvelle ligne
+
+    public function insert($data) {
+        $sql = "INSERT INTO users (username, email, password, role)
+                VALUES (:username, :email, :password, :role)";
+
+        return $this->withData($sql, $data);
+    }
+
+    // Edition d'un utilisateur existant
+
+    // Changement de pseudo
+
+    public function changeUsername($id, $username) {
+        $sql = "UPDATE users
+                SET username = :username
+                WHERE id = :id";
+
+        $data = [
+            "id" => $id,
+            "username" => $username
+        ];
+
+        return $this->withData($sql, $data);
+    }
+
+    // Changement d'e-mail
+
+    public function changeEmail($id, $email) {
+        $sql = "UPDATE users
+                SET email = :email
+                WHERE id = :id";
+
+        $data = [
+            "id" => $id,
+            "email" => $email
+        ];
+
+        return $this->withData($sql, $data);
+    }
+
+    // Changement de mot de passe
+
+    public function changePassword($id, $password) {
+        $sql = "UPDATE users
+                SET password = :password
+                WHERE id = :id";
+
+        $data = [
+            "id" => $id,
+            "password" => Security::hash($password)
+        ];
+
+        return $this->withData($sql, $data);
+    }
+
+    // Changement de rôle
+
+    public function changeRole($id, $role) {
+        $sql = "UPDATE users
+                SET role = :role
+                WHERE id = :id";
+
+        $data = [
+            "id" => $id,
+            "role" => $role
+        ];
+
+        return $this->withData($sql, $data);
+    }
+
+    // Changement du statut de bannissement
+
+    public function changeBanStatus($id, $banned) {
+        $sql = "UPDATE users
+                SET banned = :banned
+                WHERE id = :id";
+
+        $data = [
+            "id" => $id,
+            "banned" => $banned
+        ];
+
+        return $this->withData($sql, $data);
+    }
+
+    // Suppression d'une ligne par un ID
+
+    public function delete($id) {
+        $sql = "DELETE FROM users
+                WHERE id = :id";
+
+        return $this->withID($sql, $id);
     }
 }

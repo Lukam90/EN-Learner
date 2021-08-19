@@ -44,7 +44,7 @@ class Expression extends Model {
     // Sélection d'une ligne par un attribut
 
     public function findBy($attribute, $value) {
-        return parent::findBy("expressions", $attribute, $value);
+        return $this->findBy("expressions", $attribute, $value);
     }
 
     // Sélection d'une ligne par un ID
@@ -62,7 +62,10 @@ class Expression extends Model {
     // Ajout d'une nouvelle ligne
 
     public function insert($data) {
-        return parent::insert("expressions", $data);
+        $sql = "INSERT INTO expressions (french, english, phonetics, theme_id, user_id)
+                VALUES (:french, :english, :phonetics, :theme_id, :user_id)";
+
+        return $this->withData($sql, $data);
     }
 
     // Nombre d'expressions liées à une table

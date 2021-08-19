@@ -30,13 +30,13 @@ $userModel->create();
 
 // Données
 
-$users = $userModel->loadCSV(["username", "email", "password", "role"]);
+$users = $userModel->loadCSV("users", ["username", "email", "password", "role"]);
 
 foreach ($users as $user) {
     $userModel->insert($user);
 }
 
-/* Table des thèmes */
+/// Thèmes
 
 // Création
 
@@ -44,13 +44,13 @@ $themeModel->create();
 
 // Données
 
-$themes = $themeModel->loadCSV(["title", "user_id"]);
+$themes = $themeModel->loadCSV("themes", ["title", "user_id"]);
         
 foreach ($themes as $theme) {
     $themeModel->insert($theme);
 }
 
-/* Table des expressions */
+/// Expressions
 
 // Création
 
@@ -58,7 +58,7 @@ $expressionModel->create();
 
 // Données
 
-$expressions = $expressionModel->loadCSV(["french", "english", "phonetics", "theme_id", "user_id"]);
+$expressions = $expressionModel->loadCSV("expressions", ["french", "english", "phonetics", "theme_id", "user_id"]);
 
 foreach ($expressions as $expression) {
     $expressionModel->insert($expression);

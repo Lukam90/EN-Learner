@@ -16,13 +16,15 @@ class Theme extends Model {
     // Création de la table
 
     public function create() {
-        return $this->raw("CREATE TABLE IF NOT EXISTS themes (
-                           id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                           title VARCHAR(50) UNIQUE NOT NULL,
-                           user_id INTEGER NOT NULL,
-                           FOREIGN KEY (user_id) REFERENCES users (id)
-                           ON DELETE CASCADE
-                        )");
+        $sql = "CREATE TABLE IF NOT EXISTS themes (
+                    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                    title VARCHAR(50) UNIQUE NOT NULL,
+                    user_id INTEGER NOT NULL,
+                    FOREIGN KEY (user_id) REFERENCES users (id)
+                    ON DELETE CASCADE
+                )";
+
+        return $this->raw($sql);
     }
 
     // Suppression de la table
@@ -40,7 +42,7 @@ class Theme extends Model {
     // Sélection d'une ligne par un attribut
 
     public function findBy($attribute, $value) {
-        return parent::findBy("themes", $attribute, $value);
+        return $this->findBy("themes", $attribute, $value);
     }
 
     // Sélection d'une ligne par un ID
@@ -64,7 +66,10 @@ class Theme extends Model {
     // Ajout d'une nouvelle ligne
 
     public function insert($data) {
-        return parent::insert("themes", $data);
+        $sql = "INSERT INTO themes (title, user_id)
+                VALUES (:title, :user_id)";
+
+        return $this->withData($sql, $data);
     }
 
     // Expressions d'un thème
@@ -129,5 +134,18 @@ class Theme extends Model {
         $statement->execute();
 
         return $statement->fetchColumn() != 0;
+    }
+
+    // Suppression d'une ligne par un ID
+
+    public function delete($id) {
+        $sql = "DELETE FROM users
+                WHERE id = :id";
+
+        $statement = $this->prepare($sql);
+
+        $statement->bindValue(":id", $id);
+
+        return $statement->execute();
     }
 }

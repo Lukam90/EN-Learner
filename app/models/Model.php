@@ -7,11 +7,9 @@ use app\core\Security;
 
 abstract class Model {
     protected $dbHandler;
-    protected $tableName;
-    protected $definition;
 
     // Initialisation de l'objet PDO
-    // -> Connexion à la BDD
+    // Connexion à la BDD
 
     public function init() {
         $db = new Database();
@@ -19,37 +17,13 @@ abstract class Model {
         return $db->getHandler();
     }
 
-    // Séparation de valeurs
-
-    public function separate($data) {
-        $index = 0;
-        $length = count($data) - 1;
-
-        $values = "";
-
-        foreach ($data as $key => $value) {
-            $type = gettype($value);
-            $values .= "$key = ";
-
-            $values .= ($type === "string") ? "\"$value\"" : "$value";
-
-            if ($index < $length) {
-                $values .= ", ";
-            }
-
-            $index++;
-        }
-
-        return $values;
-    }
-
     // Chargement de données de tests (CSV)
 
-    public function loadCSV($attributes) {
+    public function loadCSV($tableName, $attributes) {
         $length = 0;
         $data = [];
 
-        $file = fopen("{$this->tableName}.csv", "r");
+        $file = fopen("$tableName.csv", "r");
         
         while(! feof($file)) {
             $line = Security::clean(fgets($file));
@@ -60,10 +34,6 @@ abstract class Model {
 
             foreach ($attributes as $key) {
                 $value = $values[$index];
-
-                if ($key == "password") {
-                    $value = password_hash($value, PASSWORD_BCRYPT);
-                }
 
                 $data[$length][$key] = $value;
 
@@ -80,93 +50,116 @@ abstract class Model {
 
     // Requête générale brute (ex : création)
 
-    public function raw($query) {
+    public function raw($sql) {
         return $this->dbHandler
-                    ->exec($query);
+                    ->exec($sql);
     }
 
-    // Suppression d'une table
+    // Requête préparée
 
-    /*public function drop($tableName) {
+    public function prepare($sql) {
         return $this->dbHandler
-                    ->exec("DROP TABLE IF EXISTS $tableName");
-    }*/
+                    ->prepare($sql);
+    }
+
+    // Requête générale
+
+    public function query($sql) {
+        return $this->dbHandler
+                    ->query($sql);
+    }
+
+    // Requête préparée avec un attribut
+
+    public function withAttribute($sql, $attribute, $value) {
+        $statement = $this->prepare($sql);
+
+        $statement->bindValue(":$attribute", $value);
+
+        return $statement->execute();
+    }
+
+    // Requête préparée avec un ID
+
+    public function withID($sql, $id) {
+        return $this->withAttribute($sql, "id", $id);
+    }
+
+    // Requête préparée avec données
+
+    public function withData($sql, $data) {
+        $statement = $this->prepare($sql);
+
+        foreach ($data as $key => $value) {
+            if ($key == "password") {
+                $value = Security::hash($value);
+            }
+
+            $statement->bindValue(":$key", $value);
+        }
+
+        return $statement->execute();
+    }
 
     // Sélection de l'ensemble des résultats
 
-    public function fetchAll($query) {
-        return $this->dbHandler
-                    ->query($query)
+    public function fetchAll($sql) {
+        return $this->query($sql)
                     ->fetchAll(\PDO::FETCH_OBJ);
     }
 
     // Sélection d'une colonne (ex : nombre)
 
-    public function fetchColumn($query) {
-        return $this->dbHandler->query($query)
-                               ->fetchColumn();
+    public function fetchColumn($sql) {
+        return $this->query($sql)
+                    ->fetchColumn();
     }
 
     // Sélection d'une ligne par un attribut
 
-    public function findBy($query, $value) {
-        $statement = $this->dbHandler
-                          ->prepare($query);
+    public function fetchBy($sql, $attribute, $value) {
+        $statement = $this->prepare($sql);
 
-        $statement->bindParam(":value", $value);
+        $statement->bindParam(":$attribute", $value);
         
         $statement->execute();
 
         return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
+    // Sélection d'une ligne par un ID
+
+    public function fetchByID($sql, $id) {
+        return $this->fetchBy($sql, "id", $id);
+    }
+
+    // Sélection de l'ensemble des lignes par un attribut
+
+    public function fetchAllBy($sql, $attribute, $value) {
+        $statement = $this->prepare($sql);
+
+        $statement->bindParam(":$attribute", $value);
+        
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
+    }
+
+    // Sélection de l'ensemble des lignes par un ID
+
+    public function fetchAllByID($sql, $id) {
+        return fetchAllBy($sql, "id", $id);
+    }
+
     // Vérification d'une ligne par un attribut avec ID
 
-    public function is($query, $id) {
-        $statement = $this->dbHandler
-                          ->prepare($query);
+    public function is($sql, $id) {
+        $statement = $this->prepare($sql);
 
         $statement->bindValue(":id", $id);
 
         $statement->execute();
 
         return $statement->fetchColumn() != 0;
-    }
-
-    // Ajout d'une nouvelle ligne
-
-    public function insert($tableName, $data) {
-        $values = $this->separate($data);
-
-        return $this->dbHandler
-                    ->exec("INSERT INTO $tableName
-                            SET $values");
-    }
-
-    // Changement de valeurs par un ID
-
-    public function update($id, $data) {
-        $values = $this->separate($data);
-
-        $statement = $this->dbHandler
-                          ->prepare("UPDATE {$this->tableName}
-                                     SET $values
-                                     WHERE id = :id");
-
-        $statement->bindValue(":id", $id);
-
-        return $statement->execute();
-    }
-
-    // Suppression d'une ligne par un ID
-
-    public function delete($id) {
-        $statement = $this->dbHandler
-                          ->prepare("DELETE FROM {$this->tableName}
-                                     WHERE id = :id");
-
-        $statement->bindValue(":id", $id);
-
-        return $statement->execute();
     }
 }
