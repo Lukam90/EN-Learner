@@ -1,5 +1,0 @@
-// theme_id, user_id
-
-// "Expressions de base" (1), "Lukas" (1)
-// "Jours de la semaine" (2), "Mister Bean" (3)
-// "Mois" (3), "David Goodenough" (5)
