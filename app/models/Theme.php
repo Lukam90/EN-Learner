@@ -98,7 +98,7 @@ class Theme extends Model {
     // Nom de l'utilisateur
 
     public function findUser($themeId) {
-        $this->setQuery("SELECT u.username
+        $this->setQuery("SELECT u.id, u.username
                          FROM users u, themes t
                          WHERE u.id = t.user_id
                          AND t.id = :id");
@@ -120,7 +120,7 @@ class Theme extends Model {
             "themeId" => $themeId
         ];
 
-        return $this->withData($data);
+        return (bool) $this->withData($data);
     }
 
     // Ajout d'une nouvelle ligne

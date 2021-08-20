@@ -17,6 +17,11 @@ class ThemesController extends Controller {
     private $themeModel;
     private $userModel;
 
+    private $validator;
+
+    private $canAdd;
+    private $canEdit;
+
     // Constructeur
 
     public function __construct() {
@@ -24,45 +29,47 @@ class ThemesController extends Controller {
 
         $this->themeModel = new Theme();
         $this->userModel = new User();
+
+        $this->validator = new ThemeValidation();
+
+        $this->canAdd = false;
+        $this->canEdit = false;
     }
 
-    // Liste des thèmes
+    // Chargement des thèmes
 
-    public function index() {
+    public function loadThemes() {
         // Données
 
         $list = $this->themeModel->findAll();
 
         $themes = [];
 
-        // Ajout
-
-        $canAdd = false;
-
-        $userId = 0;
-
-        if (Session::isLoggedIn()) {
-            $userId = Session::var("user_id");
-
-            $canAdd = ! $currentUser.banned;
-        }
+        $this->canAdd = Session::isLoggedIn();
 
         // Boucle d'affichage
 
         foreach ($list as $theme) {
-            // Lecture
+            // Thème
 
             $themeId = $theme->id;
             $title = $theme->title;
-            $author = $this->themeModel->findUser($themeId)->username;
+            $author = $this->themeModel->findUser($themeId);
             $nbExpressions = $this->themeModel->countExpressions($themeId);
+
+            // Auteur
+
+            $username = $author->username;
+            $userId = $author->id;
+
+            var_dump($author);
 
             // Edition
 
             $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
             $isSuperUser = $this->userModel->isSuperUser($userId);
 
-            $canEdit = $canAdd && $belongsTo && $isSuperUser;
+            $this->canEdit = $this->canAdd && $belongsTo && $isSuperUser;
 
             // Enregistrement
 
@@ -71,20 +78,44 @@ class ThemesController extends Controller {
                 "title" => $title,
                 "author" => $author,
                 "nbExpressions" => $nbExpressions,
-                "canEdit" => true
+                "canEdit" => $this->canEdit
             ];
         }
 
-        // Rendu
+        return $themes;
+    }
+
+    // Liste des thèmes
+
+    public function index() {
+        // Thèmes
+        
+        $themes = $this->loadThemes();
+
+        // Titre
+
+        $title = "";
+
+        // Envoi du formulaire
+
+        $errors = [];
+
+        // Indication
+
+        $this->validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
+
+        /* Rendu */
 
         echo $this->twig->render("themes.twig", [
             "session" => Session::all(),
 
             "themes" => $themes,
-            "can-add" => $canAdd,
-            "can-edit" => $canEdit
+            "can-add" => $this->canAdd,
+            //"can-edit" => $canEdit
         ]);
     }
+
+
 
     // Liste des expressions d'un thème
 
@@ -152,20 +183,8 @@ class ThemesController extends Controller {
 
         $validator = new ThemeValidation();
 
-        // Indication
-
-        $validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
-
-        // Titre
-
-        $title = "";
-
-        // Envoi du formulaire
-
-        $errors = [];
-
         if (Request::isPost()) {
-            //sleep(1);
+            sleep(1);
 
             $title = $validator->title();
 
@@ -174,6 +193,18 @@ class ThemesController extends Controller {
             $errors = $validator->getErrors();
 
             $valid = empty($errors["title"]); // && ! $loggedIn;
+
+            // Ajout
+
+            $canAdd = false;
+
+            $userId = 0;
+
+            if (Session::isLoggedIn()) {
+                $userId = Session::var("user_id");
+
+                $canAdd = ! $currentUser.banned;
+            }
 
             // Enregistrement
 
@@ -188,8 +219,6 @@ class ThemesController extends Controller {
                 if ($saved) {
                     Session::success("Le thème a bien été ajouté.");
 
-                    Redirection::themes("/");
-
                     return;
                 } else {
                     Session::error();
@@ -199,12 +228,13 @@ class ThemesController extends Controller {
 
         // Rendu
 
-        echo $this->twig->render("themes/new_theme.twig", [
+        echo $this->twig->render("themes.twig", [
             "session" => Session::all(),
 
-            "tips" => $validator->getTips(),
-            "errors" => $errors,
             "loggedIn" => true,
+
+            "tips" => $this->validator->getTips(),
+            "errors" => $errors,
 
             "title" => $title,
         ]);

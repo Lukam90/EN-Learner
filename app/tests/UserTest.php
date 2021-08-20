@@ -11,12 +11,6 @@ final class UserTest extends ModelTest {
         $this->log("User", $methodName, $var);
     }
 
-    public function testInit() {
-        $res = $this->erase();
-
-        $this->assertNull($res);
-    }
-
     public function testFindAll() {
         $userModel = new User();
         $res = $userModel->findAll();
@@ -41,7 +35,7 @@ final class UserTest extends ModelTest {
 
         $this->logUser(__FUNCTION__, $res->id);
 
-        $this->assertNotNull($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testFindOneByName() {
@@ -50,7 +44,7 @@ final class UserTest extends ModelTest {
 
         $this->logUser(__FUNCTION__, $res->username);
 
-        $this->assertNotNull($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testFindOneByEmail() {
@@ -59,7 +53,7 @@ final class UserTest extends ModelTest {
 
         $this->logUser(__FUNCTION__, $res->email);
 
-        $this->assertNotNull($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testFindThemes() {
@@ -68,7 +62,7 @@ final class UserTest extends ModelTest {
 
         $this->logUser(__FUNCTION__, $res[0]->title);
 
-        $this->assertNotNull($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testCountThemes() {
@@ -86,7 +80,7 @@ final class UserTest extends ModelTest {
 
         $this->logUser(__FUNCTION__, $res[0]->french);
 
-        $this->assertNotNull($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testCountExpressions() {
@@ -98,13 +92,22 @@ final class UserTest extends ModelTest {
         $this->assertIsNumeric($res);
     }
 
-    public function testLogin() {
+    public function testGoodLogin() {
         $userModel = new User();
         $res = $userModel->login("lukas@admin.com", "Admin007");
 
         $this->logUser(__FUNCTION__, $res);
 
         $this->assertTrue($res);
+    }
+
+    public function testBadLogin() {
+        $userModel = new User();
+        $res = $userModel->login("lukas@admin.com", "Admin123");
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertFalse($res);
     }
 
     public function testIsModerator() {

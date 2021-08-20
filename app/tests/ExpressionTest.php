@@ -4,63 +4,87 @@ namespace app\tests;
 
 use app\core\Faker;
 
-use app\tests\ModelTest;
 use app\models\Expression;
 
 class ExpressionTest extends ModelTest {
-    // Modèle
-
-    public function __construct() {
-        $this->model = new Expression();
+    public function logExpression($methodName, $var) {
+        $this->log("Expression", $methodName, $var);
     }
 
-    // Lancement
+    public function testFindAll() {
+        $expressionModel = new Expression();
+        $res = $expressionModel->findAll();
 
-    public function launch() {
-        $this->log("EXPRESSIONS");
+        $this->logExpression(__FUNCTION__, count($res));
 
-        // Sélection
+        $this->assertNotEmpty($res);
+    }
 
-        $this->call("count");
+    public function testFindOneById() {
+        $expressionModel = new Expression();
+        $res = $expressionModel->findOneById(1);
 
-        $this->call("findAllByTheme", 1);
-        $this->call("countByTheme", 1);
+        $this->logExpression(__FUNCTION__, $res->french);
 
-        $this->call("findAllByAuthor", 1);
-        $this->call("countByAuthor", 1);
+        $this->assertNotEmpty($res);
+    }
 
-        // Insertion
+    public function testCount() {
+        $expressionModel = new Expression();
+        $res = $expressionModel->count();
 
+        $this->logExpression(__FUNCTION__, $res);
+
+        $this->assertNotEquals(0, $res);
+    }
+
+    public function testBelongsTo() {
+        $expressionModel = new Expression();
+        $res = $expressionModel->belongsTo(1,1);
+
+        $this->logExpression(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testInsert() {
         $data = [
             "french" => Faker::string(),
             "english" => Faker::string(),
             "phonetics" => Faker::string(),
-            "user_id" => 1,
             "theme_id" => 1,
+            "user_id" => 1
         ];
 
-        $this->call("insert", $data);
+        $expressionModel = new Expression();
+        $res = $expressionModel->insert($data);
 
-        // Appartenance
+        $this->logExpression(__FUNCTION__, $res);
 
-        $this->call("belongsTo", 1, 1);
-        $this->call("belongsTo", 2, 1);
-        $this->call("belongsTo", 1, 33);
+        $this->assertTrue($res);
+    }
 
-        // Edition
-
-        $new = [
-            "french" => "Nouvelle expression",
-            "english" => "New expression",
-            "phonetics" => "niou éks-pwé-cheu-ne",
-            "user_id" => 1,
-            "theme_id" => 1,
+    public function testUpdate() {
+        $data = [
+            "french" => "Bonjour ! (le matin)",
+            "english" => "Good morning !",
+            "phonetics" => "goud mor-ning",
         ];
 
-        $this->call("update", 1, $new);
-        
-        // Suppression
+        $expressionModel = new Expression();
+        $res = $expressionModel->update(1, $data);
 
-        $this->call("delete", 9);
+        $this->logExpression(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testDelete() {
+        $expressionModel = new Expression();
+        $res = $expressionModel->delete(11);
+
+        $this->logExpression(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
     }
 }

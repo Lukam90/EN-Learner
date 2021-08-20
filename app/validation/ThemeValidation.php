@@ -23,12 +23,10 @@ class ThemeValidation extends Validation {
         $title = "";
 
         if (! Post::empty("title")) {
-            sleep(1);
-
             $title = Post::var("title");
     
             if (strlen($title) <= 50) {
-                $exists = $this->themeModel->findByTitle($title);
+                $exists = $this->themeModel->findOneByTitle($title);
     
                 if (! $exists) {
                     $this->unset("title");

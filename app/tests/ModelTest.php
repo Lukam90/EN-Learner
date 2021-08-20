@@ -5,6 +5,14 @@ namespace app\tests;
 use PHPUnit\Framework\TestCase;
 
 abstract class ModelTest extends TestCase {
+    // Test d'initialisation
+
+    public function testInit() {
+        $res = $this->erase();
+
+        $this->assertEmpty($res);
+    }
+
     // Ecriture dans le fichier log
 
     public function log($className, $methodName, $var) {

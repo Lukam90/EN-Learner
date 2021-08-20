@@ -69,7 +69,7 @@ class Expression extends Model {
 
     // Appartenance à un utilisateur
 
-    public function belongsToUser($userId, $expressionId) {
+    public function belongsTo($userId, $expressionId) {
         $this->setQuery("SELECT e.id
                          FROM expressions e, users u
                          WHERE e.user_id = u.id
@@ -78,10 +78,10 @@ class Expression extends Model {
 
         $data = [
             "userId" => $userId,
-            "expressionId" => expressionId
+            "expressionId" => $expressionId
         ];
 
-        return $this->withData($data);
+        return (bool) $this->withData($data);
     }
 
     // Ajout d'une nouvelle ligne
@@ -97,10 +97,10 @@ class Expression extends Model {
 
     public function update($id, $data) {
         $this->setQuery("UPDATE expressions
-                        SET french = :french
-                            english = :english
-                            phonetics = :phonetics
-                        WHERE id = :id");
+                         SET french = :french,
+                             english = :english,
+                             phonetics = :phonetics
+                         WHERE id = :id");
 
         $data["id"] = $id;
 

@@ -13,19 +13,13 @@ final class ThemeTest extends ModelTest {
         $this->log("Theme", $methodName, $var);
     }
 
-    public function testInit() {
-        $res = $this->erase();
-
-        $this->assertNull($res);
-    }
-
     public function testFindAll() {
         $themeModel = new Theme();
         $res = $themeModel->findAll();
 
         $this->logTheme(__FUNCTION__, count($res));
 
-        $this->assertNotNull($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testFindOneById() {
@@ -34,7 +28,7 @@ final class ThemeTest extends ModelTest {
 
         $this->logTheme(__FUNCTION__, $res->title);
 
-        $this->assertNotNull($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testFindOneByTitle() {
@@ -43,7 +37,7 @@ final class ThemeTest extends ModelTest {
 
         $this->logTheme(__FUNCTION__, $res->title);
 
-        $this->assertTrue($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testCount() {
@@ -52,7 +46,7 @@ final class ThemeTest extends ModelTest {
 
         $this->logTheme(__FUNCTION__, $res);
 
-        $this->assertTrue($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testFindExpressions() {
@@ -61,7 +55,14 @@ final class ThemeTest extends ModelTest {
 
         $this->logTheme(__FUNCTION__, $res[0]->french);
 
-        $this->assertTrue($res);
+        $this->assertNotEmpty($res);
+    }
+
+    public function testNotFindExpressions() {
+        $themeModel = new Theme();
+        $res = $themeModel->findExpressions(14);
+
+        $this->assertEmpty($res);
     }
 
     public function testCountExpressions() {
@@ -70,7 +71,7 @@ final class ThemeTest extends ModelTest {
 
         $this->logTheme(__FUNCTION__, $res);
 
-        $this->assertTrue($res);
+        $this->assertNotEquals(0, $res);
     }
 
     public function testFindUser() {
@@ -79,7 +80,7 @@ final class ThemeTest extends ModelTest {
 
         $this->logTheme(__FUNCTION__, $res->username);
 
-        $this->assertTrue($res);
+        $this->assertNotEmpty($res);
     }
 
     public function testBelongsTo() {
@@ -91,36 +92,32 @@ final class ThemeTest extends ModelTest {
         $this->assertTrue($res);
     }
 
-    public function test() {
+    public function testInsert() {
+        $data = [
+            "title" => Faker::string(10),
+            "user_id" => 1
+        ];
+
         $themeModel = new Theme();
-        $res = $themeModel->();
+        $res = $themeModel->insert($data);
 
         $this->logTheme(__FUNCTION__, $res);
 
         $this->assertTrue($res);
     }
 
-    public function test() {
+    public function testUpdate() {
         $themeModel = new Theme();
-        $res = $themeModel->();
+        $res = $themeModel->update(1, "Expressions de base");
 
         $this->logTheme(__FUNCTION__, $res);
 
         $this->assertTrue($res);
     }
 
-    public function test() {
+    public function testDelete() {
         $themeModel = new Theme();
-        $res = $themeModel->();
-
-        $this->logTheme(__FUNCTION__, $res);
-
-        $this->assertTrue($res);
-    }
-
-    public function test() {
-        $themeModel = new Theme();
-        $res = $themeModel->();
+        $res = $themeModel->delete(4);
 
         $this->logTheme(__FUNCTION__, $res);
 
