@@ -6,20 +6,22 @@ use app\core\Faker;
 
 use app\models\User;
 
-//use PHPUnit\Framework\TestCase;
-
 final class UserTest extends ModelTest {
-    public function init() {
-        
+    public function logUser($methodName, $var) {
+        $this->log("User", $methodName, $var);
+    }
+
+    public function testInit() {
+        $res = $this->erase();
+
+        $this->assertNull($res);
     }
 
     public function testFindAll() {
-        $this->className = "";
-
-        $this->erase();
-
         $userModel = new User();
         $res = $userModel->findAll();
+
+        $this->logUser(__FUNCTION__, count($res));
 
         $this->assertNotEmpty($res);
     }
@@ -28,75 +30,187 @@ final class UserTest extends ModelTest {
         $userModel = new User();
         $res = $userModel->count();
 
-        $this->log("Count", $res);
+        $this->logUser(__FUNCTION__, $res);
 
         $this->assertNotEquals(0, $res);
     }
 
-    /*
-    // Modèle
+    public function testFindOneById() {
+        $userModel = new User();
+        $res = $userModel->findOneById(1);
 
-    public function __construct() {
-        $this->model = new User();
+        $this->logUser(__FUNCTION__, $res->id);
+
+        $this->assertNotNull($res);
     }
 
-    // Lancement
+    public function testFindOneByName() {
+        $userModel = new User();
+        $res = $userModel->findOneByName("Lukas");
 
-    public function launch() {
-        $this->log("USERS");
+        $this->logUser(__FUNCTION__, $res->username);
 
-        // Sélection
+        $this->assertNotNull($res);
+    }
 
-        $this->call("count");
+    public function testFindOneByEmail() {
+        $userModel = new User();
+        $res = $userModel->findOneByEmail("lukas@admin.com");
 
-        $this->call("findAll");
+        $this->logUser(__FUNCTION__, $res->email);
 
-        $this->call("findById", 3);
-        $this->call("findById", 44);
+        $this->assertNotNull($res);
+    }
 
-        $this->call("findByName", "Lukas");
-        $this->call("findByName", "test");
+    public function testFindThemes() {
+        $userModel = new User();
+        $res = $userModel->findThemes(1);
 
-        $this->call("findByEmail", "lukas@admin.com");
-        $this->call("findByEmail", "lukas@test.com");
+        $this->logUser(__FUNCTION__, $res[0]->title);
 
-        $this->call("login", "lukas@test.com", "test");
-        $this->call("login", "lukas@admin.com", "admin123");
-        $this->call("login", "lukas@admin.com", "Admin007");
+        $this->assertNotNull($res);
+    }
 
-        // Insertion
+    public function testCountThemes() {
+        $userModel = new User();
+        $res = $userModel->countThemes(1);
 
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertIsNumeric($res);
+    }
+
+    public function testFindExpressions() {
+        $userModel = new User();
+        $res = $userModel->findExpressions(1);
+
+        $this->logUser(__FUNCTION__, $res[0]->french);
+
+        $this->assertNotNull($res);
+    }
+
+    public function testCountExpressions() {
+        $userModel = new User();
+        $res = $userModel->countExpressions(1);
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertIsNumeric($res);
+    }
+
+    public function testLogin() {
+        $userModel = new User();
+        $res = $userModel->login("lukas@admin.com", "Admin007");
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testIsModerator() {
+        $userModel = new User();
+        $res = $userModel->isModerator(7);
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testIsAdmin() {
+        $userModel = new User();
+        $res = $userModel->isAdmin(1);
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testIsSuperUser() {
+        $userModel = new User();
+        $res = $userModel->isSuperUser(1);
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testIsBanned() {
+        $userModel = new User();
+        $res = ! $userModel->isBanned(1);
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testInsert() {
         $data = [
-            "username" => Faker::string("15"),
-            "email" => Faker::email(),
-            "password" => Faker::password(),
+            "username" => Faker::string(15),
+            "email" => Faker::email(15),
+            "password" => Faker::string(10),
             "role" => Faker::role()
         ];
 
-        $this->call("insert", $data);
+        $userModel = new User();
+        $res = $userModel->insert($data);
 
-        // Edition
+        $this->logUser(__FUNCTION__, $res);
 
-        $this->call("changeUsername", 2, "Bowser");
-        $this->call("changeEmail", 2, "bowser@edit.com");
-        $this->call("changePassword", 2, "update");
-        $this->call("changeRole", 2, "admin");
-        $this->call("changeBanStatus", 2, 1);
+        $this->assertTrue($res);
+    }
 
-        // Status
+    public function testChangeUsername() {
+        $userModel = new User();
 
-        $this->call("isModerator", 1);
-        $this->call("isModerator", 6);
-        $this->call("isModerator", 7);
+        $res = $userModel->changeUsername(1, "Lukas");
 
-        $this->call("isAdmin", 1);
-        $this->call("isAdmin", 6);
+        $this->logUser(__FUNCTION__, $res);
 
-        $this->call("isBanned", 1);
-        $this->call("isBanned", 2);
+        $this->assertTrue($res);
+    }
 
-        // Suppression
+    public function testChangeEmail() {
+        $userModel = new User();
+        $res = $userModel->changeEmail(1, "lukas@admin.com");
 
-        $this->call("delete", 4);
-    }*/
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testChangePassword() {
+        $userModel = new User();
+        $res = $userModel->changePassword(1, "Admin007");
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testChangeRole() {
+        $userModel = new User();
+        $res = $userModel->changeRole(1, "Administrateur");
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testChangeBanStatus() {
+        $userModel = new User();
+        $res = $userModel->changeBanStatus(1, 0);
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testDelete() {
+        $userModel = new User();
+        $res = $userModel->delete(5);
+
+        $this->logUser(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
 }

@@ -82,7 +82,7 @@ class User extends Model {
                          FROM users
                          WHERE email = :email");
 
-        return $this->fetchOne("username", $username);
+        return $this->fetchOne("email", $email);
     }
 
     // Thèmes d'un utilisateur
@@ -153,7 +153,7 @@ class User extends Model {
                          WHERE role = 'Modérateur'
                          AND id = :id");
 
-        return $this->withID($id);
+        return (bool) $this->withID($id);
     }
 
     // Rôle d'administrateur
@@ -164,7 +164,7 @@ class User extends Model {
                          WHERE role = 'Administrateur'
                          AND id = :id");
 
-        return $this->withID($id);
+        return (bool) $this->withID($id);
     }
 
     // Rôle de modérateur ou d'administrateur
@@ -175,7 +175,7 @@ class User extends Model {
                          WHERE role IN ('Modérateur', 'Administrateur')
                          AND id = :id");
 
-        return $this->withID($id);
+        return (bool) $this->withID($id);
     }
 
     // Utilisateur banni

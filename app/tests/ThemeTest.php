@@ -5,57 +5,125 @@ namespace app\tests;
 use app\core\Faker;
 
 use app\models\Theme;
+
 use app\tests\ModelTest;
 
-class ThemeTest extends ModelTest {
-    // Modèle
-
-    public function __construct() {
-        $this->model = new Theme();
+final class ThemeTest extends ModelTest {
+    public function logTheme($methodName, $var) {
+        $this->log("Theme", $methodName, $var);
     }
 
-    // Lancement
+    public function testInit() {
+        $res = $this->erase();
 
-    public function launch() {
-        $this->log("THEMES");
+        $this->assertNull($res);
+    }
 
-        // Sélection
+    public function testFindAll() {
+        $themeModel = new Theme();
+        $res = $themeModel->findAll();
 
-        $this->call("count");
+        $this->logTheme(__FUNCTION__, count($res));
 
-        $this->call("findById", 1);
-        $this->call("findById", 24);
+        $this->assertNotNull($res);
+    }
 
-        $this->call("findByTitle", "Jours de la semaine");
-        $this->call("findByTitle", "Inconnu");
+    public function testFindOneById() {
+        $themeModel = new Theme();
+        $res = $themeModel->findOneById(1);
 
-        $this->call("findAllByUser", 1);
-        $this->call("countByUser", 1);
+        $this->logTheme(__FUNCTION__, $res->title);
 
-        $this->call("findAllByUser", 5);
-        $this->call("countByUser", 5);
+        $this->assertNotNull($res);
+    }
 
-        // Insertion
+    public function testFindOneByTitle() {
+        $themeModel = new Theme();
+        $res = $themeModel->findOneByTitle("Expressions de base");
 
-        $data = [
-            "title" => Faker::string(),
-            "user_id" => 1,
-        ];
+        $this->logTheme(__FUNCTION__, $res->title);
 
-        $this->call("insert", $data);
+        $this->assertTrue($res);
+    }
 
-        // Appartenance
+    public function testCount() {
+        $themeModel = new Theme();
+        $res = $themeModel->count();
 
-        $this->call("belongsTo", 1, 1);
-        $this->call("belongsTo", 2, 1);
-        $this->call("belongsTo", 1, 4);
+        $this->logTheme(__FUNCTION__, $res);
 
-        // Edition
+        $this->assertTrue($res);
+    }
 
-        $this->call("update", 1, ["title" => "Mon nouveau titre"]);
+    public function testFindExpressions() {
+        $themeModel = new Theme();
+        $res = $themeModel->findExpressions(1);
 
-        // Suppression
+        $this->logTheme(__FUNCTION__, $res[0]->french);
 
-        $this->call("delete", 3);
+        $this->assertTrue($res);
+    }
+
+    public function testCountExpressions() {
+        $themeModel = new Theme();
+        $res = $themeModel->countExpressions(1);
+
+        $this->logTheme(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function testFindUser() {
+        $themeModel = new Theme();
+        $res = $themeModel->findUser(1);
+
+        $this->logTheme(__FUNCTION__, $res->username);
+
+        $this->assertTrue($res);
+    }
+
+    public function testBelongsTo() {
+        $themeModel = new Theme();
+        $res = $themeModel->belongsTo(1, 1);
+
+        $this->logTheme(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function test() {
+        $themeModel = new Theme();
+        $res = $themeModel->();
+
+        $this->logTheme(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function test() {
+        $themeModel = new Theme();
+        $res = $themeModel->();
+
+        $this->logTheme(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function test() {
+        $themeModel = new Theme();
+        $res = $themeModel->();
+
+        $this->logTheme(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
+    }
+
+    public function test() {
+        $themeModel = new Theme();
+        $res = $themeModel->();
+
+        $this->logTheme(__FUNCTION__, $res);
+
+        $this->assertTrue($res);
     }
 }
