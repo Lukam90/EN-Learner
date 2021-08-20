@@ -1,8 +1,0 @@
-Présentation du projet
-
-- Base de vocabulaire en anglais (thèmes et expressions)
-- Transcription phonétique pour les francophones
-- Aspect communautaire
-- Gestion de rôles
-- Jeu et contributions
-- Inspiré de Memrise

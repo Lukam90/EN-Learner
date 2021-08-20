@@ -2,25 +2,21 @@
 
 namespace app\controllers;
 
+use app\models\User;
 use app\core\Request;
 use app\core\Session;
+
+use app\models\Theme;
+use app\core\Security;
+
 use app\core\Redirection;
 
-use app\models\User;
-use app\models\Theme;
-
 use app\controllers\Controller;
-
 use app\validation\ThemeValidation;
 
 class ThemesController extends Controller {
     private $themeModel;
     private $userModel;
-
-    private $validator;
-
-    private $canAdd;
-    private $canEdit;
 
     // Constructeur
 
@@ -29,25 +25,20 @@ class ThemesController extends Controller {
 
         $this->themeModel = new Theme();
         $this->userModel = new User();
-
-        $this->validator = new ThemeValidation();
-
-        $this->canAdd = false;
-        $this->canEdit = false;
     }
 
-    // Chargement des thèmes
+    // Liste des thèmes
 
-    public function loadThemes() {
-        // Données
+    public function index() {
+        /* Données de base */
 
         $list = $this->themeModel->findAll();
 
         $themes = [];
 
-        $this->canAdd = Session::isLoggedIn();
+        $canAdd = Session::isLoggedIn() && Security::checkCSRF();
 
-        // Boucle d'affichage
+        /* Boucle d'affichage */
 
         foreach ($list as $theme) {
             // Thème
@@ -62,47 +53,23 @@ class ThemesController extends Controller {
             $username = $author->username;
             $userId = $author->id;
 
-            var_dump($author);
-
             // Edition
 
             $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
             $isSuperUser = $this->userModel->isSuperUser($userId);
 
-            $this->canEdit = $this->canAdd && $belongsTo && $isSuperUser;
+            $canEdit = $canAdd && ($belongsTo || $isSuperUser);
 
             // Enregistrement
 
             $themes[] = [
                 "id" => $themeId,
                 "title" => $title,
-                "author" => $author,
+                "author" => $username,
                 "nbExpressions" => $nbExpressions,
-                "canEdit" => $this->canEdit
+                "canEdit" => $canEdit
             ];
         }
-
-        return $themes;
-    }
-
-    // Liste des thèmes
-
-    public function index() {
-        // Thèmes
-        
-        $themes = $this->loadThemes();
-
-        // Titre
-
-        $title = "";
-
-        // Envoi du formulaire
-
-        $errors = [];
-
-        // Indication
-
-        $this->validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
 
         /* Rendu */
 
@@ -110,12 +77,9 @@ class ThemesController extends Controller {
             "session" => Session::all(),
 
             "themes" => $themes,
-            "can-add" => $this->canAdd,
-            //"can-edit" => $canEdit
+            "can-add" => $canAdd,
         ]);
     }
-
-
 
     // Liste des expressions d'un thème
 
@@ -177,14 +141,36 @@ class ThemesController extends Controller {
     // Ajout d'un nouveau thème
 
     public function new() {
-        // titre, user_id
+        // Utilisateur connecté
+
+        $authorized = 1;// Session::isLoggedIn() && Security::checkCSRF();
+
+        if ($authorized) {
+            $userId = Session::get("user_id");
+        } else {
+            Redirection::notAuthorized();
+
+            return;
+        }
 
         // Validation
 
         $validator = new ThemeValidation();
 
+        // Indication
+
+        $validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
+
+        // Envoi des données
+
+        $errors = [];
+
+        $title = "";
+
         if (Request::isPost()) {
             sleep(1);
+
+            // Titre
 
             $title = $validator->title();
 
@@ -192,19 +178,13 @@ class ThemesController extends Controller {
 
             $errors = $validator->getErrors();
 
-            $valid = empty($errors["title"]); // && ! $loggedIn;
+            $valid = empty($errors["title"]);
 
             // Ajout
 
             $canAdd = false;
 
             $userId = 0;
-
-            if (Session::isLoggedIn()) {
-                $userId = Session::var("user_id");
-
-                $canAdd = ! $currentUser.banned;
-            }
 
             // Enregistrement
 
@@ -228,12 +208,10 @@ class ThemesController extends Controller {
 
         // Rendu
 
-        echo $this->twig->render("themes.twig", [
+        echo $this->twig->render("themes/new_theme.twig", [
             "session" => Session::all(),
 
-            "loggedIn" => true,
-
-            "tips" => $this->validator->getTips(),
+            "tips" => $validator->getTips(),
             "errors" => $errors,
 
             "title" => $title,

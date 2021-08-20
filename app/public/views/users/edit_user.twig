@@ -1,43 +1,37 @@
-<div id="editUser" class="w3-modal">
-    <div class="w3-modal-content w3-card-4" style="max-width: 500px;">
-        <div class="w3-center">
-            <div class="w3-container">
-                <span onclick="closeModal('editUser');" class="w3-button w3-display-topright">&times;</span>
+{% extends layout.html %}
 
-                <h2>Edition du statut de {{ username }}</h2>
+{% block content %}
+    <h2>Edition du statut de {{ username }}</h2>
 
-                {% if 1 %}
-                    <form action="{{ root }}/users/edit/1" class="w3-container" method="post">
-                        {# Rôle #}
+    {% if 1 %}
+        <form action="{{ root }}/users/edit/1" class="w3-container" method="post">
+            {# Rôle #}
 
-                        <select class="w3-select" name="option">
-                            <option value="" disabled selected>Rôle de l'utilisateur</option>
-                            <option value="Membre">Membre</option>
-                            <option value="Modérateur">Modérateur</option>
-                            <option value="Administrateur">Administrateur</option>
-                        </select>
+            <select class="w3-select" name="option">
+                <option value="" disabled selected>Rôle de l'utilisateur</option>
+                <option value="Membre">Membre</option>
+                <option value="Modérateur">Modérateur</option>
+                <option value="Administrateur">Administrateur</option>
+            </select>
 
-                        {# Statut "Banni" #}
+            {# Statut "Banni" #}
 
-                        <p>
-                            <label class="w3-margin-right" for="banned">Banni</label>
-                            <input class="w3-check" type="checkbox" name="banned" id="banned">
-                        </p>
+            <p>
+                <label class="w3-margin-right" for="banned">Banni</label>
+                <input class="w3-check" type="checkbox" name="banned" id="banned">
+            </p>
 
-                        {# Token CSRF #}
+            {# Token CSRF #}
 
-                        <input type="hidden" name="token" value="{{ token }}">
+            <input type="hidden" name="token" value="{{ token }}">
 
-                        {# Bouton #}
+            {# Bouton #}
 
-                        <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
-                    </form>
-                {% else %}
-                    <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
+            <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
+        </form>
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
 
-                    <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
+        <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
+    {% endif %}
+{% endblock %}

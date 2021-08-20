@@ -6,13 +6,11 @@
     <h2>Thèmes</h2>
 
     {% if 1 %}
-        <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newTheme')">
-            <i class="fa fa-plus"></i> Ajouter un thème
-        </button>
-
-        {% include "themes/new_theme.twig" %}
-        {% include "themes/edit_theme.twig" %}
-        {% include "themes/delete_theme.twig" %}
+        <a class="w3-text-blue" href="{{ root }}/themes/new">
+            <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newTheme')">
+                <i class="fa fa-plus"></i> Ajouter un thème
+            </button>
+        </a>
     {% endif %}
 
     {% if themes %}
@@ -40,11 +38,11 @@
 
                     {% if 1 %}
                     <td>
-                        <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editTheme')">
+                        <button class="w3-btn w3-margin-right w3-green">
                             <i class="fa fa-pencil"></i>
                         </button>
 
-                        <button class="w3-btn w3-red" onclick="openModal('deleteTheme')">
+                        <button class="w3-btn w3-red">
                             <i class="fa fa-close"></i>
                         </button>
                     </td>

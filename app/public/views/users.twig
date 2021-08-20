@@ -5,49 +5,46 @@
 {% block content %}
     <h2>Communauté</h2>
 
-    {% if 1 %}
-        {% include "users/edit_user.twig" %}
-        {% include "users/delete_user.twig" %}
-    {% endif %}
-
     {% if users %}
-        <table class="w3-table w3-striped w3-hoverable">
-            <thead>
-                <tr>
-                    <th>Pseudo</th>
-                    <th>Rôle</th>
-                    <th>Inscrit(e) le</th>
-                    <th>Contributions</th>
-                    {% if 1 %}<th></th>{% endif %}
-                </tr>
-            </thead>
+        <div class="w3-responsive">
+            <table class="w3-table w3-striped w3-hoverable">
+                <thead>
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Rôle</th>
+                        <th>Inscrit(e) le</th>
+                        <th>Contributions</th>
+                        {% if 1 %}<th></th>{% endif %}
+                    </tr>
+                </thead>
 
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.username }}</td>
-                    <td class="{{ user.color }}">{{ user.role }}</td>
-                    <td>{{ user.createdAt }}</td>
-                    <td>
-                        {{ user.nbThemes }} thème{% if user.nbThemes > 1 %}s{% endif %}<br>
-                        {{ user.nbExpressions }} expression{% if user.nbExpressions > 1 %}s{% endif %}
-                    </td>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td class="{{ user.color }}">{{ user.role }}</td>
+                        <td>{{ user.createdAt }}</td>
+                        <td>
+                            {{ user.nbThemes }} thème{% if user.nbThemes > 1 %}s{% endif %}<br>
+                            {{ user.nbExpressions }} expression{% if user.nbExpressions > 1 %}s{% endif %}
+                        </td>
 
-                    {% if 1 %}
-                    <td>
-                        <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editUser')">
-                            <i class="fa fa-pencil"></i> Editer
-                        </button>
+                        {% if 1 %}
+                        <td>
+                            <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editUser')">
+                                <i class="fa fa-pencil"></i>
+                            </button>
 
-                        <button class="w3-btn w3-red" onclick="openModal('deleteUser')">
-                            <i class="fa fa-pencil"></i> Supprimer
-                        </button>
-                    </td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                            <button class="w3-btn w3-red" onclick="openModal('deleteUser')">
+                                <i class="fa fa-close"></i>
+                            </button>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <p>Aucun utilisateur n'est enregistré.</p>
     {% endif %}

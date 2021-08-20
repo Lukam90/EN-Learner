@@ -1,25 +1,19 @@
-<div id="deleteUser" class="w3-modal">
-    <div class="w3-modal-content w3-card-4" style="max-width: 500px">
-        <div class="w3-center">
-            <div class="w3-container">
-                <span onclick="closeModal('deleteUser');" class="w3-button w3-display-topright">&times;</span>
+{% extends layout.html %}
 
-                <h2>Suppression de l'utilisateur {{ username }}</h2>
+{% block content %}
+    <h2>Suppression de l'utilisateur {{ username }}</h2>
 
-                {% if 1 %}
-                    <form action="{{ root }}/users/delete/1" class="w3-container" method="post">
-                        <h3>Voulez-vous supprimer cet utilisateur ?</h3>
+    {% if 1 %}
+        <form action="{{ root }}/users/delete/1" class="w3-container" method="post">
+            <h3>Voulez-vous supprimer cet utilisateur ?</h3>
 
-                        <input type="hidden" name="token" value="{{ token }}">
+            <input type="hidden" name="token" value="{{ token }}">
 
-                        <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
-                    </form>
-                {% else %}
-                    <p>Vous n'êtes pas autorisé(e) à supprimer cet utilisateur.</p>
+            <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
+        </form>
+    {% else %}
+        <p>Vous n'êtes pas autorisé(e) à supprimer cet utilisateur.</p>
 
-                    <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
+        <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
+    {% endif %}
+{% endblock %}

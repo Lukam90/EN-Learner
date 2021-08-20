@@ -24,12 +24,14 @@ class ThemeValidation extends Validation {
 
         if (! Post::empty("title")) {
             $title = Post::var("title");
+
+            $this->validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
     
             if (strlen($title) <= 50) {
                 $exists = $this->themeModel->findOneByTitle($title);
     
                 if (! $exists) {
-                    $this->unset("title");
+                    $this->erase("title");
                 } else {
                     $this->setError("title", "Le thème existe déjà. Veuillez saisir un autre titre.");
                 }

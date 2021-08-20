@@ -1,6 +1,0 @@
-require_once '/path/to/vendor/autoload.php';
-
-$loader = new \Twig\Loader\FilesystemLoader('/path/to/templates');
-$twig = new \Twig\Environment($loader, [
-    'cache' => '/path/to/compilation_cache',
-]);
