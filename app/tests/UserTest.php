@@ -6,9 +6,34 @@ use app\core\Faker;
 
 use app\models\User;
 
-use app\tests\ModelTest;
+//use PHPUnit\Framework\TestCase;
 
-class UserTest extends ModelTest {
+final class UserTest extends ModelTest {
+    public function init() {
+        
+    }
+
+    public function testFindAll() {
+        $this->className = "";
+
+        $this->erase();
+
+        $userModel = new User();
+        $res = $userModel->findAll();
+
+        $this->assertNotEmpty($res);
+    }
+
+    public function testCount() {
+        $userModel = new User();
+        $res = $userModel->count();
+
+        $this->log("Count", $res);
+
+        $this->assertNotEquals(0, $res);
+    }
+
+    /*
     // Modèle
 
     public function __construct() {
@@ -73,5 +98,5 @@ class UserTest extends ModelTest {
         // Suppression
 
         $this->call("delete", 4);
-    }
+    }*/
 }

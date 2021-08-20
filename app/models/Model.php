@@ -2,14 +2,16 @@
 
 namespace app\models;
 
+use PDO;
+
 use app\core\Database;
 use app\core\Security;
 
 abstract class Model {
     protected $dbHandler;
-    protected $tableName;
+    protected $query;
 
-    /* Fonctions générales */
+    /* Fonctions générales (PDO) */
 
     // Initialisation de l'objet PDO
     // Connexion à la BDD
@@ -20,154 +22,116 @@ abstract class Model {
         return $db->getHandler();
     }
 
+    // Edition de la requête
+
+    public function setQuery($value) {
+        $this->query = $value;
+    }
+
+    // Récupération de la requête
+
+    public function getQuery() {
+        return $this->query;
+    }
+
     // Requête générale brute (ex : création)
 
-    public function run($query) {
+    public function run() {
         return $this->dbHandler
-                    ->exec();
+                    ->exec($this->getQuery());
     }
 
     // Requête préparée
 
-    public function prepare($query) {
+    public function prepare() {
         return $this->dbHandler
-                    ->prepare($query);
+                    ->prepare($this->getQuery());
     }
 
     // Requête générale
 
-    public function query($sql) {
+    public function query() {
         return $this->dbHandler
-                    ->query($sql);
+                    ->query($this->getQuery());
     }
 
-    /* Fonctions CRUD */
+    /* Fonctions de sélections */
 
-    // Suppression de la table
+    // Sélection d'une ligne par un attribut
 
-    public function dropTable($tableName) {
-        return $this->run("DROP TABLE IF EXISTS $tableName");
-    }
-
-    // Sélection de l'ensemble des résultats
-
-    public function selectAll($tableName) {
-        return $this->query("SELECT * FROM $tableName")
-                    ->fetchAll(\PDO::FETCH_OBJ);
-    }
-
-    // Requête préparée avec un attribut
-
-    public function withAttribute($attribute, $value) {
+    public function fetchOne($attribute, $value) {
         $statement = $this->prepare();
 
-        $statement->bindValue(":$attribute", $value);
+        $statement->bindParam(":$attribute", $value);
+        
+        $statement->execute();
 
-        return $statement->execute();
+        return $statement->fetch(PDO::FETCH_OBJ);
     }
 
-    // Requête préparée avec un ID
+    // Sélection de l'ensemble des lignes sans attribut
+
+    public function fetchAll() {
+        return $this->query()
+                    ->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    // Sélection de l'ensemble des lignes par un attribut
+
+    public function fetchAllWith($attribute, $value) {
+        $statement = $this->prepare();
+
+        $statement->bindParam(":$attribute", $value);
+        
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    // Nombre de lignes sans attributs
+
+    public function withNone() {
+        $statement = $this->prepare();
+
+        $statement->execute();
+
+        return $statement->fetchColumn();
+    }
+
+    // Nombre de lignes pour un ID
 
     public function withID($id) {
-        return $this->withAttribute("id", $id);
+        $statement = $this->prepare();
+
+        $statement->bindValue(":id", $id);
+
+        $statement->execute();
+
+        return $statement->fetchColumn();
     }
 
-    // Requête préparée avec données
+    // Nombre de ligne par valeurs
 
     public function withData($data) {
         $statement = $this->prepare();
 
         foreach ($data as $key => $value) {
-            if ($key == "password") {
-                $value = Security::hash($value);
-            }
-
             $statement->bindValue(":$key", $value);
         }
 
-        return $statement->execute();
-    }
-
-    
-
-    // Sélection d'une colonne (ex : nombre)
-
-    public function countLines($tableName) {
-        return $this->query("SELECT COUNT(id) FROM $tableName")
-                    ->fetchColumn();
-    }
-
-    // Sélection d'une ligne par un attribut
-
-    public function fetchBy($attribute, $value) {
-        $statement = $this->prepare();
-
-        $statement->bindParam(":$attribute", $value);
-        
         $statement->execute();
 
-        return $statement->fetch(\PDO::FETCH_OBJ);
+        return $statement->fetchColumn();
     }
 
-    // Sélection d'une ligne par un ID
+    // Association de valeurs
 
-    public function fetchByID($id) {
-        return $this->fetchBy("id", $id);
-    }
-
-    // Sélection de l'ensemble des lignes par un attribut
-
-    public function fetchAllBy($attribute, $value) {
-        $statement = $this->prepare();
-
-        $statement->bindParam(":$attribute", $value);
-        
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
-    }
-
-    // Sélection de l'ensemble des lignes par un ID
-
-    public function fetchAllByID($id) {
-        return $this->fetchAllBy("id", $id);
-    }
-
-    // Vérification d'une ligne par un attribut avec ID
-
-    public function is($id) {
-        $statement = $this->prepare();
-
-        $statement->bindValue(":id", $id);
-
-        $statement->execute();
-
-        return $statement->fetchColumn() > 0;
-    }
-
-    // Appartenance
-
-    public function belongsTo($data) {
+    public function bindValues($data) {
         $statement = $this->prepare();
 
         foreach ($data as $key => $value) {
             $statement->bindValue(":$key", $value);
         }
-
-        $statement->execute();
-
-        return $statement->fetchColumn() > 0;
-    }
-
-    // Suppression d'une ligne par un ID
-
-    public function deleteLine($tableName, $id) {
-        $query = "DELETE FROM $tableName
-                  WHERE id = :id";
-
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $id);
 
         return $statement->execute();
     }

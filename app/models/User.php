@@ -18,7 +18,7 @@ class User extends Model {
     // Création de la table
 
     public function create() {
-        return $this->run("CREATE TABLE IF NOT EXISTS users (
+        $this->setQuery("CREATE TABLE IF NOT EXISTS users (
                             id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             username VARCHAR(32) UNIQUE NOT NULL,
                             email VARCHAR(100) UNIQUE NOT NULL,
@@ -27,132 +27,112 @@ class User extends Model {
                             created_at DATE DEFAULT CURRENT_TIMESTAMP,
                             banned BOOLEAN DEFAULT 0
                         )");
+
+        return $this->run();
     }
 
     // Suppression de la table
 
     public function drop() {
-        return $this->dropTable("users");
+        $this->setQuery("DROP TABLE IF EXISTS users");
+
+        return $this->run();
     }
 
     // Sélection de l'ensemble des résultats
 
     public function findAll() {
-        return $this->selectAll("users");
+        $this->setQuery("SELECT * FROM users");
+
+        return $this->fetchAll();
     }
 
     // Nombre d'éléments de la table
 
     public function count() {
-        return $this->countLines("users");
+        $this->setQuery("SELECT COUNT(id) FROM users");
+
+        return $this->withNone();
     }
 
     // Sélection d'une ligne par un ID
 
-    public function findById($id) {
-        $query = "SELECT *
-                  FROM users
-                  WHERE id = :id";
+    public function findOneById($id) {
+        $this->setQuery("SELECT *
+                         FROM users
+                         WHERE id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $id);
-
-        return $statement->execute();
+        return $this->fetchOne("id", $id);
     }
 
     // Sélection d'un utilisateur par son pseudo
 
-    public function findByName($username) {
-        $query = "SELECT *
-                  FROM users
-                  WHERE username = :username";
+    public function findOneByName($username) {
+        $this->setQuery("SELECT *
+                         FROM users
+                         WHERE username = :username");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":username", $username);
-
-        return $statement->execute();
+        return $this->fetchOne("username", $username);
     }
 
     // Sélection d'un utilisateur par son e-mail
 
-    public function findByEmail($email) {
-        $query = "SELECT *
-                  FROM users
-                  WHERE email = :email";
+    public function findOneByEmail($email) {
+        $this->setQuery("SELECT *
+                         FROM users
+                         WHERE email = :email");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":email", $email);
-
-        return $statement->execute();
+        return $this->fetchOne("username", $username);
     }
 
     // Thèmes d'un utilisateur
 
     public function findThemes($userId) {
-        $query = "SELECT t.*
-                  FROM themes t, users u
-                  WHERE t.user_id = u.id
-                  AND u.id = :id";
+        $this->setQuery("SELECT t.*
+                         FROM themes t, users u
+                         WHERE t.user_id = u.id
+                         AND u.id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $userId);
-
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_OBJ);
+        return $this->fetchAllWith("id", $userId);
     }
 
     // Nombre de thèmes d'un utilisateur
 
     public function countThemes($userId) {
-        $themes = $this->findThemes($userId);
+        $this->setQuery("SELECT COUNT(t.id)
+                         FROM themes t, users u
+                         WHERE t.user_id = u.id
+                         AND u.id = :id");
 
-        return count($themes);
+        return $this->withID($userId);
     }
 
     // Expressions d'un utilisateur
 
     public function findExpressions($userId) {
-        $query = "SELECT e.*
-                  FROM expressions e, users u
-                  WHERE e.user_id = u.id
-                  AND u.id = :id";
+        $this->setQuery("SELECT e.*
+                         FROM expressions e, users u
+                         WHERE e.user_id = u.id
+                         AND u.id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $userId);
-
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_OBJ);
+        return $this->fetchAllWith("id", $userId);
     }
 
     // Nombre d'expressions d'un utilisateur
 
     public function countExpressions($userId) {
-        $expressions = $this->findExpressions($userId);
+        $this->setQuery("SELECT COUNT(e.id)
+                         FROM expressions e, users u
+                         WHERE e.user_id = u.id
+                         AND u.id = :id");
 
-        return count($expressions);
+        return $this->withID($userId);
     }
 
     // Connexion d'un utilisateur
 
     public function login($email, $password) {
-        $query = "SELECT email, password
-                  FROM users
-                  WHERE email = :email";
-
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":email", $email);
-
-        $statement->execute();
-
-        $row = $statement->fetch(PDO::FETCH_OBJ);
+        $row = $this->findOneByEmail($email);
 
         // On vérifie si les mots de passe correspondent
 
@@ -168,77 +148,56 @@ class User extends Model {
     // Rôle de modérateur
 
     public function isModerator($id) {
-        $query = "SELECT id 
-                  FROM users
-                  WHERE role = 'Modérateur'
-                  AND id = :id";
+        $this->setQuery("SELECT COUNT(id) 
+                         FROM users
+                         WHERE role = 'Modérateur'
+                         AND id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $id);
-
-        return $statement->execute();
+        return $this->withID($id);
     }
 
     // Rôle d'administrateur
 
     public function isAdmin($id) {
-        $query = "SELECT id 
-                  FROM users
-                  WHERE role = 'Administrateur'
-                  AND id = :id";
+        $this->setQuery("SELECT id 
+                         FROM users
+                         WHERE role = 'Administrateur'
+                         AND id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $id);
-
-        return $statement->execute();
+        return $this->withID($id);
     }
 
     // Rôle de modérateur ou d'administrateur
 
     public function isSuperUser($id) {
-        $query = "SELECT id 
-                  FROM users
-                  WHERE role IN ('Modérateur', 'Administrateur')
-                  AND id = :id";
+        $this->setQuery("SELECT id 
+                         FROM users
+                         WHERE role IN ('Modérateur', 'Administrateur')
+                         AND id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $id);
-
-        return $statement->execute();
+        return $this->withID($id);
     }
 
     // Utilisateur banni
 
     public function isBanned($id) {
-        $query = "SELECT id
-                  FROM users
-                  WHERE banned
-                  AND id = :id";
+        $this->setQuery("SELECT id
+                         FROM users
+                         WHERE banned
+                         AND id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $id);
-
-        return $statement->execute();
+        return $this->withID($id);
     }
 
     // Ajout d'une nouvelle ligne
 
     public function insert($data) {
-        $query = "INSERT INTO users (username, email, password, role)
-                  VALUES (:username, :email, :password, :role)";
+        $this->setQuery("INSERT INTO users (username, email, password, role)
+                         VALUES (:username, :email, :password, :role)");
 
-        $statement = $this->prepare($query);
+        $data["password"] = Security::hash($data["password"]);
 
-        $statement->bindValue(":username", $username);
-        $statement->bindValue(":email", $email);
-        $statement->bindValue(":password", Security::hash($password));
-        $statement->bindValue(":role", $role);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Edition d'un utilisateur existant
@@ -246,81 +205,86 @@ class User extends Model {
     // Changement de pseudo
 
     public function changeUsername($id, $username) {
-        $query = "UPDATE users
-                  SET username = :username
-                  WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET username = :username
+                         WHERE id = :id");
 
-        $statement = $this->prepare($query);
+        $data = [
+            "id" => $id,
+            "username" => $username
+        ];
 
-        $statement->bindValue(":id", $id);
-        $statement->bindValue(":username", $username);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Changement d'e-mail
 
     public function changeEmail($id, $email) {
-        $query = "UPDATE users
-                  SET email = :email
-                  WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET email = :email
+                         WHERE id = :id");
 
-        $statement = $this->prepare($query);
+        $data = [
+            "id" => $id,
+            "email" => $email
+        ];
 
-        $statement->bindValue(":id", $id);
-        $statement->bindValue(":email", $email);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Changement de mot de passe
 
     public function changePassword($id, $password) {
-        $query = "UPDATE users
-                  SET password = :password
-                  WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET password = :password
+                         WHERE id = :id");
 
-        $statement = $this->prepare($query);
+        $data = [
+            "id" => $id,
+            "password" => Security::hash($password)
+        ];
 
-        $statement->bindValue(":id", $id);
-        $statement->bindValue(":password", $password);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Changement de rôle
 
     public function changeRole($id, $role) {
-        $query = "UPDATE users
-                  SET role = :role
-                  WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET role = :role
+                         WHERE id = :id");
 
-        $statement = $this->prepare($query);
+        $data = [
+            "id" => $id,
+            "role" => $role
+        ];
 
-        $statement->bindValue(":id", $id);
-        $statement->bindValue(":role", $role);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Changement du statut de bannissement
 
     public function changeBanStatus($id, $banned) {
-        $query = "UPDATE users
-                  SET banned = :banned
-                  WHERE id = :id";
+        $this->setQuery("UPDATE users
+                         SET banned = :banned
+                         WHERE id = :id");
 
-        $statement = $this->prepare($query);
+        $data = [
+            "id" => $id,
+            "banned" => $banned
+        ];
 
-        $statement->bindValue(":id", $id);
-        $statement->bindValue(":banned", $banned);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Suppression d'une ligne par un ID
 
     public function delete($id) {
-        return $this->deleteLine("users");
+        $this->setQuery("DELETE FROM users
+                         WHERE id = :id");
+
+        $data = ["id" => $id];
+
+        return $this->bindValues($data);
     }
 }

@@ -2,15 +2,15 @@
 
 namespace app\controllers;
 
-use app\models\User;
-
 use app\core\Request;
 use app\core\Session;
+use app\core\Redirection;
 
+use app\models\User;
 use app\models\Theme;
 
-use app\core\Redirection;
 use app\controllers\Controller;
+
 use app\validation\ThemeValidation;
 
 class ThemesController extends Controller {
@@ -59,7 +59,7 @@ class ThemesController extends Controller {
 
             // Edition
 
-            $belongsTo = $this->themeModel->belongsToUser($userId, $themeId);
+            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
             $isSuperUser = $this->userModel->isSuperUser($userId);
 
             $canEdit = $canAdd && $belongsTo && $isSuperUser;
@@ -91,14 +91,11 @@ class ThemesController extends Controller {
     public function show($themeId) {
         // Données
 
-        $theme = $this->themeModel->findById($themeId);
+        $theme = $this->themeModel->findOneById($themeId);
 
         $title = $theme->title;
 
         $list = $this->themeModel->findExpressions($themeId);
-
-        //var_dump($theme);
-        //var_dump($list);
 
         $expressions = [];
 
@@ -118,12 +115,8 @@ class ThemesController extends Controller {
 
             $userId = $expression->user_id;
 
-            //$belongsTo = $this->themeModel->belongsTo($userId, $themeId);
-            //$isSuperUser = $this->userModel->isSuperUser($userId);
-
-            //var_dump($expression);
-            var_dump($userId);
-            var_dump($belongsTo);
+            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
+            $isSuperUser = $this->userModel->isSuperUser($userId);
 
             $canEdit = $belongsTo || $isSuperUser;
 
@@ -138,8 +131,6 @@ class ThemesController extends Controller {
                 "canEdit" => true,
             ];
         }
-
-        var_dump($expressions);
 
         // Rendu
 
@@ -176,8 +167,6 @@ class ThemesController extends Controller {
         if (Request::isPost()) {
             //sleep(1);
 
-            var_dump($_POST);
-
             $title = $validator->title();
 
             // Validation
@@ -185,10 +174,6 @@ class ThemesController extends Controller {
             $errors = $validator->getErrors();
 
             $valid = empty($errors["title"]); // && ! $loggedIn;
-
-            var_dump($errors);
-
-            var_dump($valid);
 
             // Enregistrement
 

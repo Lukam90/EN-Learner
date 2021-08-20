@@ -2,15 +2,17 @@
 
 namespace app\tests;
 
-abstract class ModelTest {
-    protected $model;
+use PHPUnit\Framework\TestCase;
+
+abstract class ModelTest extends TestCase {
+    protected $className;
 
     // Ecriture dans le fichier log
 
-    public function log($content) {
+    public function log($name, $var) {
         $file = fopen("app/tests/testlog.txt", "a") or die("Unable to open the log file.");
 
-        fwrite($file, $content . "\n\n");
+        fwrite($file, "\n" . __CLASS__ . "$name : $var\n");
 
         fclose($file);
     }
@@ -25,13 +27,11 @@ abstract class ModelTest {
         fclose($file);
     }
 
+    /*
     // Log d'une fonction avec des données
 
-    public function print($methodName, $data) {
-        $str = print_r($data, true);
-
-        $this->log($methodName);
-        $this->log($str);
+    public function print($name, $var) {
+        echo "\n$name : $var\n";
     }
 
     // Appels de fonctions
@@ -41,4 +41,5 @@ abstract class ModelTest {
 
         $this->print($methodName, $data);
     }
+    */
 }

@@ -18,7 +18,7 @@ class Expression extends Model {
     // Création de la table
 
     public function create() {
-        return $this->run("CREATE TABLE IF NOT EXISTS expressions (
+        $this->setQuery("CREATE TABLE IF NOT EXISTS expressions (
                             id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             french VARCHAR(255) UNIQUE NOT NULL,
                             english VARCHAR(255) UNIQUE NOT NULL,
@@ -29,101 +29,92 @@ class Expression extends Model {
                             FOREIGN KEY (theme_id) REFERENCES themes (id)
                             ON DELETE CASCADE
                         )");
+
+        return $this->run();
     }
 
     // Suppression de la table
 
     public function drop() {
-        return $this->dropTable("expressions");
+        $this->setQuery("DROP TABLE IF EXISTS expressions");
+
+        return $this->run();
     }
 
     // Sélection de l'ensemble des résultats
 
     public function findAll() {
-        return $this->selectAll("expressions");
+        $this->setQuery("SELECT * FROM expressions");
+
+        return $this->fetchAll();
     }
 
     // Sélection d'une ligne par un ID
 
-    public function findById($id) {
-        $query = "SELECT *
-                  FROM expressions
-                  WHERE id = :id";
+    public function findOneById($id) {
+        $this->setQuery("SELECT *
+                         FROM expressions
+                         WHERE id = :id");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":id", $id);
-
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_OBJ);
+        return $this->fetchOne("id", $id);
     }
 
     // Nombre d'éléments de la table
 
     public function count() {
-        return $this->countLines("expressions");
+        $this->setQuery("SELECT COUNT(id) FROM expressions");
+
+        return $this->withNone();
     }
 
     // Appartenance à un utilisateur
 
     public function belongsToUser($userId, $expressionId) {
-        $query = "SELECT e.id
-                  FROM expressions e, users u
-                  WHERE e.user_id = u.id
-                  AND u.id = :userId
-                  AND e.id = :expressionId";
+        $this->setQuery("SELECT e.id
+                         FROM expressions e, users u
+                         WHERE e.user_id = u.id
+                         AND u.id = :userId
+                         AND e.id = :expressionId");
 
-        $statement = $this->prepare($query);
+        $data = [
+            "userId" => $userId,
+            "expressionId" => expressionId
+        ];
 
-        $statement->bindValue(":userId", $userId);
-        $statement->bindValue(":expressionId", $expressionId);
-
-        $statement->execute();
-
-        return $statement->fetchAll(PDO::FETCH_OBJ);
+        return $this->withData($data);
     }
 
     // Ajout d'une nouvelle ligne
 
-    public function insert($values) {
-        $query = "INSERT INTO expressions (french, english, phonetics, theme_id, user_id)
-                  VALUES (:french, :english, :phonetics, :themeId, :userId)";
+    public function insert($data) {
+        $this->setQuery("INSERT INTO expressions (french, english, phonetics, theme_id, user_id)
+                         VALUES (:french, :english, :phonetics, :theme_id, :user_id)");
 
-        $statement = $this->prepare($query);
-
-        $statement->bindValue(":french", $values["french"]);
-        $statement->bindValue(":english", $values["english"]);
-        $statement->bindValue(":phonetics", $values["phonetics"]);
-        $statement->bindValue(":themeId", $values["theme_id"]);
-        $statement->bindValue(":userId", $values["user_id"]);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Edition d'une expression
 
-    public function update($id, $values) {
-        $query = "UPDATE expressions
-                  SET french = :french
-                      english = :english
-                      phonetics = :phonetics
-                  WHERE id = :id";
+    public function update($id, $data) {
+        $this->setQuery("UPDATE expressions
+                        SET french = :french
+                            english = :english
+                            phonetics = :phonetics
+                        WHERE id = :id");
 
-        $statement = $this->prepare($query);
+        $data["id"] = $id;
 
-        $statement->bindValue(":id", $id);
-
-        $statement->bindValue(":french", $values["french"]);
-        $statement->bindValue(":english", $values["english"]);
-        $statement->bindValue(":phonetics", $values["phonetics"]);
-
-        return $statement->execute();
+        return $this->bindValues($data);
     }
 
     // Suppression d'une ligne par un ID
 
     public function delete($id) {
-        return $this->deleteLine("expressions", $id);
+        $this->setQuery("DELETE FROM expressions
+                         WHERE id = :id");
+
+        $data = ["id" => $id];
+
+        return $this->bindValues($data);
     }
 }
