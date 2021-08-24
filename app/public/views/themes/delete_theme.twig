@@ -1,19 +1,13 @@
 {% extends "layout.twig" %}
 
 {% block content %}
-    <h2>Suppression du thème : Lorem ipsum dolor sit amet consectetur adipisicing elit. Quidem officia iure asperiores quisquam minus ullam a dolores voluptatibus, dolore sint! {{ title }}</h2>
+    <h3>Suppression du thème : {{ title }}</h3>
 
-    {% if 1 %}
-        <form action="{{ root }}/themes/delete/1" class="w3-container" method="post">
-            <h3>Voulez-vous supprimer ce thème ?</h3>
+    <form action="{{ root }}/themes/delete/1" class="w3-container" method="post">
+        <h3>Voulez-vous supprimer ce thème ?</h3>
 
-            <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="token" value="{{ token }}">
 
-            <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
-        </form>
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à supprimer ce thème.</p>
-
-        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/themes">liste des thèmes</a>.</p>
-    {% endif %}
+        <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
+    </form>
 {% endblock %}

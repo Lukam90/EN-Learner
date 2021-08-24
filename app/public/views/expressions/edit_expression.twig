@@ -1,51 +1,44 @@
 {% extends "layout.twig" %}
 
 {% block content %}
+    <h3>Edition de l'expression</h3>
 
-    <h3>Edition de l'expression : {{ title }}</h3>
+    <form action="{{ root }}/expressions/edit/1" class="w3-container" method="post">
+        {# Expression (FR) #}
 
-    {% if 1 %}
-        <form action="{{ root }}/expressions/edit/1" class="w3-container" method="post">
-            {# Expression (FR) #}
+        <label for="french">Expression</label>
+        <input type="text" name="french" id="french" value="{{ french }}" class="w3-input w3-border w3-margin-bottom">
 
-            <label for="french">Expression</label>
-            <input type="text" name="french" id="french" value="{{ french }}" class="w3-input w3-border w3-margin-bottom">
+        {{ forms.text("french", french, "Expression") }}
 
-            {{ forms.text("french", french, "Expression") }}
+        <p class="w3-text-blue">{{ tips.french }}</p>
 
-            <p class="w3-text-blue">{{ tips.french }}</p>
+        <p class="w3-text-red">{{ errors.french }}</p>
 
-            <p class="w3-text-red">{{ errors.french }}</p>
+        {# Traduction (EN) #}
 
-            {# Traduction (EN) #}
+        <label for="english">Traduction</label>
+        <input type="text" name="english" id="english" value="{{ english }}" class="w3-input w3-border w3-margin-bottom">
 
-            <label for="english">Traduction</label>
-            <input type="text" name="english" id="english" value="{{ english }}" class="w3-input w3-border w3-margin-bottom">
+        <p class="w3-text-blue">{{ tips.english }}</p>
 
-            <p class="w3-text-blue">{{ tips.english }}</p>
+        <p class="w3-text-red">{{ errors.english }}</p>
 
-            <p class="w3-text-red">{{ errors.english }}</p>
+        {# Phonétique #}
 
-            {# Phonétique #}
+        <label for="phonetics">Phonétique</label>
+        <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="w3-input w3-border w3-margin-bottom">
 
-            <label for="phonetics">Phonétique</label>
-            <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="w3-input w3-border w3-margin-bottom">
+        <p class="w3-text-blue">{{ tips.phonetics }}</p>
 
-            <p class="w3-text-blue">{{ tips.phonetics }}</p>
+        <p class="w3-text-red">{{ errors.phonetics }}</p>
 
-            <p class="w3-text-red">{{ errors.phonetics }}</p>
+        {# Jeton CSRF #}
 
-            {# Jeton CSRF #}
+        <input type="hidden" name="token" value="{{ token }}">
 
-            <input type="hidden" name="token" value="{{ token }}">
+        {# Bouton #}
 
-            {# Bouton #}
-
-            <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
-        </form>
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à éditer cette expression.</p>
-
-        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/themes/show/1">liste des expressions</a>.</p>
-    {% endif %}
+        <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
+    </form>
 {% endblock %}

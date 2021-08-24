@@ -120,12 +120,6 @@ class Theme extends Model {
             "themeId" => $themeId
         ];
 
-        $res = $this->withData($data);
-
-        $bool = (bool) $res;
-
-        var_dump($res, $bool);
-
         return (bool) $this->withData($data);
     }
 

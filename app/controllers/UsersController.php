@@ -65,6 +65,13 @@ class UsersController extends Controller {
                 $color = "w3-text-green";
             }
 
+            // Edition
+
+            $isNotSameUser = false; // $this->themeModel->belongsTo($userId, $themeId);
+            $isSuperUser = $this->userModel->isSuperUser($userId);
+
+            $canEdit = $isNotSameUser && $isSuperUser;
+
             // Enregistrement
 
             $users[] = [
@@ -74,7 +81,8 @@ class UsersController extends Controller {
                 "color" => $color,
                 "createdAt" => $createdAt,
                 "nbThemes" => $nbThemes,
-                "nbExpressions" => $nbExpressions
+                "nbExpressions" => $nbExpressions,
+                "canEdit" => $canEdit
             ];
         }
 

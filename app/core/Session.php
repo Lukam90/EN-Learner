@@ -150,6 +150,16 @@ class Session {
     }
 
     /**
+     * Error if not logged in
+     */
+
+    public static function errorIfNotLoggedIn() {
+        if (! self::isLoggedIn()) {
+            self::redirectWith("alert", "Vous devez être connecté(e) pour accéder à cette page.");
+        }
+    }
+
+    /**
      * Redirect if logged in
      */
 

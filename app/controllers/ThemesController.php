@@ -142,22 +142,16 @@ class ThemesController extends Controller {
         ]);
     }
 
-    // Ajout d'un nouveau thème
+    /**
+     * Ajout d'un nouveau thème
+     */
 
     public function new() {
         Session::start();
 
-        // Utilisateur connecté
+        // Utilisateur non connecté
 
-        $authorized = 1;// Session::isLoggedIn() && Security::checkCSRF();
-
-        if ($authorized) {
-            $userId = Session::get("user_id");
-        } else {
-            Redirection::notAuthorized();
-
-            return;
-        }
+        Session::errorIfNotLoggedIn();
 
         // Validation
 
@@ -188,27 +182,27 @@ class ThemesController extends Controller {
 
             // Ajout
 
-            $canAdd = false;
-
-            $userId = 0;
-
-            // Enregistrement
+            $userId = Session::get("user_id");
 
             if ($valid) {
                 $newTheme = [
                     "title" => $title,
-                    "user_id" => 1,
+                    "user_id" => $userId,
                 ];
 
                 $saved = $this->themeModel->insert($newTheme);
 
                 if ($saved) {
                     Session::success("Le thème a bien été ajouté.");
-
-                    return;
                 } else {
                     Session::error();
                 }
+
+                $this->index();
+
+                Session::erase();
+
+                return;
             }
         }
 
@@ -224,35 +218,124 @@ class ThemesController extends Controller {
         ]);
     }
 
-    // Edition d'un thème (titre)
+    /**
+     * Edition d'un thème (titre)
+     */
 
     public function edit($id) {
         Session::start();
 
-        // 
+        // Utilisateur non connecté
+
+        Session::errorIfNotLoggedIn();
+
+        // Titre
+
+        $theme = $this->themeModel->findOneById($id);
+
+        $title = $theme->title;
+
+        // Validation
+
+        $validator = new ThemeValidation();
+
+        // Indication
+
+        $validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
+
+        // Envoi des données
+
+        $errors = [];
+
+        if (Request::isPost()) {
+            sleep(1);
+
+            // Titre
+
+            $title = $validator->title();
+
+            // Validation
+
+            $errors = $validator->getErrors();
+
+            $valid = empty($errors["title"]);
+
+            // Edition
+
+            if ($valid) {
+                $saved = $this->themeModel->update($id, $title);
+
+                if ($saved) {
+                    Session::success("Le thème a bien été édité.");
+                } else {
+                    Session::error();
+                }
+
+                $this->index();
+
+                Session::erase();
+
+                return;
+            }
+        }
 
         // Rendu
 
         echo $this->twig->render("themes/edit_theme.twig", [
             "session" => Session::all(),
 
-            "title" => "Mon thème",
+            "tips" => $validator->getTips(),
+            "errors" => $errors,
+
+            "title" => $title,
         ]);
     }
 
-    // Suppression d'un thème (titre)
+    /**
+     * Suppression d'un thème (titre)
+     */
 
     public function delete($id) {
         Session::start();
 
-        // 
+        // Utilisateur non connecté
+
+        Session::errorIfNotLoggedIn();
+
+        // Titre
+
+        $theme = $this->themeModel->findOneById($id);
+
+        $title = $theme->title;
+
+        // Suppression
+
+        if (Request::isPost()) {
+            sleep(1);
+
+            $deleted = $this->themeModel->delete($id);
+
+            var_dump($deleted);
+
+            if ($deleted) {
+                Session::success("Le thème a bien été supprimé.");
+            } else {
+                Session::error();
+            }
+
+            $this->index();
+
+            Session::erase();
+
+            return;
+        }
 
         // Rendu
 
         echo $this->twig->render("themes/delete_theme.twig", [
             "session" => Session::all(),
             
-            "title" => "Mon thème",
+            "title" => $title,
         ]);
     }
 
@@ -260,8 +343,6 @@ class ThemesController extends Controller {
 
     public function start($id) {
         Session::start();
-
-        // 
 
         // Rendu
 
