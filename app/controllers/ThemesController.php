@@ -2,16 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\User;
+use app\core\Redirection;
 use app\core\Request;
 use app\core\Session;
-
-use app\models\Theme;
 use app\core\Security;
 
-use app\core\Redirection;
+use app\models\User;
+use app\models\Theme;
 
 use app\controllers\Controller;
+
 use app\validation\ThemeValidation;
 
 class ThemesController extends Controller {
@@ -30,13 +30,15 @@ class ThemesController extends Controller {
     // Liste des thèmes
 
     public function index() {
+        Session::start();
+
         /* Données de base */
 
         $list = $this->themeModel->findAll();
 
         $themes = [];
 
-        $canAdd = Session::isLoggedIn() && Security::checkCSRF();
+        $canAdd = Session::isLoggedIn();
 
         /* Boucle d'affichage */
 
@@ -77,13 +79,17 @@ class ThemesController extends Controller {
             "session" => Session::all(),
 
             "themes" => $themes,
-            "can-add" => $canAdd,
+            "canAdd" => $canAdd,
         ]);
     }
 
-    // Liste des expressions d'un thème
+    /**
+     * Liste des expressions d'un thème
+     */
 
     public function show($themeId) {
+        Session::start();
+
         // Données
 
         $theme = $this->themeModel->findOneById($themeId);
@@ -93,8 +99,6 @@ class ThemesController extends Controller {
         $list = $this->themeModel->findExpressions($themeId);
 
         $expressions = [];
-
-        $canAdd = true;
 
         // Boucle d'affichage
 
@@ -131,16 +135,18 @@ class ThemesController extends Controller {
 
         echo $this->twig->render("themes/show_theme.twig", [
             "session" => Session::all(),
+            "canAdd" => Session::isLoggedIn(),
 
             "title" => $title,
             "expressions" => $expressions,
-            "canAdd" => $canAdd
         ]);
     }
 
     // Ajout d'un nouveau thème
 
     public function new() {
+        Session::start();
+
         // Utilisateur connecté
 
         $authorized = 1;// Session::isLoggedIn() && Security::checkCSRF();
@@ -221,6 +227,8 @@ class ThemesController extends Controller {
     // Edition d'un thème (titre)
 
     public function edit($id) {
+        Session::start();
+
         // 
 
         // Rendu
@@ -235,6 +243,8 @@ class ThemesController extends Controller {
     // Suppression d'un thème (titre)
 
     public function delete($id) {
+        Session::start();
+
         // 
 
         // Rendu
@@ -249,11 +259,15 @@ class ThemesController extends Controller {
     // Jeu de flashcards
 
     public function start($id) {
+        Session::start();
+
         // 
 
         // Rendu
 
         echo $this->twig->render("themes/game.twig", [
+            "session" => Session::all(),
+
             "title" => "Mon thème",
         ]);
     }

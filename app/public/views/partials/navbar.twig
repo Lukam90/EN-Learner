@@ -3,8 +3,8 @@
 <nav id="navbar" class="w3-bar w3-blue">
     <a href="{{ root }}/" id="nav-title" class="{{ navItem }}">English Learner</a>
 
-    {% if user %}
-        <a href="{{ root }}/users/profile" class="{{ navItem }}">Bienvenue {{ username }}</a>
+    {% if session.user_id %}
+        <a href="{{ root }}/users/profile/{{ session.user_id }}" class="{{ navItem }}">Bienvenue {{ session.username }}</a>
         <a href="{{ root }}/users/logout" class="{{ navItem }}">Déconnexion</a>
     {% else %}
         <a href="{{ root }}/users/register" class="{{ navItem }}">Inscription</a>

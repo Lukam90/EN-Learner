@@ -9,22 +9,32 @@ use app\controllers\ErrorsController;
 use app\controllers\ThemesController;
 use app\controllers\ExpressionsController;
 
-abstract class Redirection {
-    /* Gestion des URLS */
+/**
+ * Redirection Class
+ */
 
-    // Présence d'un paramètre
+abstract class Redirection {
+    /* URLs Management */
+
+    /**
+     * Check if a parameter exists
+     */
 
     public static function hasParameter($url) {
         return isset($url[1]);
     }
 
-    // Présence d'un ID
+    /**
+     * Check if an ID exists
+     */
 
     public static function hasID($url) {
         return isset($url[2]);
     }
 
-    // Correspondance de paramètres
+    /**
+     * Find an existing parameter (or not)
+     */
 
     public static function finds($parameter, $values) {
         foreach ($values as $element) {
@@ -36,23 +46,20 @@ abstract class Redirection {
         return false;
     }
 
-    /* Redirection */
+    /* Redirections */
 
-    // Redirection vers la page d'accueil
+    /**
+     * Home Page
+     */
 
     public static function home() {
         $controller = new HomeController();
         $controller->index();
     }
 
-    // Redirection vers les pages d'authentification et d'inscription
-
-    public static function auth($methodName) {
-        $controller = new UsersController();
-        $controller->$methodName();
-    }
-
-    // Redirection des utilisateurs
+    /**
+     * Users Pages
+     */
 
     public static function users($url) {
         $controller = new UsersController();
@@ -62,7 +69,7 @@ abstract class Redirection {
 
             $withId = self::finds($methodName, ["profile", "edit", "delete"]);
 
-            // Route avec ID (ex : /users/edit/2)
+            // Route with ID (ex : /users/edit/2)
 
             if ($withId) {
                 if (self::hasID($url)) {
@@ -72,29 +79,31 @@ abstract class Redirection {
                 } else {
                     self::notFound();
                 }
-            } else { // Route sans ID (ex : /users/edit)
+            } else { // Route without ID (ex : /users/edit)
                 $controller->$methodName();
             }
-        } else { // Liste des utilisateurs (/users)
+        } else { // Users list (/users)
             $controller->index();
         }
     }
 
-    // Redirection des thèmes
+    /**
+     * Themes pages
+     */
 
     public static function themes($url) {
         $controller = new ThemesController();
 
-        // Route avec paramètre (ex : /themes/action)
+        // Route with parameter (ex : /themes/action)
 
         if (self::hasParameter($url)) {
             $methodName = $url[1];
 
             $withId = self::finds($methodName, ["show", "edit", "delete", "start"]);
 
-            if ($methodName == "new") { // Ajout (/themes/new)
+            if ($methodName == "new") { // Add (/themes/new)
                 $controller->new();
-            } else if ($withId) { // Route avec ID (ex : /themes/action/x)
+            } else if ($withId) { // Route with ID (ex : /themes/action/x)
                 if (self::hasID($url)) {
                     $id = (int) $url[2];
 
@@ -102,20 +111,22 @@ abstract class Redirection {
                 } else {
                     self::notFound();
                 }
-            } else { // Route avec paramètre inconnu (ex : /themes/inconnu)
+            } else { // Route with unknown parameter (ex : /themes/inconnu)
                 self::notFound();
             }
-        } else { // Route sans paramètres (/themes)
+        } else { // Route without parameters (/themes)
             $controller->index();
         }
     }
 
-    // Redirection des expressions
+    /**
+     * Expressions pages
+     */
 
     public function expressions($url) {
         $controller = new ExpressionsController();
 
-        // Route avec paramètre (ex : /expressions/action)
+        // Route with parameter (ex : /expressions/action)
 
         if (self::hasParameter($url)) {
             $methodName = $url[1];
@@ -124,32 +135,36 @@ abstract class Redirection {
 
             if ($methodName == "new") {
                 $controller->new();
-            } else if ($withId) { // Route avec ID (ex : /expressions/edit/1)
+            } else if ($withId) { // Route with ID (ex : /expressions/edit/1)
                 if (self::hasID($url)) {
                     $id = (int) $url[2];
 
                     $controller->$methodName($id);
-                } else { // Route sans ID (ex : /expressions/edit)
+                } else { // Route without ID (ex : /expressions/edit)
                     self::notFound();
                 }
-            } else { // Route sans ID (ex : /expressions/edit)
+            } else { // Route without ID (ex : /expressions/edit)
                 self::notFound();
             }
-        } else { // Route sans paramètres (ex : /expressions)
+        } else { // Route without parameters (ex : /expressions)
             self::notFound();
         }
     }
 
-    // Redirection vers la page de tests
+    /**
+     * Tests Page
+     */
 
     public static function tests() {
         $controller = new TestsController();
         $controller->render();
     }
 
-    /* Erreurs */
+    /* Errors */
 
-    // Redirection 403 : Accès non autorisé
+    /**
+     * Redirection 403 : Forbidden Access
+     */
 
     public static function notAuthorized() {
         header("HTTP/1.0 403 Forbidden");
@@ -158,7 +173,9 @@ abstract class Redirection {
         $controller->notAuthorized();
     }
 
-    // Redirection 404 : Page non trouvée
+    /**
+     * Redirection 404 : Page Not Found
+     */
 
     public static function notFound() {
         header("HTTP/1.0 404 Not Found");

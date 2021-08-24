@@ -1,10 +1,10 @@
-{% extends layout.html %}
+{% extends "layout.twig" %}
 
 {% block content %}
     <h3>Ajout d'un thème</h3>
 
     {% if 1 %}
-        <form action="themes/new" class="w3-container" method="post">
+        <form action="themes/new" class="w3-container w3-half" method="post">
             <label for="title">Titre</label>
             <input type="text" name="title" id="title" value="{{ title }}" class="w3-input w3-border w3-margin-bottom">
 

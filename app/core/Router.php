@@ -8,10 +8,16 @@ use app\controllers\UsersController;
 use app\controllers\ThemesController;
 use app\controllers\ExpressionsController;
 
-abstract class Router {
-    /* Paramètres */
+/**
+ * Router Class
+ */
 
-    // Définition de l'URL
+abstract class Router {
+    /* Parameters */
+
+    /**
+     * URL Initialization
+     */
 
     public static function url() {
         $url = "/";
@@ -30,7 +36,9 @@ abstract class Router {
         return $url;
     }
 
-    // Définition de la page
+    /**
+     * Page Initialization
+     */
 
     public static function page($url) {
         $page = "home";
@@ -42,9 +50,9 @@ abstract class Router {
         return $page;
     }
 
-    /* Redirections */
-
-    // Redirection de la page
+    /**
+     * Redirections
+     */
 
     public static function init() {
         $url = self::url();

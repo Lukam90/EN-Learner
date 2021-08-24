@@ -4,8 +4,14 @@ namespace app\core;
 
 use app\core\Security;
 
+/**
+ * $_GET Class
+ */
+
 abstract class Get {
-    // Contenu d'une variable GET 
+    /**
+     * $_GET variable's content
+     */ 
 
     public static function var($parameter) {
         if (self::has($parameter)) {
@@ -13,13 +19,17 @@ abstract class Get {
         }
     }
 
-    // Existence d'une variable GET 
+    /**
+     * Check if a $_GET variable exists
+     */
 
     public static function has($parameter) {
         return isset($_GET[$parameter]);
     }
 
-    // Existence d'un objet GET 
+    /**
+     * Check if $_GET exists
+     */
 
     public static function exists() {
         return isset($_GET);

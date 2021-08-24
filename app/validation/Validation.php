@@ -6,34 +6,50 @@ abstract class Validation {
     protected $tips;
     protected $errors;
 
-    // Base des constructeurs
+    /**
+     * Main constructor
+     */
 
     public function init() {
         $this->tips = [];
         $this->errors = [];
     }
 
-    // Indications
+    /**
+     * Get tips
+     */
 
     public function getTips() {
         return $this->tips;
     }
 
+    /**
+     * Set tip
+     */
+
     public function setTip($name, $message) {
         $this->tips[$name] = $message;
     }
 
-    // Erreurs
+    /**
+     * Get error messages
+     */
 
     public function getErrors() {
         return $this->errors;
     }
 
+    /**
+     * Set error message
+     */
+
     public function setError($name, $message) {
         $this->errors[$name] = $message;
     }
 
-    // Suppression des indications et des erreurs
+    /**
+     * Erase tips and error messages
+     */
 
     public function erase($attribute) {
         $this->setTip($attribute, "");

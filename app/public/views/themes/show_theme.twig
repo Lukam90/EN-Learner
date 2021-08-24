@@ -5,14 +5,10 @@
 {% block content %}
     <h2>{{ title }}</h2>
 
-    {% if 1 %}
+    {% if canAdd %}
         <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newExpression')">
             <i class="fa fa-plus"></i> Ajouter une expression
         </button>
-
-        {% include "expressions/new_expression.twig" %}
-        {% include "expressions/edit_expression.twig" %}
-        {% include "expressions/delete_expression.twig" %}
     {% endif %}
 
     {% if expressions %}
@@ -23,7 +19,7 @@
                     <th>Traduction</th>
                     <th>Prononciation</th>
                     <th>Auteur</th>
-                    {% if 1 %}
+                    {% if canAdd %}
                     <th></th>
                     {% endif %}
                 </tr>
@@ -37,15 +33,19 @@
                     <td>{{ expression.phonetics }}</td>
                     <td>{{ expression.author }}</td>
 
-                    {% if 1 %}
+                    {% if expression.canEdit %}
                     <td>
-                        <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editExpression')">
-                            <i class="fa fa-pencil"></i> Editer
-                        </button>
+                        <a href="{{ root }}/expressions/edit/{{ expression.id }}">
+                            <button class="w3-btn w3-margin-right w3-green">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                        </a>
 
-                        <button class="w3-btn w3-red" onclick="openModal('deleteExpression')">
-                            <i class="fa fa-pencil"></i> Supprimer
-                        </button>
+                        <a href="{{ root }}/expressions/delete/{{ expression.id }}">
+                            <button class="w3-btn w3-red" onclick="openModal('deleteExpression')">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                        </a>
                     </td>
                     {% endif %}
                 </tr>

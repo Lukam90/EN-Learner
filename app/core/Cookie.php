@@ -4,8 +4,14 @@ namespace app\core;
 
 use app\core\Security;
 
+/**
+ * $_COOKIE Class
+ */
+
 abstract class Cookie {
-    // Récupération d'un cookie
+    /**
+     * Get a cookie
+     */
 
     public static function get($parameter) {
         if (self::has($parameter)) {
@@ -13,7 +19,9 @@ abstract class Cookie {
         }
     }
 
-    // Existence d'un cookie
+    /**
+     * Check if a cookie exists 
+     */
 
     public static function has($parameter) {
         return isset($_COOKIE[$parameter]);

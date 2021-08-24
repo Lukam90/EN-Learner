@@ -2,8 +2,14 @@
 
 namespace app\core;
 
+/**
+ * Fake test data class
+ */
+
 abstract class Faker {
-    // Chargement de données de tests (CSV)
+    /**
+     * Load fake CSV data
+     */
 
     public static function loadCSV($tableName, $attributes) {
         $length = 0;
@@ -34,6 +40,10 @@ abstract class Faker {
         return $data;
     }
 
+    /**
+     * Generate alphanumeric basic characters
+     */
+
     public static function alphabet() {
         $alphabet = "0123456789";
         $alphabet .= "abcdefghijklmnopqrstuvwxyz";
@@ -41,6 +51,10 @@ abstract class Faker {
 
         return $alphabet;
     }
+
+    /**
+     * Generate random string
+     */
 
     public static function string($length = 20) {
         $alphabet = self::alphabet();
@@ -58,13 +72,17 @@ abstract class Faker {
         return $result;
     }
 
-    public static function password() {
-        return password_hash(self::string(), PASSWORD_BCRYPT);
-    }
+    /**
+     * Generate random email
+     */
 
     public static function email() {
         return self::string() . "@fakemail.com";
     }
+
+    /**
+     * Generate random role
+     */
 
     public static function role () {
         $number = rand(0, 2);

@@ -3,9 +3,12 @@
 namespace app\core;
 
 use app\core\Security;
+use app\core\Redirection;
 
 class Session {
-    // Démarrage d'une session
+    /**
+     * Start a session
+     */
 
     public static function start() {
         if (! self::exists()) {
@@ -13,13 +16,17 @@ class Session {
         }
     }
 
-    // Existence d'une session
+    /**
+     * Check if $_SESSION exists
+     */
 
     public static function exists() {
         return isset($_SESSION);
     }
 
-    // Enregistrement d'une session
+    /**
+     * Set a $_SESSION variable
+     */
 
     public static function set($name, $variable) {
         self::start();
@@ -27,7 +34,9 @@ class Session {
         $_SESSION[$name] = Security::clean($variable);
     }
 
-    // Génération d'un token CSRF (session)
+    /**
+     * Generate a CSRF token
+     */
 
     public static function setToken() {
         self::start();
@@ -35,7 +44,9 @@ class Session {
         $_SESSION["token"] = bin2hex(random_bytes(50));
     }
 
-    // Variable de session
+    /**
+     * Get $_SESSION variable
+     */
 
     public static function get($parameter) {
         if (self::has($parameter)) {
@@ -43,19 +54,25 @@ class Session {
         }
     }
 
-    // Existence d'une variable
+    /**
+     * Check if a $_SESSION variable exists
+     */
 
     public static function has($parameter) {
         return isset($_SESSION[$parameter]);
     }
 
-    // Suppression d'une variable
+    /**
+     * Delete a _SESSION variable
+     */
 
     public static function delete($parameter) {
         unset($_SESSION[$parameter]);
     }
 
-    // Objet entier d'une session
+    /**
+     * Get the whole $_SESSION variables
+     */
 
     public static function all() {
         if (self::exists()) {
@@ -63,29 +80,110 @@ class Session {
         }
     }
 
-    // Messages Flash
+    /* Flash Messages */
 
-    // Succès
+    /**
+     * Define a success message
+     */
 
     public static function success($message) {
         self::set("success", $message);
     }
 
-    // Erreur
+    /**
+     * Define an error message
+     */
 
     public static function alert($message) {
         self::set("alert", $message);
     }
 
-    // Alerte (Message général)
+    /**
+     * Get a general error message
+     */
 
     public static function error() {
         self::alert("Une erreur s'est produite. Veuillez contacter l'administrateur du site.");
     }
 
-    // Utilisateur connecté (ID)
+    /**
+     * Erase messages
+     */
+
+    public static function erase() {
+        self::delete("success");
+        self::delete("alert");
+    }
+
+    /* Login */
+
+    /**
+     * Connected used with ID
+     */
 
     public static function isLoggedIn() {
         return self::has("user_id");
+    }
+
+    /**
+     * Redirect with message
+     */
+
+    public static function redirectWith($type, $message) {
+        self::set($type, $message);
+
+        Redirection::home();
+
+        self::erase();
+
+        exit;
+    }
+
+    /**
+     * Error if logged in
+     */
+
+    public static function errorIfLoggedIn() {
+        if (self::isLoggedIn()) {
+            self::redirectWith("alert", "Vous êtes déjà connecté(e).");
+        }
+    }
+
+    /**
+     * Redirect if logged in
+     */
+
+    public static function redirectIfLoggedIn() {
+        if (self::isLoggedIn()) {
+            self::redirectWith("success", "Vous êtes connecté(e).");
+        }
+    }
+
+    /**
+     * Error if banned
+     */
+    public static function errorIfBanned() {
+        self::redirectWith("alert", "Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
+    }
+
+    /**
+     * Session log in
+     */
+
+    public static function login($user) {
+        self::setToken();
+
+        self::set("user_id", $user->id);
+        self::set("username", $user->username);
+        self::set("email", $user->email);
+    }
+
+    /**
+     * Session log out
+     */
+
+    public static function logout() {
+        self::delete("user_id");
+        self::delete("token");
     }
 }

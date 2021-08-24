@@ -29,15 +29,19 @@
                             {{ user.nbExpressions }} expression{% if user.nbExpressions > 1 %}s{% endif %}
                         </td>
 
-                        {% if 1 %}
+                        {% if user.canEdit %}
                         <td>
-                            <button class="w3-btn w3-margin-right w3-green" onclick="openModal('editUser')">
-                                <i class="fa fa-pencil"></i>
-                            </button>
+                            <a href="{{ root }}/users/edit/{{ user.id }}">
+                                <button class="w3-btn w3-margin-right w3-green">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </a>
 
-                            <button class="w3-btn w3-red" onclick="openModal('deleteUser')">
-                                <i class="fa fa-close"></i>
-                            </button>
+                            <a href="{{ root }}/users/delete/{{ user.id }}">
+                                <button class="w3-btn w3-red" onclick="openModal('deleteUser')">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            </a>
                         </td>
                         {% endif %}
                     </tr>

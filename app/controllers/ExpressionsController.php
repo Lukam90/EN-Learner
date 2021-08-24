@@ -21,6 +21,8 @@ class ExpressionsController extends Controller {
     // Ajout d'une nouvelle expression
 
     public function new() {
+        Session::start();
+
         // FR, EN, phonétique, user ID, theme ID
 
         // Rendu
@@ -34,7 +36,7 @@ class ExpressionsController extends Controller {
     // Edition d'un thème (titre)
 
     public function edit() {
-        // 
+        Session::start();
 
         // Rendu
 
@@ -47,7 +49,7 @@ class ExpressionsController extends Controller {
     // Suppression d'un thème (titre)
 
     public function delete($id) {
-        // 
+        Session::start();
 
         // Rendu
 

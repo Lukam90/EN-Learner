@@ -19,7 +19,9 @@ class UsersController extends Controller {
 
     private $userModel; // Modèle (User)
 
-    // Constructeur
+    /**
+     * Constructeur
+     */
 
     public function __construct() {
         $this->init();
@@ -27,9 +29,13 @@ class UsersController extends Controller {
         $this->userModel = new User();
     }
 
-    // Liste des utilisateurs
+    /**
+     * Liste des utilisateurs
+     */
 
     public function index() {
+        Session::start();
+        
         // Données
 
         $list = $this->userModel->findAll();
@@ -75,28 +81,40 @@ class UsersController extends Controller {
         // Rendu
 
         echo $this->twig->render("users.twig", [
+            "session" => Session::all(),
+
             "users" => $users
         ]);
     }
 
-    // Profil d'un utilisateur
+    /**
+     * Profil d'un utilisateur
+     */
 
     public function profile() {
+        Session::start();
+
         // Connexion
 
         // Rendu
 
         echo $this->twig->render("users/profile.twig", [
+            "session" => Session::all(),
+
             "username" => "Lukas"
         ]);
     }
 
-    // Inscription d'un utilisateur
+    /**
+     * Inscription d'un utilisateur
+     */
 
     public function register() {
+        Session::start();
+
         // Utilisateur connecté
 
-        $loggedIn = Session::has("user_id");
+        Session::errorIfLoggedIn();
 
         // Validation
 
@@ -122,8 +140,6 @@ class UsersController extends Controller {
         if (Request::isPost()) {
             sleep(1);
 
-            var_dump($_POST);
-
             $username = $validator->username();
             $email = $validator->email();
             $password = $validator->password();
@@ -133,23 +149,31 @@ class UsersController extends Controller {
 
             $errors = $validator->getErrors();
 
-            $valid = empty($errors) && ! $loggedIn;
+            $valid = empty($errors["username"])
+                     && empty($errors["email"])
+                     && empty($errors["password"])
+                     && empty($errors["confirm"]);
 
             // Enregistrement
 
             if ($valid) {
-                $hashedPassword = Security::hash($password);
-
                 $newUser = [
                     "username" => $username,
                     "email" => $email,
-                    "password" => $hashedPassword
+                    "password" => $password,
+                    "role" => "Membre"
                 ];
 
                 $registered = $this->userModel->insert($newUser);
 
                 if ($registered) {
                     Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
+
+                    $this->login();
+
+                    Session::erase();
+
+                    exit;
                 } else {
                     Session::error();
                 }
@@ -159,9 +183,10 @@ class UsersController extends Controller {
         // Rendu
 
         echo $this->twig->render("users/register.twig", [
+            "session" => Session::all(),
+
             "tips" => $validator->getTips(),
             "errors" => $errors,
-            "loggedIn" => $loggedIn,
 
             "username" => $username,
             "email" => $email,
@@ -170,53 +195,126 @@ class UsersController extends Controller {
         ]);
     }
 
-    // Connexion d'un utilisateur
+    /**
+     * Connexion d'un utilisateur
+     */
 
     public function login() {
-        // 
+        Session::start();
+
+        // Erreur si utilisateur déjà connecté
+
+        Session::errorIfLoggedIn();
+
+        // Données du formulaire
+
+        $email = "";
+        $password = "";
+
+        // Envoi du formulaire
+
+        $errors = [];
+
+        if (Request::isPost()) {
+            sleep(1);
+
+            $email = Post::var("email");
+            $password = Post::var("password");
+
+            $loggedIn = $this->userModel->login($email, $password);
+
+            if ($loggedIn) {
+                $errors["login"] = "";
+
+                $currentUser = $this->userModel->findOneByEmail($email);
+
+                $isBanned = $currentUser->banned;
+
+                // Utilisateur banni
+
+                if ($isBanned) {
+                    Session::errorIfBanned();
+                }
+
+                // Utilisateur autorisé
+
+                Session::login($currentUser);
+
+                Session::redirectIfLoggedIn();
+            } else {
+                $errors["login"] = "Les identifiants sont incorrects. Veuillez réessayer.";
+            }
+        }
 
         // Rendu
 
         echo $this->twig->render("users/login.twig", [
-            "key" => "value"
+            "session" => Session::all(),
+
+            "errors" => $errors,
+
+            "email" => $email,
+            "password" => $password
         ]);
     }
 
-    // Déconnexion d'un utilisateur
+    /**
+     * Déconnexion d'un utilisateur
+     */
 
     public function logout() {
-        // 
+        Session::start();
 
-        // Redirection vers la page d'accueil
+        if (! Session::isLoggedIn()) {
+            Session::alert("Vous êtes déjà déconnecté(e).");
+        }
+
+        Session::logout();
+
+        Session::erase();
 
         Redirection::home();
     }
 
-    // Edition d'un utilisateur
+    /**
+     * Edition d'un utilisateur
+     */
 
     public function edit() {
+        Session::start();
+
         // Connexion
 
         // Rendu
 
         echo $this->twig->render("users/edit_user.twig", [
+            "session" => Session::all(),
+
             "username" => "Lukas"
         ]);
     }
 
-    // Suppression d'un utilisateur
+    /**
+     * Suppression d'un utilisateur
+     */
 
     public function delete() {
+        Session::start();
+
         // Connexion
 
         // Rendu
 
         echo $this->twig->render("users/delete_user.twig", [
+            "session" => Session::all(),
+
             "username" => "Lukas"
         ]);
     }
 
-    // Demande de nouveau mot de passe
+    /**
+     * Demande de nouveau mot de passe
+     */
 
     public function reset() {
         // Connexion
@@ -228,7 +326,9 @@ class UsersController extends Controller {
         ]);
     }
 
-    // Confirmation du nouveau mot de passe
+    /**
+     * Confirmation du nouveau mot de passe
+     */
 
     public function confirm() {
         // Connexion

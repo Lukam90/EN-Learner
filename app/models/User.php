@@ -129,7 +129,9 @@ class User extends Model {
         return $this->withID($userId);
     }
 
-    // Connexion d'un utilisateur
+    /**
+     * Login user
+     */
 
     public function login($email, $password) {
         $row = $this->findOneByEmail($email);

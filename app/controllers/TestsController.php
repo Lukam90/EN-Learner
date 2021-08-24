@@ -30,6 +30,8 @@ class TestsController extends Controller {
         $expressions = ["expressions/new", "expressions/edit/1", "expressions/delete/1"];
 
         echo $this->twig->render("tests.twig", [
+            "session" => Session::all(),
+
             "auth" => $auth,
             "themes" => $themes,
             "users" => $users,

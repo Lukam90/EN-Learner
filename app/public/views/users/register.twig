@@ -1,12 +1,14 @@
 {% set field = "w3-input w3-border w3-margin-bottom" %}
 
 {% extends "layout.twig" %}
+
+{% block title %}Inscription{% endblock %}
     
 {% block content %}
     <h2>Inscription</h2>
 
     {% if 1 %}
-        <form action="{{ root }}/register" class="w3-container w3-half" method="post">
+        <form action="{{ root }}/users/register" class="w3-container w3-half" method="post">
             <label for="username">Pseudo</label>
             <input type="text" name="username" id="username" value="{{ username }}" class="{{ field }}">
 
@@ -46,7 +48,7 @@
             {# Lien de connexion #}
 
             <p>
-                <a class="w3-text-blue" href="{{ root }}/login">Déjà inscrit(e) ?</a>
+                <a class="w3-text-blue" href="{{ root }}/users/login">Déjà inscrit(e) ?</a>
             </p>
         </form>
     {% else %}

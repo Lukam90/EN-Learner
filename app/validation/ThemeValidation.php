@@ -39,7 +39,7 @@ class ThemeValidation extends Validation {
                 $this->setError("title", "Le titre ne doit pas dépasser 50 caractères.");
             }
         } else {
-            $this->setError("title", "Le title doit être renseigné.");
+            $this->setError("title", "Le titre doit être renseigné.");
         }
 
         return $title;

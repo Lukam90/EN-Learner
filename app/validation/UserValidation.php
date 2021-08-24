@@ -23,17 +23,15 @@ class UserValidation extends Validation {
         $username = "";
 
         if (! Post::empty("username")) {
-            sleep(1);
-
             $username = Post::var("username");
 
             $regex = "/^[a-z0-9\s]{2,32}$/i";
     
             if (preg_match($regex, $username)) {
-                $exists = $this->userModel->findByName($username);
+                $exists = $this->userModel->findOneByName($username);
     
                 if (! $exists) {
-                    $this->setTip("username", "");
+                    $this->erase("username");
                 } else {
                     $this->setError("username", "Le pseudo existe déjà. Veuillez en choisir un autre.");
                 }
@@ -56,9 +54,9 @@ class UserValidation extends Validation {
             $email = Post::var("email");
 
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $exists = $this->userModel->findByEmail($email);
+                $exists = $this->userModel->findOneByEmail($email);
 
-                $this->setTip("email", "");
+                $this->erase("email");
     
                 if ($exists) {
                     $this->setError("email", "Un compte existe déjà avec cette adresse e-mail. Veuillez en saisir une nouvelle.");
@@ -93,7 +91,7 @@ class UserValidation extends Validation {
                 $matches = $hasLowerCase && $hasUpperCase && $hasDigit;
 
                 if ($matches) {
-                    $this->setTip("password", "");
+                    $this->erase("password");
                 } else {
                     $this->setError("password", "Le mot de passe doit contenir au moins une minuscule, une majuscule et un chiffre.");
                 }
@@ -116,7 +114,7 @@ class UserValidation extends Validation {
             $confirm = Post::var("confirm");
     
             if ($confirm === $password) {
-                $this->setTip("confirm", "");
+                $this->erase("confirm");
             } else {
                 $this->setError("confirm", "Les mots de passe doivent correspondre.");
             }

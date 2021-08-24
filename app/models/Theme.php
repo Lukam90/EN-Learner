@@ -109,7 +109,7 @@ class Theme extends Model {
     // Appartenance à un utilisateur
 
     public function belongsTo($userId, $themeId) {
-        $this->setQuery("SELECT COUNT(t.id)
+        $this->setQuery("SELECT t.id
                          FROM themes t, users u
                          WHERE t.user_id = u.id
                          AND u.id = :userId
@@ -119,6 +119,12 @@ class Theme extends Model {
             "userId" => $userId,
             "themeId" => $themeId
         ];
+
+        $res = $this->withData($data);
+
+        $bool = (bool) $res;
+
+        var_dump($res, $bool);
 
         return (bool) $this->withData($data);
     }

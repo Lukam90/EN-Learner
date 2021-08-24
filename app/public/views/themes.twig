@@ -5,7 +5,7 @@
 {% block content %}
     <h2>Thèmes</h2>
 
-    {% if 1 %}
+    {% if canAdd %}
         <a class="w3-text-blue" href="{{ root }}/themes/new">
             <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newTheme')">
                 <i class="fa fa-plus"></i> Ajouter un thème
@@ -20,7 +20,7 @@
                     <th>Titre</th>
                     <th>Auteur</th>
                     <th>Nb Expressions</th>
-                    {% if 1 %}
+                    {% if canAdd %}
                     <th></th>
                     {% endif %}
                 </tr>
@@ -36,15 +36,19 @@
                     <td>{{ theme.author }}</td>
                     <td>{{ theme.nbExpressions }}</td>
 
-                    {% if 1 %}
+                    {% if theme.canEdit %}
                     <td>
-                        <button class="w3-btn w3-margin-right w3-green">
-                            <i class="fa fa-pencil"></i>
-                        </button>
+                        <a href="{{ root }}/themes/edit/{{ theme.id }}">
+                            <button class="w3-btn w3-margin-right w3-green">
+                                <i class="fa fa-pencil"></i>
+                            </button>
+                        </a>
 
-                        <button class="w3-btn w3-red">
-                            <i class="fa fa-close"></i>
-                        </button>
+                        <a href="{{ root }}/themes/delete/{{ theme.id }}">
+                            <button class="w3-btn w3-red">
+                                <i class="fa fa-close"></i>
+                            </button>
+                        </a>
                     </td>
                     {% endif %}
                 </tr>
