@@ -1,13 +1,19 @@
-{% extends "layout.twig" %}
+<div id="delete-modal" class="w3-modal">
+    <div class="w3-modal-content" style="max-width: 500px;">
+        <div class="w3-container">
+            <form action="#" class="w3-container" id="delete-form" method="post">
+                <h3>Voulez-vous supprimer ce thème ?</h3>
 
-{% block content %}
-    <h3>Suppression du thème : {{ title }}</h3>
+                <p>Titre : <span id="delete-title"></span></p>
 
-    <form action="{{ root }}/themes/delete/1" class="w3-container" method="post">
-        <h3>Voulez-vous supprimer ce thème ?</h3>
+                {{ token }}
 
-        <input type="hidden" name="token" value="{{ token }}">
+                <input type="hidden" name="token" value="{{ token }}">
 
-        <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
-    </form>
-{% endblock %}
+                <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
+            </form>
+
+            <span onclick="closeModal();" id="close" class="w3-button w3-display-topright">&times;</span>
+        </div>
+    </div>
+</div>

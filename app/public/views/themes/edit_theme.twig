@@ -1,9 +1,9 @@
 {% extends "layout.twig" %}
 
 {% block content %}
-    <h3>Edition du thème</h3>
+    <h3>Edition du thème : {{ theme }}</h3>
 
-    <form action="{{ root }}/themes/edit/1" class="w3-container" method="post">
+    <form action="{{ root }}/themes/edit/{{ id }}" class="w3-container" method="post">
         {# Titre #}
 
         <label for="title">Titre</label>

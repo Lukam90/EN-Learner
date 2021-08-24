@@ -233,6 +233,7 @@ class ThemesController extends Controller {
 
         $theme = $this->themeModel->findOneById($id);
 
+        $id = $theme->id;
         $title = $theme->title;
 
         // Validation
@@ -287,6 +288,7 @@ class ThemesController extends Controller {
             "tips" => $validator->getTips(),
             "errors" => $errors,
 
+            "id" => $id,
             "title" => $title,
         ]);
     }
@@ -315,8 +317,6 @@ class ThemesController extends Controller {
 
             $deleted = $this->themeModel->delete($id);
 
-            var_dump($deleted);
-
             if ($deleted) {
                 Session::success("Le thème a bien été supprimé.");
             } else {
@@ -335,6 +335,7 @@ class ThemesController extends Controller {
         echo $this->twig->render("themes/delete_theme.twig", [
             "session" => Session::all(),
             
+            "id" => $id,
             "title" => $title,
         ]);
     }
@@ -349,7 +350,7 @@ class ThemesController extends Controller {
         echo $this->twig->render("themes/game.twig", [
             "session" => Session::all(),
 
-            "title" => "Mon thème",
+            "title" => "Mon thème"
         ]);
     }
 }
