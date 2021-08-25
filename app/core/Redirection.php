@@ -133,9 +133,7 @@ abstract class Redirection {
 
             $withId = self::finds($methodName, ["new", "edit", "delete"]);
 
-            if ($methodName == "new") {
-                $controller->new();
-            } else if ($withId) { // Route with ID (ex : /expressions/edit/1)
+            if ($withId) { // Route with ID (ex : /expressions/edit/1)
                 if (self::hasID($url)) {
                     $id = (int) $url[2];
 

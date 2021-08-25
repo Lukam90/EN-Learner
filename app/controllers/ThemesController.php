@@ -139,7 +139,7 @@ class ThemesController extends Controller {
             "session" => Session::all(),
             "canAdd" => Session::isLoggedIn(),
 
-            "id" => $id,
+            "id" => $themeId,
             "title" => $title,
             "expressions" => $expressions,
         ]);
@@ -173,6 +173,8 @@ class ThemesController extends Controller {
         $title = "";
 
         if (Request::isPost()) {
+            // Sécurité
+
             sleep(1);
 
             Session::errorIfNotToken();
@@ -234,6 +236,10 @@ class ThemesController extends Controller {
 
         Session::errorIfNotLoggedIn();
 
+        // Thème non existant
+
+        Session::errorIfThemeNotExists($id);
+
         // Titre
 
         $theme = $this->themeModel->findOneById($id);
@@ -253,6 +259,8 @@ class ThemesController extends Controller {
         $errors = [];
 
         if (Request::isPost()) {
+            // Sécurité
+
             sleep(1);
 
             Session::errorIfNotToken();
@@ -308,6 +316,10 @@ class ThemesController extends Controller {
 
         Session::errorIfNotLoggedIn();
 
+        // Thème inexistant
+
+        Session::errorIfThemeNotExists($id);
+
         // Suppression
 
         if (Request::isPost()) {
@@ -339,6 +351,10 @@ class ThemesController extends Controller {
 
     public function start($id) {
         Session::start();
+
+        // Thème non existant
+
+        Session::errorIfThemeNotExists($id);
 
         // Rendu
 

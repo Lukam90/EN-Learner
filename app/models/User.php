@@ -24,8 +24,7 @@ class User extends Model {
                             email VARCHAR(100) UNIQUE NOT NULL,
                             `password` VARCHAR(255) NOT NULL,
                             role VARCHAR(20) NOT NULL DEFAULT 'Membre',
-                            created_at DATE DEFAULT CURRENT_TIMESTAMP,
-                            banned BOOLEAN DEFAULT 0
+                            created_at DATE DEFAULT CURRENT_TIMESTAMP
                         )");
 
         return $this->run();

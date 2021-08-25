@@ -340,6 +340,10 @@ class UsersController extends Controller {
 
         Session::errorIfNotLoggedIn();
 
+        // Utilisateur inexistant
+
+        Session::errorIfUserNotExists($id);
+
         // Utilisateur sélectionné
 
         $user = $this->userModel->findOneById($id);
@@ -351,9 +355,13 @@ class UsersController extends Controller {
         // Envoi des données
 
         if (Request::isPost()) {
+            // Sécurité
+
             sleep(1);
 
             Session::errorIfNotToken();
+
+            // Edition
 
             $role = Post::var("role");
 
@@ -392,14 +400,18 @@ class UsersController extends Controller {
 
         Session::errorIfNotSuperUser();
 
-        // Suppression
+        // Utilisateur inexistant
+
+        Session::errorIfUserNotExists($id);
+
+        // Envoi des données
 
         if (Request::isPost()) {
             sleep(1);
 
             Session::errorIfNotToken();
 
-            // Action
+            // Suppression
 
             $deleted = $this->userModel->delete($id);
 

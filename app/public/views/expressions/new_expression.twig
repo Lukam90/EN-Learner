@@ -5,7 +5,7 @@
 {% block content %}
     <h2>Ajout d'une expression</h2>
 
-    <form action="{{ root }}/expressions/new" class="w3-container w3-half" method="post">
+    <form action="{{ root }}/expressions/new/{{ id }}" class="w3-container w3-half" method="post">
         {# Expression (FR) #}
 
         <label for="french">Expression</label>

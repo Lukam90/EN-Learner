@@ -7,6 +7,8 @@ use app\core\Security;
 use app\core\Redirection;
 
 use app\models\User;
+use app\models\Theme;
+use app\models\Expression;
 
 class Session {
     /**
@@ -179,7 +181,7 @@ class Session {
     public static function errorIfNotAuthorized($isMethod) {
         self::errorIfNotLoggedIn();
 
-        $userId = Session::get("user_id");
+        $userId = self::get("user_id");
 
         $userModel = new User();
 
@@ -221,6 +223,60 @@ class Session {
     public static function errorIfNotToken() {
         if (Post::var("token") != self::get("token")) {
             self::logoutWith("alert", "Le token CSRF a expiré. Veuillez vous reconnecter.");
+        }
+    }
+
+    /**
+     * Error if user not exists
+     */
+    
+    public static function errorIfUserNotExists($userId) {
+        $userModel = new User();
+
+        $exists = $userModel->findOneById($userId);
+
+        if (! $exists) {
+            self::alert("L'utilisateur n'existe pas.");
+
+            header("Location: http://localhost/en_app/users");
+
+            return;
+        }
+    }
+
+    /**
+     * Error if theme not exists
+     */
+    
+    public static function errorIfThemeNotExists($themeId) {
+        $themeModel = new Theme();
+
+        $exists = $themeModel->findOneById($themeId);
+
+        if (! $exists) {
+            self::alert("Le thème n'existe pas.");
+
+            header("Location: http://localhost/en_app/themes");
+
+            return;
+        }
+    }
+
+    /**
+     * Error if expression not exists
+     */
+    
+    public static function errorIfExpressionNotExists($expressionId) {
+        $expressionModel = new Expression();
+    
+        $exists = $expressionModel->findOneById($expressionId);
+    
+        if (! $exists) {
+            self::alert("L'expression n'existe pas.");
+    
+            header("Location: http://localhost/en_app/expressions");
+    
+            return;
         }
     }
 

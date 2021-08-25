@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\core\Request;
 use app\core\Session;
 
+use app\models\Theme;
 use app\models\Expression;
 
 use app\controllers\Controller;
@@ -31,6 +32,10 @@ class ExpressionsController extends Controller {
 
         Session::errorIfNotLoggedIn();
 
+        // Existence du thème
+
+        Session::errorIfThemeNotExists($themeId);
+
         // Validation
 
         $validator = new ExpressionValidation();
@@ -50,6 +55,8 @@ class ExpressionsController extends Controller {
         $phonetics = "";
 
         if (Request::isPost()) {
+            // Sécurité
+
             sleep(1);
 
             Session::errorIfNotToken();
@@ -103,13 +110,14 @@ class ExpressionsController extends Controller {
             "tips" => $validator->getTips(),
             "errors" => $errors,
 
+            "id" => $themeId,
             "french" => $french,
             "english" => $english,
             "phonetics" => $phonetics
         ]);
     }
 
-    // Edition d'un thème (titre)
+    // Edition d'une expression
 
     public function edit($id) {
         Session::start();
@@ -117,6 +125,10 @@ class ExpressionsController extends Controller {
         // Utilisateur non connecté
 
         Session::errorIfNotLoggedIn();
+
+        // Expression inexistante
+
+        Session::errorIfExpressionNotExists($id);
 
         // Données existantes
 
@@ -192,22 +204,50 @@ class ExpressionsController extends Controller {
             "tips" => $validator->getTips(),
             "errors" => $errors,
 
+            "id" => $id,
             "french" => $french,
             "english" => $english,
             "phonetics" => $phonetics
         ]);
     }
 
-    // Suppression d'un thème (titre)
+    // Suppression d'une expression
 
     public function delete($id) {
         Session::start();
+
+        // Utilisateur non connecté
+
+        Session::errorIfNotLoggedIn();
+
+        // Expression inexistante
+
+        Session::errorIfExpressionNotExists($id);
+
+        // Suppression
+
+        if (Request::isPost()) {
+            sleep(1);
+
+            Session::errorIfNotToken();
+
+            $deleted = $this->expressionModel->delete($id);
+
+            if ($deleted) {
+                Session::success("L'expression a bien été supprimée.");
+            } else {
+                Session::error();
+            }
+
+            header("Location: http://localhost/en_app/themes/show/$themeId");
+
+            return;
+        }
 
         // Rendu
 
         echo $this->twig->render("expressions/delete_expression.twig", [
             "session" => Session::all(),
-            "title" => "Mon thème",
         ]);
     }
 }

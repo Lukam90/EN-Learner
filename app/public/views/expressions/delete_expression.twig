@@ -8,24 +8,10 @@
 
                 <input type="hidden" id="delete-token" name="token" value="">
 
-                <button onclick="" class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
+                <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
             </form>
 
-            <span onclick="closeModal();" id="close" class="w3-button w3-display-topright">&times;</span>
+            <span onclick="closeDeleteModal();" id="close" class="w3-button w3-display-topright">&times;</span>
         </div>
     </div>
 </div>
-
-{% extends "layout.twig" %}
-
-{% block content %}
-    <h3>Suppression de l'expression</h3>
-
-    <form action="{{ root }}/expressions/delete/1" class="w3-container" method="post">
-        <h3>Voulez-vous supprimer cette expression ?</h3>
-
-        <input type="hidden" name="token" value="{{ token }}">
-
-        <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
-    </form>
-{% endblock %}

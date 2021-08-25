@@ -3,7 +3,7 @@
 {% block content %}
     <h3>Edition de l'expression</h3>
 
-    <form action="{{ root }}/expressions/edit/1" class="w3-container" method="post">
+    <form action="{{ root }}/expressions/edit/{{ id }}" class="w3-container" method="post">
         {# Expression (FR) #}
 
         <label for="french">Expression</label>
