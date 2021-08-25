@@ -170,6 +170,8 @@ class ThemesController extends Controller {
         if (Request::isPost()) {
             sleep(1);
 
+            Session::errorIfNotToken();
+
             // Titre
 
             $title = $validator->title();
@@ -314,6 +316,8 @@ class ThemesController extends Controller {
 
         if (Request::isPost()) {
             sleep(1);
+
+            Session::errorIfNotToken();
 
             $deleted = $this->themeModel->delete($id);
 

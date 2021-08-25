@@ -1,6 +1,6 @@
 const deleteModal = document.getElementById("delete-modal");
 
-function openModal(values) {
+function openModal(type, values) {
     deleteModal.style.display = 'block';
 
     // Values
@@ -13,7 +13,7 @@ function openModal(values) {
 
     const deleteForm = document.getElementById("delete-form");
 
-    const link = `http://localhost/en_app/themes/delete/${id}`;
+    const link = `http://localhost/en_app/${type}/delete/${id}`;
 
     const deleteToken = document.getElementById("delete-token");
     const deleteTitle = document.getElementById("delete-title");

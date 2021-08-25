@@ -46,11 +46,9 @@
                             </button>
                         </a>
 
-                        {#<a href="{{ root }}/themes/delete/{{ theme.id }}">#}
-                            <button class="w3-btn w3-red" onclick="openModal({{ theme.id }}, '{{ theme.title }}')">
-                                <i class="fa fa-close"></i>
-                            </button>
-                        {#</a>#}
+                        <button class="w3-btn w3-red" onclick="openModal('themes', { id: {{ theme.id }}, token: '{{ session.token }}', title: '{{ theme.title }}' })">
+                            <i class="fa fa-close"></i>
+                        </button>
                     </td>
                     {% endif %}
                 </tr>
@@ -63,5 +61,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ public }}/js/delete-theme.js"></script>
+<script src="{{ public }}/js/delete.js"></script>
 {% endblock %}

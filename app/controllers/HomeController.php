@@ -28,6 +28,8 @@ class HomeController extends Controller {
     // Page d'accueil
 
     public function index() {
+        Session::start();
+
         // Stats
 
         $nbUsers = $this->userModel->count();

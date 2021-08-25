@@ -3,7 +3,7 @@
 {% block content %}
     <h3>Ajout d'un thème</h3>
 
-    <form action="{{ root }}/themes/new" class="w3-container w3-half" method="post">
+    <form action="{{ root }}/themes/new" class="w3-container w3-half" method="post" target="_self">
         <label for="title">Titre</label>
         <input type="text" name="title" id="title" value="{{ title }}" class="w3-input w3-border w3-margin-bottom">
 
@@ -11,10 +11,8 @@
 
         <p class="w3-text-red">{{ errors.title }}</p>
 
-        <input type="hidden" name="token" value="{{ token }}">
+        <input type="hidden" name="token" value="{{ session.token }}">
 
-        <button class="w3-btn w3-blue">Ajouter</button>
+        <button type="submit" class="w3-btn w3-blue">Ajouter</button>
     </form>
-
-    <div class="w3-margin-bottom"></div>
 {% endblock %}

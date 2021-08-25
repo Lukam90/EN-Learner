@@ -2,6 +2,7 @@
 
 namespace app\core;
 
+use app\core\Post;
 use app\core\Security;
 use app\core\Redirection;
 
@@ -156,6 +157,16 @@ class Session {
     public static function errorIfNotLoggedIn() {
         if (! self::isLoggedIn()) {
             self::redirectWith("alert", "Vous devez être connecté(e) pour accéder à cette page.");
+        }
+    }
+
+    /**
+     * Error if not matching token
+     */
+
+    public static function errorIfNotToken() {
+        if (Post::var("token") != self::get("token")) {
+            self::redirectWith("alert", "Le token CSRF a expiré. Veuillez vous reconnecter.");
         }
     }
 

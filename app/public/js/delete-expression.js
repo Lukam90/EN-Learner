@@ -1,22 +1,14 @@
 const deleteModal = document.getElementById("delete-modal");
 
-function openModal(values) {
+function openModal(id, french, english) {
     deleteModal.style.display = 'block';
 
-    // Values
-
-    const id = values["id"];
-    const token = values["token"];
-    const title = values["title"];
-
-    // Form & Data
+    const deleteFR = document.getElementById("delete-fr");
+    const deleteEN = document.getElementById("delete-en");
 
     const deleteForm = document.getElementById("delete-form");
 
     const link = `http://localhost/en_app/themes/delete/${id}`;
-
-    const deleteToken = document.getElementById("delete-token");
-    const deleteTitle = document.getElementById("delete-title");
 
     // AJAX Request
     
@@ -26,7 +18,6 @@ function openModal(values) {
         if (this.readyState == 4 && this.status == 200) {
             deleteForm.action = link;
             deleteTitle.innerHTML = title;
-            deleteToken.value = token;
         }
     }
 

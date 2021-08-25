@@ -1,3 +1,21 @@
+<div id="delete-modal" class="w3-modal">
+    <div class="w3-modal-content" style="max-width: 500px;">
+        <div class="w3-container">
+            <form action="#" class="w3-container" id="delete-form" method="post">
+                <h3>Voulez-vous supprimer cette expression ?</h3>
+
+                <p><span id="delete-text"></span></p>
+
+                <input type="hidden" id="delete-token" name="token" value="">
+
+                <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
+            </form>
+
+            <span onclick="closeModal();" id="close" class="w3-button w3-display-topright">&times;</span>
+        </div>
+    </div>
+</div>
+
 {% extends "layout.twig" %}
 
 {% block content %}
