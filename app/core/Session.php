@@ -206,6 +206,14 @@ class Session {
         self::errorIfNotAuthorized("isAdmin");
     }
 
+    /**
+     * Error if banned
+     */
+    
+    public static function errorIfBanned() {
+        self::redirectHomeWith("alert", "Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
+    }
+
      /**
      * Error if not matching token
      */
@@ -224,13 +232,6 @@ class Session {
         if (self::isLoggedIn()) {
             self::redirectHomeWith("success", "Vous êtes connecté(e).");
         }
-    }
-
-    /**
-     * Error if banned
-     */
-    public static function errorIfBanned() {
-        self::redirectHomeWith("alert", "Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
     }
 
     /**

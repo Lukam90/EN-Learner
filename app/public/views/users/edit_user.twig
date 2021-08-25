@@ -3,35 +3,24 @@
 {% block content %}
     <h2>Edition du statut de {{ username }}</h2>
 
-    {% if 1 %}
-        <form action="{{ root }}/users/edit/1" class="w3-container w3-quarter" method="post">
-            {# Rôle #}
+    <form action="{{ root }}/users/edit/{{ id }}" class="w3-container w3-quarter" method="post">
+        {# Rôle #}
 
-            <select class="w3-select" name="role" selected="{{ role }}">
-                <option value="" disabled selected>Rôle de l'utilisateur</option>
-                <option value="Membre">Membre</option>
-                <option value="Modérateur">Modérateur</option>
-                <option value="Administrateur">Administrateur</option>
-            </select>
+        {% set roles = ["Suspendu", "Membre", "Modérateur", "Administrateur"] %}
 
-            {# Statut "Banni" #}
+        <select class="w3-select w3-margin-bottom" name="role">
+            <option value="" disabled>Rôle de l'utilisateur</option>
+            {% for option in roles %}
+            <option value="{{ option }}" {% if role == option %} selected {% endif %}>{{ option }}</option>
+            {% endfor %}
+        </select>
 
-            <p>
-                <label class="w3-margin-right" for="banned">Banni</label>
-                <input class="w3-check" type="checkbox" name="banned" id="banned" checked="{{ banned }}">
-            </p>
+        {# Token CSRF #}
 
-            {# Token CSRF #}
+        <input type="hidden" name="token" value="{{ session.token }}">
 
-            <input type="hidden" name="token" value="{{ session.token }}">
+        {# Bouton #}
 
-            {# Bouton #}
-
-            <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
-        </form>
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à éditer le statut de cet utilisateur.</p>
-
-        <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
-    {% endif %}
+        <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
+    </form>
 {% endblock %}

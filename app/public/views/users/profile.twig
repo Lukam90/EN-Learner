@@ -5,15 +5,17 @@
 {% block content %}
     <h2>Profil de l'utilisateur {{ session.username }}</h2>
 
+    <p>{{ nbThemes }} thème{% if nbThemes > 1 %}s{% endif %} + {{ nbExpressions }} expression{% if nbExpressions > 1 %}s{% endif %}</p>
+
     {% if 1 %}
-        <div class="w3-container w3-half">
+        <div class="w3-container w3-third">
             <h3>Identifiants</h3>
 
-            <form action="{{ root }}/users/profile/1" method="post">
+            <form action="{{ root }}/users/profile/{{ id }}" method="post">
                 {# Pseudo #}
 
                 <label for="username">Pseudo</label>
-                <input type="text" name="username" id="username" value="{{ session.username }}" class="w3-input w3-border w3-margin-bottom">
+                <input type="text" name="username" id="username" value="{{ username }}" class="w3-input w3-border w3-margin-bottom">
 
                 <p class="w3-text-blue">{{ tips.username }}</p>
 
@@ -22,7 +24,7 @@
                 {# Adresse e-mail #}
 
                 <label for="email">Adresse e-mail</label>
-                <input type="text" name="email" id="email" value="{{ session.email }}" class="w3-input w3-border w3-margin-bottom">
+                <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
 
                 <p class="w3-text-blue">{{ tips.email }}</p>
 
@@ -30,7 +32,7 @@
 
                 {# Jeton CSRF #}
 
-                <input type="hidden" name="token" value="{{ token }}">
+                <input type="hidden" name="token" value="{{ session.token }}">
 
                 {# Bouton #}
 

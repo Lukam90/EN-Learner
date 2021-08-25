@@ -109,18 +109,53 @@ class UsersController extends Controller {
      * Profil d'un utilisateur
      */
 
-    public function profile() {
+    public function profile($id) {
         Session::start();
 
-        // Connexion
+        // Erreur si non connecté
+
+        Session::errorIfNotLoggedIn();
+
+        // Utilisateur connecté
+
+        $userId = Session::get("user_id");
+
+        // Même utilisateur
+
+        if ($userId != $id) {
+            Session::alert("Vous n'êtes pas autorisé(e) à accéder à cette page de profil utilisateur.");
+
+            header("Location: http://localhost/en_app");
+
+            return;
+        }
+
+        $user = $this->userModel->findOneById($id);
+
+        $username = $user->username;
+        $email = $user->email;
+        $oldPassword = $user->password;
+
+        // Stats
+
+        $nbThemes = $this->userModel->countThemes($userId);
+        $nbExpressions = $this->userModel->countExpressions($userId);
 
         // Rendu
 
         echo $this->twig->render("users/profile.twig", [
             "session" => Session::all(),
 
-            "username" => "Lukas"
+            "id" => $id,
+            "username" => $username,
+            "email" => $email,
+            "oldPassword" => $oldPassword,
+
+            "nbThemes" => $nbThemes,
+            "nbExpressions" => $nbExpressions
         ]);
+
+        Session::erase();
     }
 
     /**
@@ -242,9 +277,9 @@ class UsersController extends Controller {
             if ($loggedIn) {
                 $errors["login"] = "";
 
-                $currentUser = $this->userModel->findOneByEmail($email);
+                $user = $this->userModel->findOneByEmail($email);
 
-                $isBanned = $currentUser->banned;
+                $isBanned = ($user->role === "Suspendu");
 
                 // Utilisateur banni
 
@@ -254,7 +289,7 @@ class UsersController extends Controller {
 
                 // Utilisateur autorisé
 
-                Session::login($currentUser);
+                Session::login($user);
 
                 Session::redirectIfLoggedIn();
             } else {
@@ -309,9 +344,9 @@ class UsersController extends Controller {
 
         $user = $this->userModel->findOneById($id);
 
+        $id = $user->id;
         $username = $user->username;
         $role = $user->role;
-        $banned = $user->banned;
 
         // Envoi des données
 
@@ -321,20 +356,11 @@ class UsersController extends Controller {
             Session::errorIfNotToken();
 
             $role = Post::var("role");
-            $banned = Post::var("banned");
 
             $saved = $this->userModel->changeRole($id, $role);
 
             if ($saved) {
                 Session::success("Le rôle de l'utilisateur a bien été édité.");
-            } else {
-                Session::error();
-            }
-
-            $saved = $this->userModel->changeBanStatus($id, $banned);
-
-            if ($saved) {
-                Session::success("Le status d'activation du compte de l'utilisateur a bien été édité.");
             } else {
                 Session::error();
             }
@@ -349,9 +375,9 @@ class UsersController extends Controller {
         echo $this->twig->render("users/edit_user.twig", [
             "session" => Session::all(),
 
+            "id" => $id,
             "username" => $username,
             "role" => $role,
-            "banned" => $banned
         ]);
     }
 

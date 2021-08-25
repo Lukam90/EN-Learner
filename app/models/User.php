@@ -185,7 +185,7 @@ class User extends Model {
     public function isBanned($id) {
         $this->setQuery("SELECT id
                          FROM users
-                         WHERE banned
+                         WHERE role = 'Suspendu'
                          AND id = :id");
 
         return $this->withID($id);
@@ -259,21 +259,6 @@ class User extends Model {
         $data = [
             "id" => $id,
             "role" => $role
-        ];
-
-        return $this->bindValues($data);
-    }
-
-    // Changement du statut de bannissement
-
-    public function changeBanStatus($id, $banned) {
-        $this->setQuery("UPDATE users
-                         SET banned = :banned
-                         WHERE id = :id");
-
-        $data = [
-            "id" => $id,
-            "banned" => $banned
         ];
 
         return $this->bindValues($data);

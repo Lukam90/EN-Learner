@@ -142,6 +142,8 @@ class ThemesController extends Controller {
             "title" => $title,
             "expressions" => $expressions,
         ]);
+
+        Session::erase();
     }
 
     /**

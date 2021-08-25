@@ -6,9 +6,11 @@
     <h2>{{ title }}</h2>
 
     {% if canAdd %}
-        <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newExpression')">
-            <i class="fa fa-plus"></i> Ajouter une expression
-        </button>
+        <a href="{{ root }}/expressions/new">
+            <button class="w3-btn w3-margin-bottom w3-blue" onclick="openModal('newExpression')">
+                <i class="fa fa-plus"></i> Ajouter une expression
+            </button>
+        </a>
     {% endif %}
 
     {% if expressions %}
