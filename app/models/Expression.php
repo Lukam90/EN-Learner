@@ -20,9 +20,9 @@ class Expression extends Model {
     public function create() {
         $this->setQuery("CREATE TABLE IF NOT EXISTS expressions (
                             id INTEGER PRIMARY KEY AUTO_INCREMENT,
-                            french VARCHAR(255) UNIQUE NOT NULL,
-                            english VARCHAR(255) UNIQUE NOT NULL,
-                            phonetics VARCHAR(255) UNIQUE NOT NULL,
+                            french VARCHAR(255) NOT NULL,
+                            english VARCHAR(255) NOT NULL,
+                            phonetics VARCHAR(255) NOT NULL,
                             user_id INTEGER NOT NULL,
                             theme_id INTEGER NOT NULL,
                             FOREIGN KEY (user_id) REFERENCES users (id),
@@ -83,7 +83,7 @@ class Expression extends Model {
 
         return (bool) $this->withData($data);
     }
-
+    
     // Ajout d'une nouvelle ligne
 
     public function insert($data) {

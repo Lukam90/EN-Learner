@@ -131,7 +131,7 @@ abstract class Redirection {
         if (self::hasParameter($url)) {
             $methodName = $url[1];
 
-            $withId = self::finds($methodName, ["edit", "delete"]);
+            $withId = self::finds($methodName, ["new", "edit", "delete"]);
 
             if ($methodName == "new") {
                 $controller->new();

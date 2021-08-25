@@ -129,7 +129,7 @@ class ThemesController extends Controller {
                 "english" => $english,
                 "phonetics" => $phonetics,
                 "author" => $author,
-                "canEdit" => true,
+                "canEdit" => $canEdit,
             ];
         }
 
@@ -139,6 +139,7 @@ class ThemesController extends Controller {
             "session" => Session::all(),
             "canAdd" => Session::isLoggedIn(),
 
+            "id" => $id,
             "title" => $title,
             "expressions" => $expressions,
         ]);
@@ -237,7 +238,6 @@ class ThemesController extends Controller {
 
         $theme = $this->themeModel->findOneById($id);
 
-        $id = $theme->id;
         $title = $theme->title;
 
         // Validation
