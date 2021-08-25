@@ -1,19 +1,17 @@
-{% extends "layout.twig" %}
+<div id="delete-modal" class="w3-modal">
+    <div class="w3-modal-content" style="max-width: 500px;">
+        <div class="w3-container">
+            <form action="#" class="w3-container" id="delete-form" method="post">
+                <h3>Voulez-vous supprimer cet utilisateur ?</h3>
 
-{% block content %}
-    <h2>Suppression de l'utilisateur {{ username }}</h2>
+                <p>Pseudo : <span id="delete-text"></span></p>
 
-    {% if 1 %}
-        <form action="{{ root }}/users/delete/1" class="w3-container" method="post">
-            <h3>Voulez-vous supprimer cet utilisateur ?</h3>
+                <input type="hidden" id="delete-token" name="token" value="">
 
-            <input type="hidden" name="token" value="{{ token }}">
+                <button type="submit" class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
+            </form>
 
-            <button class="w3-btn w3-margin-bottom w3-red">Confirmer</button>
-        </form>
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à supprimer cet utilisateur.</p>
-
-        <p>Veuillez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
-    {% endif %}
-{% endblock %}
+            <span onclick="closeDeleteModal();" id="close" class="w3-button w3-display-topright">&times;</span>
+        </div>
+    </div>
+</div>

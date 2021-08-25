@@ -46,5 +46,7 @@ class HomeController extends Controller {
             "nbThemes"      => $nbThemes,
             "nbExpressions" => $nbExpressions
         ]);
+
+        Session::erase();
     }
 }

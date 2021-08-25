@@ -6,7 +6,7 @@
     <h2>Thèmes</h2>
 
     {% if canAdd %}
-        <a class="w3-text-blue" href="{{ root }}/themes/new">
+        <a class="w3-text-blue" href="http://localhost/en_app/themes/new">
             <button class="w3-btn w3-margin-bottom w3-blue">
                 <i class="fa fa-plus"></i> Ajouter un thème
             </button>
@@ -40,13 +40,13 @@
 
                     {% if theme.canEdit %}
                     <td>
-                        <a href="{{ root }}/themes/edit/{{ theme.id }}">
+                        <a href="http://localhost/en_app/themes/edit/{{ theme.id }}">
                             <button class="w3-btn w3-margin-right w3-green">
                                 <i class="fa fa-pencil"></i>
                             </button>
                         </a>
 
-                        <button class="w3-btn w3-red" onclick="openModal('themes', { id: {{ theme.id }}, token: '{{ session.token }}', title: '{{ theme.title }}' })">
+                        <button class="w3-btn w3-red" onclick="openDeleteModal('themes', { id: {{ theme.id }}, token: '{{ session.token }}', text: '{{ theme.title }}' })">
                             <i class="fa fa-close"></i>
                         </button>
                     </td>

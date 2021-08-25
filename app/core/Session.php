@@ -6,6 +6,8 @@ use app\core\Post;
 use app\core\Security;
 use app\core\Redirection;
 
+use app\models\User;
+
 class Session {
     /**
      * Start a session
@@ -130,12 +132,22 @@ class Session {
      * Redirect with message
      */
 
-    public static function redirectWith($type, $message) {
+    public static function redirectHomeWith($type, $message) {
         self::set($type, $message);
 
-        Redirection::home();
+        header("Location: http://localhost/en_app");
 
-        self::erase();
+        exit;
+    }
+
+    /**
+     * Logout with message
+     */
+
+    public static function logoutWith($type, $message) {
+        self::set($type, $message);
+
+        header("Location: http://localhost/en_app/users/logout");
 
         exit;
     }
@@ -146,7 +158,7 @@ class Session {
 
     public static function errorIfLoggedIn() {
         if (self::isLoggedIn()) {
-            self::redirectWith("alert", "Vous êtes déjà connecté(e).");
+            self::redirectHomeWith("alert", "Vous êtes déjà connecté(e).");
         }
     }
 
@@ -156,17 +168,51 @@ class Session {
 
     public static function errorIfNotLoggedIn() {
         if (! self::isLoggedIn()) {
-            self::redirectWith("alert", "Vous devez être connecté(e) pour accéder à cette page.");
+            self::redirectHomeWith("alert", "Vous devez être connecté(e) pour accéder à cette page.");
         }
     }
 
     /**
+     * Error if not authorized
+     */
+
+    public static function errorIfNotAuthorized($isMethod) {
+        self::errorIfNotLoggedIn();
+
+        $userId = Session::get("user_id");
+
+        $userModel = new User();
+
+        $isAuthorized = $userModel->$isMethod($userId);
+
+        if (! $isAuthorized) {
+            self::redirectHomeWith("alert", "Vous n'êtes pas autorisé(e) à effectuer cette action.");
+        }
+    }
+
+    /**
+     * Error if not superuser (moderator or admin)
+     */
+
+    public static function errorIfNotSuperUser() {
+        self::errorIfNotAuthorized("isSuperUser");
+    }
+
+    /**
+     * Error if not admin
+     */
+
+    public static function errorIfNotAdmin() {
+        self::errorIfNotAuthorized("isAdmin");
+    }
+
+     /**
      * Error if not matching token
      */
 
     public static function errorIfNotToken() {
         if (Post::var("token") != self::get("token")) {
-            self::redirectWith("alert", "Le token CSRF a expiré. Veuillez vous reconnecter.");
+            self::logoutWith("alert", "Le token CSRF a expiré. Veuillez vous reconnecter.");
         }
     }
 
@@ -176,7 +222,7 @@ class Session {
 
     public static function redirectIfLoggedIn() {
         if (self::isLoggedIn()) {
-            self::redirectWith("success", "Vous êtes connecté(e).");
+            self::redirectHomeWith("success", "Vous êtes connecté(e).");
         }
     }
 
@@ -184,7 +230,7 @@ class Session {
      * Error if banned
      */
     public static function errorIfBanned() {
-        self::redirectWith("alert", "Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
+        self::redirectHomeWith("alert", "Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
     }
 
     /**

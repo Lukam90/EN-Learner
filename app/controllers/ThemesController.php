@@ -81,6 +81,8 @@ class ThemesController extends Controller {
             "themes" => $themes,
             "canAdd" => $canAdd,
         ]);
+
+        Session::erase();
     }
 
     /**
@@ -200,9 +202,7 @@ class ThemesController extends Controller {
                     Session::error();
                 }
 
-                $this->index();
-
-                Session::erase();
+                header("Location: http://localhost/en_app/themes");
 
                 return;
             }
@@ -253,6 +253,8 @@ class ThemesController extends Controller {
         if (Request::isPost()) {
             sleep(1);
 
+            Session::errorIfNotToken();
+
             // Titre
 
             $title = $validator->title();
@@ -274,9 +276,7 @@ class ThemesController extends Controller {
                     Session::error();
                 }
 
-                $this->index();
-
-                Session::erase();
+                header("Location: http://localhost/en_app/themes");
 
                 return;
             }
@@ -306,12 +306,6 @@ class ThemesController extends Controller {
 
         Session::errorIfNotLoggedIn();
 
-        // Titre
-
-        $theme = $this->themeModel->findOneById($id);
-
-        $title = $theme->title;
-
         // Suppression
 
         if (Request::isPost()) {
@@ -327,9 +321,7 @@ class ThemesController extends Controller {
                 Session::error();
             }
 
-            $this->index();
-
-            Session::erase();
+            header("Location: http://localhost/en_app/themes");
 
             return;
         }
@@ -338,9 +330,6 @@ class ThemesController extends Controller {
 
         echo $this->twig->render("themes/delete_theme.twig", [
             "session" => Session::all(),
-            
-            "id" => $id,
-            "title" => $title,
         ]);
     }
 

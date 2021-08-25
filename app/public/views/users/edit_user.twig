@@ -4,10 +4,10 @@
     <h2>Edition du statut de {{ username }}</h2>
 
     {% if 1 %}
-        <form action="{{ root }}/users/edit/1" class="w3-container" method="post">
+        <form action="{{ root }}/users/edit/1" class="w3-container w3-quarter" method="post">
             {# Rôle #}
 
-            <select class="w3-select" name="option">
+            <select class="w3-select" name="role" selected="{{ role }}">
                 <option value="" disabled selected>Rôle de l'utilisateur</option>
                 <option value="Membre">Membre</option>
                 <option value="Modérateur">Modérateur</option>
@@ -18,12 +18,12 @@
 
             <p>
                 <label class="w3-margin-right" for="banned">Banni</label>
-                <input class="w3-check" type="checkbox" name="banned" id="banned">
+                <input class="w3-check" type="checkbox" name="banned" id="banned" checked="{{ banned }}">
             </p>
 
             {# Token CSRF #}
 
-            <input type="hidden" name="token" value="{{ token }}">
+            <input type="hidden" name="token" value="{{ session.token }}">
 
             {# Bouton #}
 

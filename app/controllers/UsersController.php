@@ -35,6 +35,16 @@ class UsersController extends Controller {
 
     public function index() {
         Session::start();
+
+        // Edition
+
+        $isSuperUser = false; 
+
+        if (Session::isLoggedIn()) {
+            $userId = Session::get("user_id");
+
+            $isSuperUser = $this->userModel->isSuperUser($userId);
+        }
         
         // Données
 
@@ -67,10 +77,7 @@ class UsersController extends Controller {
 
             // Edition
 
-            $isNotSameUser = false; // $this->themeModel->belongsTo($userId, $themeId);
-            $isSuperUser = $this->userModel->isSuperUser($userId);
-
-            $canEdit = $isNotSameUser && $isSuperUser;
+            $canEdit = true;// $this->themeModel->belongsTo($userId, $themeId);
 
             // Enregistrement
 
@@ -90,9 +97,12 @@ class UsersController extends Controller {
 
         echo $this->twig->render("users.twig", [
             "session" => Session::all(),
+            "superuser" => $isSuperUser,
 
             "users" => $users
         ]);
+
+        Session::erase();
     }
 
     /**
@@ -177,9 +187,7 @@ class UsersController extends Controller {
                 if ($registered) {
                     Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
 
-                    $this->login();
-
-                    Session::erase();
+                    header("Location: http://localhost/en_app/users/login");
 
                     exit;
                 } else {
@@ -264,6 +272,8 @@ class UsersController extends Controller {
             "email" => $email,
             "password" => $password
         ]);
+
+        Session::erase();
     }
 
     /**
@@ -273,32 +283,75 @@ class UsersController extends Controller {
     public function logout() {
         Session::start();
 
-        if (! Session::isLoggedIn()) {
+        if (Session::isLoggedIn()) {
+            Session::success("Vous êtes bien déconnecté(e).");
+        } else {
             Session::alert("Vous êtes déjà déconnecté(e).");
         }
 
         Session::logout();
 
-        Session::erase();
-
-        Redirection::home();
+        header("Location: http://localhost/en_app");
     }
 
     /**
      * Edition d'un utilisateur
      */
 
-    public function edit() {
+    public function edit($id) {
         Session::start();
 
-        // Connexion
+        // Utilisateur non connecté
+
+        Session::errorIfNotLoggedIn();
+
+        // Utilisateur sélectionné
+
+        $user = $this->userModel->findOneById($id);
+
+        $username = $user->username;
+        $role = $user->role;
+        $banned = $user->banned;
+
+        // Envoi des données
+
+        if (Request::isPost()) {
+            sleep(1);
+
+            Session::errorIfNotToken();
+
+            $role = Post::var("role");
+            $banned = Post::var("banned");
+
+            $saved = $this->userModel->changeRole($id, $role);
+
+            if ($saved) {
+                Session::success("Le rôle de l'utilisateur a bien été édité.");
+            } else {
+                Session::error();
+            }
+
+            $saved = $this->userModel->changeBanStatus($id, $banned);
+
+            if ($saved) {
+                Session::success("Le status d'activation du compte de l'utilisateur a bien été édité.");
+            } else {
+                Session::error();
+            }
+
+            header("Location: http://localhost/en_app/users");
+
+            return;
+        }
 
         // Rendu
 
         echo $this->twig->render("users/edit_user.twig", [
             "session" => Session::all(),
 
-            "username" => "Lukas"
+            "username" => $username,
+            "role" => $role,
+            "banned" => $banned
         ]);
     }
 
@@ -306,17 +359,40 @@ class UsersController extends Controller {
      * Suppression d'un utilisateur
      */
 
-    public function delete() {
+    public function delete($id) {
         Session::start();
 
-        // Connexion
+        // Utilisateur non autorisé
+
+        Session::errorIfNotSuperUser();
+
+        // Suppression
+
+        if (Request::isPost()) {
+            sleep(1);
+
+            Session::errorIfNotToken();
+
+            // Action
+
+            $deleted = $this->userModel->delete($id);
+
+            if ($deleted) {
+                Session::success("L'utilisateur a bien été supprimé.");
+            } else {
+                Session::error();
+            }
+
+            header("Location: http://localhost/en_app/users");
+
+            return;
+        }
 
         // Rendu
 
         echo $this->twig->render("users/delete_user.twig", [
             "session" => Session::all(),
-
-            "username" => "Lukas"
+            "superuser" => $isSuperUser
         ]);
     }
 
