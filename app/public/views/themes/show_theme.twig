@@ -45,7 +45,7 @@
                             </button>
                         </a>
 
-                        <button class="w3-btn w3-red" onclick="openDeleteModal('expressions', { id: {{ expression.id }}, token : '{{ session.token }}', text: '{{ expression.english }}' })">
+                        <button class="w3-btn w3-red" onclick="openDeleteModal('expressions', { id: {{ expression.id }}, token : '{{ session.token }}', text: 'FR = {{ expression.french }}<br>EN = {{ expression.english }}<br>P = {{ expression.phonetics }}' })">
                             <i class="fa fa-close"></i>
                         </button>
                     </td>

@@ -224,6 +224,12 @@ class ExpressionsController extends Controller {
 
         Session::errorIfExpressionNotExists($id);
 
+        // Expression courante
+
+        $expression = $this->expressionModel->findOneById($id);
+
+        $themeId = $expression->theme_id;
+
         // Suppression
 
         if (Request::isPost()) {
