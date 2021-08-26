@@ -92,9 +92,19 @@ class ThemesController extends Controller {
     public function show($themeId) {
         Session::start();
 
-        // Données
+        // Thème
 
         $theme = $this->themeModel->findOneById($themeId);
+
+        if (! $theme) {
+            Session::alert("Le thème n'existe pas.");
+
+            header("Location: http://localhost/en_app/themes");
+
+            return;
+        }
+
+        // Données
 
         $title = $theme->title;
 
