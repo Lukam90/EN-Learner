@@ -15,14 +15,14 @@
                 <i class="fa fa-plus"></i> Ajouter une expression
             </button>
         </a>
+    {% endif %}
 
-        {% if nbExpressions >= 10 %}
+    {% if nbExpressions >= 10 %}
         <a href="{{ root }}/themes/start/{{ id }}">
             <button class="w3-btn w3-margin-bottom w3-green">
                 <i class="fa fa-gamepad"></i> Lancer le jeu
             </button>
         </a>
-        {% endif %}
     {% endif %}
 
     {% if expressions %}

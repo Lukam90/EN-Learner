@@ -5,3 +5,7 @@
 .close:hover {
     color: red;
 }
+
+#restart {
+    display: none;
+}

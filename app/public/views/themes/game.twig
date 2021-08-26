@@ -9,39 +9,34 @@ Flashcards > {{ title }}
 {% endblock %}
 
 {% block content %}
-<p>
-    <a class="w3-text-blue" href="{{ root }}/themes/show/{{ id }}">&lt; Retour à la liste</a>
-</p>
+    <p>
+        <a class="w3-text-blue" href="{{ root }}/themes/show/{{ id }}">&lt; Retour à la liste</a>
+    </p>
 
-<h2>Flashcards > {{ title }}</h2>
+    <h2>Flashcards > {{ title }}</h2>
 
-<form action="{{ root }}/themes/start/{{ id }}" method="post">
     {% if not started %}
-        <div class="w3-container w3-third">
-            <p>Niveau de difficulté</p>
+        <form action="{{ root }}/themes/start/{{ id }}" method="post">
+            <div class="w3-container w3-third">
+                <p>Niveau de difficulté</p>
 
-            <select class="w3-select w3-margin-bottom" name="level">
-                {% for level in levels %}
-                <option value="{{ level }}">{{ level }}</option>
-                {% endfor %}
-            </select>
+                <select class="w3-select w3-margin-bottom" name="level">
+                    {% for level in levels %}
+                    <option value="{{ level }}">{{ level }}</option>
+                    {% endfor %}
+                </select>
 
-            <button class="w3-btn w3-green">Let's go !</button>
-        </div>
+                <button class="w3-btn w3-green">Let's go !</button>
+            </div>
+        </form>
     {% else %}
         {% set index = 0 %}
 
         {% for flashcard in flashcards %}
             {% set index = index + 1 %}
 
-            <div class="w3-card-4 w3-margin w3-quarter flashcard" id="card{{ index }}" onclick="flipCard({{ index }});">
-                <div class="close" onclick="closeCard({{ index }});">
-                    <div class="w3-container w3-right">
-                        <h3><i class="fa fa-close"></i></h3>
-                    </div>
-                </div>
-
-                <div class="w3-container w3-center question">
+            <div class="w3-card-4 w3-margin w3-quarter flashcards" id="card{{ index }}" onclick="flipCard({{ index }});">
+                <div class="w3-container w3-center">
                     <h2>{{ flashcard.french }}</h2>
                 </div>
 
@@ -55,17 +50,22 @@ Flashcards > {{ title }}
                     </div>
                 </div>
 
-                <div class="w3-margin-bottom"></div>
+                <div class="w3-display-container w3-center">
+                    <button class="w3-button w3-display-bottomright next" onclick="nextSlide();">&#10095;</button>
+                </div>
             </div>
         {% endfor %}
 
         <div class="w3-container">
-            <button name="restart" class="w3-btn w3-green w3-margin-top w3-margin-bottom">Rejouer ?</button>
+            <a href="{{ root }}/themes/start/{{ id }}">
+                <button class="w3-btn w3-green w3-margin-top w3-margin-bottom" id="restart">Rejouer ?</button>
+            </a>
         </div>
     {% endif %}
-</form>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ public }}/js/game.js"></script>
+    {% if started %}
+    <script src="{{ public }}/js/game.js"></script>
+    {% endif %}
 {% endblock %}

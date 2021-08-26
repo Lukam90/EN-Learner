@@ -425,7 +425,7 @@ class ThemesController extends Controller {
 
         // Lancement du jeu
 
-        if (Post::has("level")) {
+        if (Request::isPost()) {
             $level = Post::var("level");
 
             $started = true;
@@ -451,14 +451,6 @@ class ThemesController extends Controller {
             for ($i = 0 ; $i < $nb ; $i++) {
                 $flashcards[] = $expressions[$i];
             }
-        }
-
-        // Redémarrage du jeu
-
-        if (Post::has("restart")) {
-            header("Location: http://localhost/en_app/themes/start/$id");
-
-            return;
         }
 
         // Rendu

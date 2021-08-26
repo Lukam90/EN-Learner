@@ -1,20 +1,39 @@
-function flipCard(index) {
-    const card = document.getElementById(`card${index}`);
+let index = 0;
 
-    const question = document.querySelector(`#card${index} > .question`);
-    const answers = document.querySelector(`#card${index} > .answers`);
+let flashcards = document.getElementsByClassName("flashcards");
 
-    if (answers.style.visibility != "visible") {
-        answers.style.visibility = "visible";
-        /*question.style.visibility = "hidden";
-    } else {
-        answers.style.visibility = "hidden";
-        question.style.visibility = "visible";*/
+let count = flashcards.length;
+
+let nextButtons = document.getElementsByClassName("next");
+
+let restartBtn = document.getElementById("restart");
+
+nextSlide();
+
+function nextSlide() {
+    
+
+    for (let i = 0 ; i < count ; i++) {
+        flashcards[i].style.display = "none";
+    }
+
+    if (index < count) {
+        flashcards[index].style.display = "block";
+        index++;
     }
 }
 
-function closeCard(index) {
-    const card = document.getElementById(`card${index}`);
+function flipCard() {
+    let answers = document.querySelector(`#card${index} > .answer`);
+    let nextButton = nextButtons[index];
 
-    card.style.display = "none";
+    if (answers.style.visibility != "visible") {
+        answers.style.visibility = "visible";
+
+        if (index < count) {
+            nextButton.style.visibility = "visible";
+        } else {
+            restartBtn.style.display = "block";
+        }
+    }
 }
