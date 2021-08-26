@@ -2,13 +2,15 @@
 
 namespace app\controllers;
 
-use app\core\Redirection;
+use app\core\Post;
 use app\core\Request;
 use app\core\Session;
 use app\core\Security;
+use app\core\Redirection;
 
-use app\models\User;
 use app\models\Theme;
+use app\models\User;
+use app\models\Expression;
 
 use app\controllers\Controller;
 
@@ -92,7 +94,7 @@ class ThemesController extends Controller {
     public function show($themeId) {
         Session::start();
 
-        // Thème
+        // Thème courant
 
         $theme = $this->themeModel->findOneById($themeId);
 
@@ -114,6 +116,8 @@ class ThemesController extends Controller {
 
         // Boucle d'affichage
 
+        $expressionModel = new Expression();
+
         foreach ($list as $expression) {
             // Lecture
 
@@ -122,7 +126,7 @@ class ThemesController extends Controller {
             $english = $expression->english;
             $phonetics = $expression->phonetics;
 
-            $author = $this->themeModel->findUser($themeId)->username;
+            $author = $expressionModel->findUser($id)->username;
 
             $userId = $expression->user_id;
 
@@ -152,6 +156,7 @@ class ThemesController extends Controller {
             "id" => $themeId,
             "title" => $title,
             "expressions" => $expressions,
+            "nbExpressions" => count($expressions)
         ]);
 
         Session::erase();
@@ -362,16 +367,110 @@ class ThemesController extends Controller {
     public function start($id) {
         Session::start();
 
-        // Thème non existant
+        // Thème courant
 
-        Session::errorIfThemeNotExists($id);
+        $theme = $this->themeModel->findOneById($id);
+
+        if (! $theme) {
+            Session::alert("Le thème n'existe pas.");
+
+            header("Location: http://localhost/en_app/themes");
+
+            return;
+        }
+
+        // Données
+
+        $title = $theme->title;
+
+        $list = $this->themeModel->findExpressions($id);
+
+        $count = count($list);        
+
+        $expressions = [];
+
+        $flashcards = [];
+
+        $started = false;
+
+        // Liste initiale
+
+        foreach ($list as $expression) {
+            // Lecture
+
+            $french = $expression->french;
+            $english = $expression->english;
+            $phonetics = $expression->phonetics;
+
+            // Enregistrement
+
+            $expressions[] = [
+                "french" => $french,
+                "english" => $english,
+                "phonetics" => $phonetics
+            ];
+        }
+
+        // Niveaux de difficulté
+
+        $levels = ["Facile"];
+
+        if ($count >= 15 && $count < 20) {
+            $levels = ["Facile", "Moyen"];
+        }
+        
+        if ($count >= 20) {
+            $levels = ["Facile", "Moyen", "Difficile"];
+        }
+
+        // Lancement du jeu
+
+        if (Post::has("level")) {
+            $level = Post::var("level");
+
+            $started = true;
+
+            // Choix du niveau
+
+            switch ($level) {
+                case "Facile":
+                    $nb = 10;
+                    break;
+                case "Moyen":
+                    $nb = 15;
+                    break;
+                case "Difficile":
+                    $nb = 20;
+                    break;
+            }
+
+            // Génération des flashcards
+
+            shuffle($expressions);
+
+            for ($i = 0 ; $i < $nb ; $i++) {
+                $flashcards[] = $expressions[$i];
+            }
+        }
+
+        // Redémarrage du jeu
+
+        if (Post::has("restart")) {
+            header("Location: http://localhost/en_app/themes/start/$id");
+
+            return;
+        }
 
         // Rendu
 
         echo $this->twig->render("themes/game.twig", [
             "session" => Session::all(),
 
-            "title" => "Mon thème"
+            "started" => $started,
+            "id" => $id,
+            "title" => $title,
+            "levels" => $levels,
+            "flashcards" => $flashcards
         ]);
     }
 }

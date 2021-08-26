@@ -1,0 +1,7 @@
+.answers {
+    visibility: hidden;
+}
+
+.close:hover {
+    color: red;
+}

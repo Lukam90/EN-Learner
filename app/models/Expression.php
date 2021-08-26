@@ -67,6 +67,17 @@ class Expression extends Model {
         return $this->withNone();
     }
 
+    // Nom de l'utilisateur
+
+    public function findUser($expressionId) {
+        $this->setQuery("SELECT u.id, u.username
+                         FROM users u, expressions e
+                         WHERE u.id = e.user_id
+                         AND e.id = :id");
+
+        return $this->fetchOne("id", $expressionId);
+    }
+
     // Appartenance à un utilisateur
 
     public function belongsTo($userId, $expressionId) {

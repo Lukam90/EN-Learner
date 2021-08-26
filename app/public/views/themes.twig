@@ -6,11 +6,12 @@
     <h2>Thèmes</h2>
 
     {% if canAdd %}
-        <button class="w3-btn w3-margin-bottom w3-blue" onclick="openAddModal('{{ session.token }}');">
-            <i class="fa fa-plus"></i> Ajouter un thème
-        </button>
+        <a href="{{ root }}/themes/new">
+            <button class="w3-btn w3-margin-bottom w3-blue">
+                <i class="fa fa-plus"></i> Ajouter un thème
+            </button>
+        </a>
 
-        {% include "themes/new_theme.twig" %}
         {% include "themes/delete_theme.twig" %}
     {% endif %}
 
@@ -31,7 +32,7 @@
                 {% for theme in themes %}
                 <tr>
                     <td>
-                        <a class="w3-text-blue" href="themes/show/{{ theme.id }}">{{ theme.title }}</a>
+                        <a class="w3-text-blue" href="{{ root }}/themes/show/{{ theme.id }}">{{ theme.title }}</a>
                     </td>
 
                     <td>{{ theme.author }}</td>
@@ -39,7 +40,7 @@
 
                     {% if theme.canEdit %}
                     <td>
-                        <a href="themes/edit/{{ theme.id }}">
+                        <a href="{{ root }}/themes/edit/{{ theme.id }}">
                             <button class="w3-btn w3-margin-right w3-green">
                                 <i class="fa fa-pencil"></i>
                             </button>
@@ -60,6 +61,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ public }}/js/new-theme.js"></script>
 <script src="{{ public }}/js/delete.js"></script>
 {% endblock %}

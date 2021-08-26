@@ -1,41 +1,20 @@
-const tipsTitle = document.getElementById("tips-title");
-const errorsTitle = document.getElementById("errors-title");
+const tips = document.getElementById("tips-title");
+const errors = document.getElementById("errors-title");
 
 const formTitle = document.getElementById("form-title");
 
-function validateModal() {
-    let tips = tipsTitle.value;
-    let errors = errorsTitle.value;
-    
+function validateModal(event) {    
     let title = formTitle.value;
 
     let nb = title.length;
 
-    if (title) {
-        if (nb <= 50) {
-            
-        }
+    let valid = (nb > 0 && nb <= 50);
+        
+    if (valid) {
+        tips.value = "";
     } else {
-        tipsTitle.value = "Le titre doit être renseigné.";
+        errorsTitle.value = "Le titre doit être renseigné et contenir jusqu'à 50 caractères.";
+
+        event.preventDefault();
     }
 }
-
-/*
-if (! Post::empty("title")) {
-            $title = Post::var("title");
-    
-            if (strlen($title) <= 50) {
-                $exists = $this->themeModel->findOneByTitle($title);
-    
-                if (! $exists) {
-                    $this->erase("title");
-                } else {
-                    $this->setError("title", "Le thème existe déjà. Veuillez saisir un autre titre.");
-                }
-            } else {
-                $this->setError("title", "Le titre ne doit pas dépasser 50 caractères.");
-            }
-        } else {
-            $this->setError("title", "Le titre doit être renseigné.");
-        }
-*/

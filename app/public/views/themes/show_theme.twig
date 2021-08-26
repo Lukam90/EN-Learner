@@ -3,14 +3,26 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
+    <p>
+        <a class="w3-text-blue" href="{{ root }}/themes">&lt; Liste des thèmes</a>
+    </p>
+
     <h2>{{ title }}</h2>
 
     {% if canAdd %}
         <a href="{{ root }}/expressions/new/{{ id }}">
-            <button class="w3-btn w3-margin-bottom w3-blue" onclick="openNewModal('newExpression')">
+            <button class="w3-btn w3-margin-bottom w3-margin-right w3-blue" onclick="openNewModal('newExpression')">
                 <i class="fa fa-plus"></i> Ajouter une expression
             </button>
         </a>
+
+        {% if nbExpressions >= 10 %}
+        <a href="{{ root }}/themes/start/{{ id }}">
+            <button class="w3-btn w3-margin-bottom w3-green">
+                <i class="fa fa-gamepad"></i> Lancer le jeu
+            </button>
+        </a>
+        {% endif %}
     {% endif %}
 
     {% if expressions %}
@@ -37,8 +49,9 @@
                     <td>{{ expression.phonetics }}</td>
                     <td>{{ expression.author }}</td>
 
-                    {% if expression.canEdit %}
+                    {% if canAdd %}
                     <td>
+                        {% if 1 %}
                         <a href="{{ root }}/expressions/edit/{{ expression.id }}">
                             <button class="w3-btn w3-margin-right w3-green">
                                 <i class="fa fa-pencil"></i>
@@ -48,6 +61,7 @@
                         <button class="w3-btn w3-red" onclick="openDeleteModal('expressions', { id: {{ expression.id }}, token : '{{ session.token }}', text: 'FR = {{ expression.french }}<br>EN = {{ expression.english }}<br>P = {{ expression.phonetics }}' })">
                             <i class="fa fa-close"></i>
                         </button>
+                        {% endif %}
                     </td>
                     {% endif %}
                 </tr>

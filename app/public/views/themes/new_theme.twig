@@ -1,35 +1,8 @@
-<div id="add-modal" class="w3-modal">
-    <div class="w3-modal-content" style="max-width: 500px;">
-        <div class="w3-container">
-            <form action="" id="add-form" class="w3-container" method="post">
-                <h3>Ajout d'un thème</h3>
-
-                <label for="title">Titre</label>
-                <input type="text" name="title" id="form-title" class="w3-input w3-border w3-margin-bottom">
-
-                <p class="w3-text-blue" id="tips-title">{{ tips.title }}</p>
-
-                <p class="w3-text-red" id="errors-title">{{ errors.title }}</p>
-
-                <input type="hidden" name="token" id="add-token" value="">
-
-                <button class="w3-btn w3-blue" onclick="validateTheme();">Ajouter</button>
-
-                <div class="w3-margin-bottom"></div>
-            </form>
-
-            <span onclick="closeAddModal();" id="close" class="w3-button w3-display-topright">&times;</span>
-        </div>
-    </div>
-</div>
-
-{#
-
 {% extends "layout.twig" %}
 
-{% block content %}
-    
+{% block title %}Ajout d'un thème{% endblock %}
 
+{% block content %}
     <form action="{{ root }}/themes/new" class="w3-container w3-half" method="post">
         <h3>Ajout d'un thème</h3>
 
@@ -43,7 +16,11 @@
         <input type="hidden" name="token" value="{{ session.token }}">
 
         <button type="submit" class="w3-btn w3-blue">Ajouter</button>
+
+        {# Lien de retour #}
+
+        <p>
+            <a class="w3-text-blue" href="{{ root }}/themes/">&lt; Retour à la liste</a>
+        </p>
     </form>
 {% endblock %}
-
-#}

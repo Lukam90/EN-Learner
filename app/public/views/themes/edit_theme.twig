@@ -1,9 +1,11 @@
 {% extends "layout.twig" %}
 
-{% block content %}
-    <h3>Edition du thème : {{ theme }}</h3>
+{% block title %}Edition du thème : {{ title }}{% endblock %}
 
-    <form action="{{ root }}/themes/edit/{{ id }}" class="w3-container" method="post">
+{% block content %}
+    <h3>Edition du thème : {{ title }}</h3>
+
+    <form action="{{ root }}/themes/edit/{{ id }}" class="w3-container w3-third" method="post">
         {# Titre #}
 
         <label for="title">Titre</label>
@@ -19,6 +21,12 @@
 
         {# Bouton d'édition #}
 
-        <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
+        <button class="w3-btn w3-green">Editer</button>
+
+        {# Lien de retour #}
+
+        <p>
+            <a class="w3-text-blue" href="{{ root }}/themes/">&lt; Retour à la liste</a>
+        </p>
     </form>
 {% endblock %}

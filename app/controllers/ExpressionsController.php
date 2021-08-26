@@ -205,6 +205,7 @@ class ExpressionsController extends Controller {
             "errors" => $errors,
 
             "id" => $id,
+            "themeId" => $themeId,
             "french" => $french,
             "english" => $english,
             "phonetics" => $phonetics

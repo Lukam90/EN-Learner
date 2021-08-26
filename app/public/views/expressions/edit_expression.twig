@@ -1,9 +1,11 @@
 {% extends "layout.twig" %}
 
+{% block title %}Edition de l'expression{% endblock %}
+
 {% block content %}
     <h3>Edition de l'expression</h3>
 
-    <form action="{{ root }}/expressions/edit/{{ id }}" class="w3-container" method="post">
+    <form action="{{ root }}/expressions/edit/{{ id }}" class="w3-container w3-half" method="post">
         {# Expression (FR) #}
 
         <label for="french">Expression</label>
@@ -39,6 +41,12 @@
 
         {# Bouton #}
 
-        <button class="w3-btn w3-margin-bottom w3-green">Editer</button>
+        <button class="w3-btn w3-green">Editer</button>
+
+        {# Lien de retour #}
+
+        <p>
+            <a class="w3-text-blue" href="{{ root }}/themes/show/{{ themeId }}">&lt; Retour à la liste</a>
+        </p>
     </form>
 {% endblock %}
