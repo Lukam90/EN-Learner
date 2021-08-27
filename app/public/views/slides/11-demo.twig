@@ -1,0 +1,90 @@
+{% macro title() %}
+<img src="{{ public }}/img/bg-new-york.jpg" class="background" alt="background">
+
+<div class="w3-container w3-margin">
+    <h2>Démonstration</h2>
+</div>
+{% endmacro %}
+
+<!-- 1 -->
+
+<div class="w3-container w3-display-middle w3-center w3-card-2 slides">
+    {{ _self.title }}
+
+    <div class="w3-container w3-margin">
+        <h3>Un visiteur souhaite s'inscrire...</h3>
+
+        <div class="w3-container w3-margin-bottom"></div>
+
+        <ul class="w3-ul w3-xlarge">
+            <li>... mais remplit le formulaire d'une manière incorrecte</li>
+            <li>... et remplit le formulaire en respectant les règles de validation</li>
+        </ul>
+    </div>
+
+    {% include "slides/buttons.twig" %}
+</div>
+
+<!-- 2 -->
+
+<div class="w3-container w3-display-middle w3-center w3-card-2 slides">
+    {{ _self.title }}
+
+    <div class="w3-container w3-margin">
+        <h3>Un administrateur se connecte avec ses identifiants.</h3>
+
+        <div class="w3-container w3-margin-bottom"></div>
+
+        <h3>Il se rend ensuite sur la liste :</h3>
+
+        <div class="w3-container w3-margin-bottom"></div>
+
+        <ul class="w3-ul w3-xlarge">
+            <li>des utilisateurs</li>
+            <li>des thèmes</li>
+            <li>des expressions d'un thème</li>
+            <li></li>
+        </ul>
+    </div>
+
+    {% include "slides/buttons.twig" %}
+</div>
+
+<!-- 3 -->
+
+<div class="w3-container w3-display-middle w3-center w3-card-2 slides">
+    {{ _self.title }}
+
+    <div class="w3-container w3-margin">
+        <h3>L'administrateur créé un nouveau thème.</h3>
+
+        <div class="w3-container w3-margin-bottom"></div>
+
+        <ul class="w3-ul w3-xlarge">
+            <li>Il créé 3 expressions liées à ce thème.</li>
+            <li>Il édite l'expression du milieu.</li>
+            <li>Il supprime l'expression du milieu.</li>
+        </ul>
+    </div>
+
+    {% include "slides/buttons.twig" %}
+</div>
+
+<!-- 4 -->
+
+<div class="w3-container w3-display-middle w3-center w3-card-2 slides">
+    {{ _self.title }}
+
+    <div class="w3-container w3-margin">
+        <h3>Un invité (ou un membre) souhaite lancer une partie de flashcards avec :</h3>
+
+        <div class="w3-container w3-margin-bottom"></div>
+
+        <ul class="w3-ul w3-xlarge">
+            <li>le thème <b>Expressions de base</b></li>
+            <li>le niveau de difficulté <b>Moyen</b></li>
+        </ul>
+    </div>
+
+    {% include "slides/buttons.twig" %}
+</div>
