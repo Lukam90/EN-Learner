@@ -1,9 +1,15 @@
+{% macro title() %}
+<img src="{{ public }}/img/bg-new-york.jpg" class="background" alt="background">
+
+<div class="w3-container w3-margin">
+    <h2>Démonstration</h2>
+</div>
+{% endmacro %}
+
 <!-- 1 -->
 
 <div class="w3-container w3-display-middle w3-center w3-card-2 slides">
-    <div class="w3-container w3-margin">
-        <h2>Démonstration</h2>
-    </div>
+    {{ _self.title }}
 
     <div class="w3-container w3-margin">
         <h3>Un visiteur souhaite s'inscrire...</h3>
@@ -22,9 +28,7 @@
 <!-- 2 -->
 
 <div class="w3-container w3-display-middle w3-center w3-card-2 slides">
-    <div class="w3-container w3-margin">
-        <h2>Démonstration</h2>
-    </div>
+    {{ _self.title }}
 
     <div class="w3-container w3-margin">
         <h3>Un administrateur se connecte avec ses identifiants.</h3>
@@ -49,9 +53,7 @@
 <!-- 3 -->
 
 <div class="w3-container w3-display-middle w3-center w3-card-2 slides">
-    <div class="w3-container w3-margin">
-        <h2>Démonstration</h2>
-    </div>
+    {{ _self.title }}
 
     <div class="w3-container w3-margin">
         <h3>L'administrateur créé un nouveau thème.</h3>
@@ -71,9 +73,7 @@
 <!-- 4 -->
 
 <div class="w3-container w3-display-middle w3-center w3-card-2 slides">
-    <div class="w3-container w3-margin">
-        <h2>Démonstration</h2>
-    </div>
+    {{ _self.title }}
 
     <div class="w3-container w3-margin">
         <h3>Un invité (ou un membre) souhaite lancer une partie de flashcards avec :</h3>

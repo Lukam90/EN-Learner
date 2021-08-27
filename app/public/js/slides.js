@@ -6,6 +6,8 @@ const count = slides.length;
 
 showSlides(index);
 
+document.addEventListener("keydown", changeSlide);
+
 function nextSlide(number) {
 	showSlides(index += number);
 }
@@ -20,4 +22,18 @@ function showSlides(number) {
 	}
 
 	slides[index - 1].style.display = "block";
+}
+
+function changeSlide(event) {
+	let code = event.keyCode;
+
+	console.log(code);
+
+	if (code == 37) {
+		nextSlide(-1);
+	}
+
+	if (code == 39) {
+		nextSlide(1);
+	}
 }

@@ -1,59 +1,44 @@
+<div class="w3-container w3-display-middle w3-center w3-card-2 slides">
+    <img src="{{ public }}/img/bg-new-york.jpg" class="background" alt="background">
 
+    <div class="w3-container w3-margin">
+        <h3>L'intégration de Twig</h3>
+    </div>
 
-
-{% include "slides/buttons.twig" %}
+    {% include "slides/buttons.twig" %}
 </div>
-Le cas de Twig
-
-1) La syntaxe (et bien plus encore !)
 
 <pre>
-{#
-{% import "macros/forms.twig" as forms %}
-{% import "macros/links.twig" as links %}
+    &#123;% extends "layout.twig" %&#125;
 
-{% extends "layout.twig" %}
+    &#123;% block title %&#125;Edition du thème : &#123;&#123; title &#125;&#125;&#123;% endblock %&#125;
 
-{% block title %}Edition du thème : {{ title }}{% endblock %}
+    &#123;% block content %&#125;
+    <h3>Edition du thème : &#123;&#123; title &#125;&#125;</h3>
 
-{% block content %}
-    <h2>Edition du thème : {{ title }}</h2>
+    <form action="&#123;&#123; root &#125;&#125;/themes/edit/&#123;&#123; id &#125;&#125;" class="w3-container w3-third" method="post">
+        &#123;# Titre #&#125;
 
-    {% if 0 %}
-        {{ forms.start("themes/edit/1", "third") }}
-            {{ forms.text("title", "Titre") }}
+        <label for="title">Titre</label>
+        <input type="text" name="title" id="title" value="&#123;&#123; title &#125;&#125;" class="w3-input w3-border w3-margin-bottom">
 
-            {{ forms.info(tips.title) }}
+        <p class="w3-text-blue">&#123;&#123; tips.title &#125;&#125;</p>
 
-            {{ forms.error(errors.title) }}
+        <p class="w3-text-red">&#123;&#123; errors.title &#125;&#125;</p>
 
-            {{ forms.csrf }}
+        &#123;# Jeton CSRF #&#125;
 
-            {{ forms.submit("Editer") }}
-        {{ forms.end }}
-    {% else %}
-        <p>Vous n'êtes pas autorisé(e) à éditer ce thème.</p>
+        <input type="hidden" name="token" value="&#123;&#123; session.token &#125;&#125;">
 
-        <p>Veuillez revenir à la {{ links.hypertext("themes", "liste des thèmes") }}.</p>
-    {% endif %}
-{% endblock %}
+        &#123;# Bouton d'édition #&#125;
+
+        <button class="w3-btn w3-green">Editer</button>
+
+        &#123;# Lien de retour #&#125;
+
+        <p>
+            <a class="w3-text-blue" href="&#123;&#123; root &#125;&#125;/themes/">&lt; Retour à la liste</a>
+        </p>
+    </form>
+&#123;% endblock %&#125;
 </pre>
-#}
-
-2) Les composants (ou macros)
-
-{#
-<pre>
-{% macro stats(page, id, count, name) %}
-<div class="w3-third">
-    <a href="{{ root }}/{{ page }}">
-        <div id="{{ id }}" class="w3-card w3-container w3-center w3-margin-right">
-            <h1>{{ count }}</h1>
-
-            <h2>{{ name }}</h2>
-        </div>
-    </a>
-</div>
-{% endmacro %}
-</pre>
-#}
