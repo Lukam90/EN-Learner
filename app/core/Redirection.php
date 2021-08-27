@@ -6,6 +6,7 @@ use app\controllers\HomeController;
 use app\controllers\TestsController;
 use app\controllers\UsersController;
 use app\controllers\ErrorsController;
+use app\controllers\SlidesController;
 use app\controllers\ThemesController;
 use app\controllers\ExpressionsController;
 
@@ -150,11 +151,11 @@ abstract class Redirection {
     }
 
     /**
-     * Tests Page
+     * Slides
      */
 
-    public static function tests() {
-        $controller = new TestsController();
+    public static function slides() {
+        $controller = new SlidesController();
         $controller->render();
     }
 

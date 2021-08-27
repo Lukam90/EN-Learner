@@ -77,8 +77,8 @@ abstract class Router {
                 Redirection::expressions($url);
 
                 break;
-            case "tests":
-                Redirection::tests();
+            case "slides":
+                Redirection::slides();
 
                 break;
             default:

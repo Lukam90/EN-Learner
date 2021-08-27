@@ -1,39 +1,13 @@
-let index = 0;
+function showAnswer(index) {
+    let answer = document.querySelector(`#card${index} > .answers`);
+    let closeBtn = document.querySelector(`#card${index} > .close`);
 
-let flashcards = document.getElementsByClassName("flashcards");
-
-let count = flashcards.length;
-
-let nextButtons = document.getElementsByClassName("next");
-
-let restartBtn = document.getElementById("restart");
-
-nextSlide();
-
-function nextSlide() {
-    
-
-    for (let i = 0 ; i < count ; i++) {
-        flashcards[i].style.display = "none";
-    }
-
-    if (index < count) {
-        flashcards[index].style.display = "block";
-        index++;
+    if (answer.style.display != "block") {
+        answer.style.display = "block";
+        closeBtn.style.display = "block";
     }
 }
 
-function flipCard() {
-    let answers = document.querySelector(`#card${index} > .answer`);
-    let nextButton = nextButtons[index];
-
-    if (answers.style.visibility != "visible") {
-        answers.style.visibility = "visible";
-
-        if (index < count) {
-            nextButton.style.visibility = "visible";
-        } else {
-            restartBtn.style.display = "block";
-        }
-    }
+function closeCard(event) {
+    event.parentElement.style.display = "none";
 }

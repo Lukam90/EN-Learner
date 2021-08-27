@@ -1,11 +1,8 @@
+.close,
 .answers {
-    visibility: hidden;
+    display: none;
 }
 
 .close:hover {
     color: red;
-}
-
-#restart {
-    display: none;
 }
