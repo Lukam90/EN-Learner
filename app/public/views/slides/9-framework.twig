@@ -1,34 +1,33 @@
 {% macro title() %}
 <img src="{{ public }}/img/bg-new-york.jpg" class="background" alt="background">
 
-<div class="w3-container w3-margin">
-    <h3>Pourquoi un framework personnel ?</h3>
-</div>
+
+Pourquoi un framework personnel ?
+
 {% endmacro %}
 
-<div class="w3-container w3-display-middle w3-center w3-card-2 slides">
-    {{ _self.title }}
 
-    <div class="w3-container w3-margin">
-        <div class="w3-container w3-margin-bottom"></div>
+{{ _self.title }}
 
-        <table class="w3-table w3-centered">
-            <tr>
-                <th>Avantages</th>
-                <th>inconvénients</th>
-            </tr>
 
-            <tr>
-                <td>une grande liberté</td>
-                <td>un besoin de maîtrise</td>
-            </tr>
 
-            <tr>
-                <td>une meilleure maîtrise</td>
-                <td>limité à terme</td>
-            </tr>
-        </table>
-    </div>
-    
-    {% include "slides/buttons.twig" %}
-</div>
+
+<table class="w3-table w3-centered">
+
+Avantages
+inconvénients
+
+
+
+une grande liberté
+un besoin de maîtrise
+
+
+
+une meilleure maîtrise
+limité à terme
+
+</table>
+
+
+{% include "slides/buttons.twig" %}

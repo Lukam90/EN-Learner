@@ -2,6 +2,7 @@
 
 body {
     font-family: "Lato", sans-serif;
+    line-height: 1.5;
     min-height: 100vh;
     display: table;
     width: 100%;

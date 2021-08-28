@@ -1,17 +1,15 @@
-{% set navItem = "w3-bar-item w3-button w3-mobile" %}
-
-<nav id="navbar" class="w3-bar w3-blue">
-    <a href="{{ root }}/" id="nav-title" class="{{ navItem }}">English Learner</a>
+<nav id="navbar" class="navbar">
+    <a href="{{ root }}/" id="nav-title" class="nav-item">English Learner</a>
 
     {% if session.user_id %}
-        <a href="{{ root }}/users/profile/{{ session.user_id }}" class="{{ navItem }}">Bienvenue {{ session.username }}</a>
-        <a href="{{ root }}/users/logout" class="{{ navItem }}">Déconnexion</a>
+        <a href="{{ root }}/users/profile/{{ session.user_id }}" class="nav-item">Bienvenue {{ session.username }}</a>
+        <a href="{{ root }}/users/logout" class="nav-item">Déconnexion</a>
     {% else %}
-        <a href="{{ root }}/users/register" class="{{ navItem }}">Inscription</a>
-        <a href="{{ root }}/users/login" class="{{ navItem }}">Connexion</a>
+        <a href="{{ root }}/users/register" class="nav-item">Inscription</a>
+        <a href="{{ root }}/users/login" class="nav-item">Connexion</a>
     {% endif %}
 
-    <a href="{{ root }}/users" class="{{ navItem }}">Communauté</a>
-    <a href="{{ root }}/themes" class="{{ navItem }}">Listes</a>
-    <a href="{{ root }}/slides" class="{{ navItem }}">Présentation</a>
+    <a href="{{ root }}/users" class="nav-item">Communauté</a>
+    <a href="{{ root }}/themes" class="nav-item">Listes</a>
+    <a href="{{ root }}/slides" class="nav-item">Présentation</a>
 </nav>

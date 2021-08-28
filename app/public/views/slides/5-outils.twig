@@ -1,52 +1,45 @@
 {% macro title() %}
 <img src="{{ public }}/img/bg-new-york.jpg" class="background" alt="background">
 
-<div class="w3-container w3-margin">
-    <h2>Les outils</h2>
-</div>
+
+Les outils
+
 {% endmacro %}
 
 <!-- 1 -->
 
-<div class="w3-container w3-display-middle w3-center w3-card-2 slides">
-    {{ _self.title }}
 
-    <div class="w3-container w3-margin">
-        <h3>1) La conception</h3>
+{{ _self.title }}
 
-        <div class="w3-container w3-margin-bottom"></div>
 
-        <ul class="w3-ul w3-xlarge">
-            <li>LucidChart</li>
-            <li>VS Code</li>
-            <li>Github</li>
-            <li>XAMPServer</li>
-            <li>PHPMyAdmin</li>
-        </ul>
-    </div>
+1) La conception
 
-    {% include "slides/buttons.twig" %}
-</div>
+LucidChart
+VS Code
+Github
+XAMPServer
+PHPMyAdmin
+
+
+
+{% include "slides/buttons.twig" %}
+
 
 <!-- 2 -->
 
-<div class="w3-container w3-display-middle w3-center w3-padding-64 w3-card-2 slides">
-    {{ _self.title }}
 
-    <div class="w3-container w3-margin">
-        <h3>2) Le développement</h3>
+{{ _self.title }}
 
-        <div class="w3-container w3-margin-bottom"></div>
 
-        <ul class="w3-ul w3-xlarge">
-            <li>HTML / CSS</li>
-            <li>JS</li>
-            <li>W3.CSS</li>
-            <li>PHP</li>
-            <li>MySQL</li>
-            <li>Twig</li>
-        </ul>
-    </div>
+2) Le développement
 
-    {% include "slides/buttons.twig" %}
-</div>
+HTML, CSS, SCSS
+W3.CSS
+JS
+PHP
+MySQL
+Twig
+
+
+
+{% include "slides/buttons.twig" %}
