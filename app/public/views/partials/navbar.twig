@@ -1,15 +1,15 @@
-<nav id="navbar" class="navbar">
-    <a href="{{ root }}/" id="nav-title" class="nav-item">English Learner</a>
+<nav>
+    <a href="{{ root }}/" id="nav-title" class="nav-item w3-mobile">English Learner</a>
 
     {% if session.user_id %}
-        <a href="{{ root }}/users/profile/{{ session.user_id }}" class="nav-item">Bienvenue {{ session.username }}</a>
-        <a href="{{ root }}/users/logout" class="nav-item">Déconnexion</a>
+        <a href="{{ root }}/users/profile/{{ session.user_id }}" class="nav-item w3-mobile">Bienvenue {{ session.username }}</a>
+        <a href="{{ root }}/users/logout" class="nav-item w3-mobile">Déconnexion</a>
     {% else %}
-        <a href="{{ root }}/users/register" class="nav-item">Inscription</a>
-        <a href="{{ root }}/users/login" class="nav-item">Connexion</a>
+        <a href="{{ root }}/users/register" class="nav-item w3-mobile">Inscription</a>
+        <a href="{{ root }}/users/login" class="nav-item w3-mobile">Connexion</a>
     {% endif %}
 
-    <a href="{{ root }}/users" class="nav-item">Communauté</a>
-    <a href="{{ root }}/themes" class="nav-item">Listes</a>
-    <a href="{{ root }}/slides" class="nav-item">Présentation</a>
+    <a href="{{ root }}/users" class="nav-item w3-mobile">Communauté</a>
+    <a href="{{ root }}/themes" class="nav-item w3-mobile">Listes</a>
+    <a href="{{ root }}/slides" class="nav-item w3-mobile">Présentation</a>
 </nav>

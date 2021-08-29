@@ -1,5 +1,3 @@
-{% set stats = "w3-card w3-container w3-center w3-margin-right" %}
-
 {% extends "layout.twig" %}
 
 {% block title %}Accueil{% endblock %}
@@ -12,7 +10,7 @@
 
 <div class="w3-third">
     <a href="{{ root }}/themes">
-        <div id="themes" class="{{ stats }}">
+        <div id="themes" class="stats">
             <h1>{{ nbThemes }}</h1>
 
             <h2>thème{% if nbThemes > 1 %}s{% endif %}</h2>
@@ -24,7 +22,7 @@
 
 <div class="w3-third">
     <a href="{{ root }}/users">
-        <div id="users" class="{{ stats }}">
+        <div id="users" class="stats">
             <h1>{{ nbUsers }}</h1>
 
             <h2>utilisateur{% if nbUsers > 1 %}s{% endif %}</h2>
@@ -36,7 +34,7 @@
 
 <div class="w3-third">
     <a href="{{ root }}/themes">
-        <div id="expressions" class="{{ stats }}">
+        <div id="expressions" class="stats">
             <h1>{{ nbExpressions }}</h1>
 
             <h2>expression{% if nbExpressions > 1 %}s{% endif %}</h2>
