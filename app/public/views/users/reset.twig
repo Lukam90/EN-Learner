@@ -16,17 +16,17 @@
 
             {# Bouton #}
 
-            <button class="w3-btn w3-margin-bottom w3-blue">Envoyer</button>
+            <button class="info m-bottom">Envoyer</button>
 
             {# Lien de connexion #}
 
             <p>
-                <a class="w3-text-blue" href="{{ root }}/users/login">Revenir à la page de connexion</a>
+                <a href="{{ root }}/users/login">Revenir à la page de connexion</a>
             </p>
         </form>
     {% else %}
         <p>Vous êtes déjà connecté(e).</p>
 
-        <p>Vous pouvez revenir sur la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a> ou changer vos informations sur votre <a class="w3-text-blue" href="{{ root }}/users/profile/1">page de profil</a>.</p>
+        <p>Vous pouvez revenir sur la <a href="{{ root }}/">page d'accueil</a> ou changer vos informations sur votre <a href="{{ root }}/users/profile/1">page de profil</a>.</p>
     {% endif %}
 {% endblock %}

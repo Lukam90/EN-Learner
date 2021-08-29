@@ -4,14 +4,14 @@
 
 {% block content %}
     <p>
-        <a class="w3-text-blue" href="{{ root }}/themes">&lt; Liste des thèmes</a>
+        <a href="{{ root }}/themes">&lt; Liste des thèmes</a>
     </p>
 
     <h2>{{ title }}</h2>
 
     {% if canAdd %}
         <a href="{{ root }}/expressions/new/{{ id }}">
-            <button class="w3-btn w3-margin-bottom w3-margin-right w3-blue" onclick="openNewModal('newExpression')">
+            <button class="btn-info m-right" onclick="openNewModal('newExpression')">
                 <i class="fa fa-plus"></i> Ajouter une expression
             </button>
         </a>
@@ -19,55 +19,57 @@
 
     {% if nbExpressions >= 10 %}
         <a href="{{ root }}/themes/start/{{ id }}">
-            <button class="w3-btn w3-margin-bottom w3-green">
+            <button class="btn-success m-bottom">
                 <i class="fa fa-gamepad"></i> Lancer le jeu
             </button>
         </a>
     {% endif %}
 
     {% if expressions %}
-        <table class="w3-table w3-striped w3-hoverable">
-            <thead>
-                <tr>
-                    <th>Mot</th>
-                    <th>Traduction</th>
-                    <th>Prononciation</th>
-                    <th>Auteur</th>
-                    {% if canAdd %}
-                        <th></th>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mot</th>
+                        <th>Traduction</th>
+                        <th>Prononciation</th>
+                        <th>Auteur</th>
+                        {% if canAdd %}
+                            <th></th>
 
-                        {% include "expressions/delete_expression.twig" %}
-                    {% endif %}
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for expression in expressions %}
-                <tr>
-                    <td>{{ expression.french }}</td>
-                    <td>{{ expression.english }}</td>
-                    <td>{{ expression.phonetics }}</td>
-                    <td>{{ expression.author }}</td>
-
-                    {% if canAdd %}
-                    <td>
-                        {% if 1 %}
-                        <a href="{{ root }}/expressions/edit/{{ expression.id }}">
-                            <button class="w3-btn w3-margin-right w3-green">
-                                <i class="fa fa-pencil"></i>
-                            </button>
-                        </a>
-
-                        <button class="w3-btn w3-red" onclick="openDeleteModal('expressions', { id: {{ expression.id }}, token : '{{ session.token }}', text: 'FR = {{ expression.french }}<br>EN = {{ expression.english }}<br>P = {{ expression.phonetics }}' })">
-                            <i class="fa fa-close"></i>
-                        </button>
+                            {% include "expressions/delete_expression.twig" %}
                         {% endif %}
-                    </td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for expression in expressions %}
+                    <tr>
+                        <td>{{ expression.french }}</td>
+                        <td>{{ expression.english }}</td>
+                        <td>{{ expression.phonetics }}</td>
+                        <td>{{ expression.author }}</td>
+
+                        {% if canAdd %}
+                        <td>
+                            {% if 1 %}
+                            <a href="{{ root }}/expressions/edit/{{ expression.id }}">
+                                <button class="btn-success m-right">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </a>
+
+                            <button class="btn-danger" onclick="openDeleteModal('expressions', { id: {{ expression.id }}, token : '{{ session.token }}', text: 'FR = {{ expression.french }}<br>EN = {{ expression.english }}<br>P = {{ expression.phonetics }}' })">
+                                <i class="fa fa-close"></i>
+                            </button>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <p>Aucune expression n'est enregistrée pour ce thème.</p>
     {% endif %}

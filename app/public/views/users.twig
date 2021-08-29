@@ -6,8 +6,8 @@
     <h2>Communauté</h2>
 
     {% if users %}
-        <div class="w3-responsive">
-            <table class="w3-table w3-striped w3-hoverable">
+        <div class="table-responsive">
+            <table>
                 <thead>
                     <tr>
                         <th>Pseudo</th>
@@ -33,15 +33,15 @@
                             {{ user.nbExpressions }} expression{% if user.nbExpressions > 1 %}s{% endif %}
                         </td>
 
-                        {% if user.canEdit %}
+                        {% if session.user_id %}
                         <td>
                             <a href="{{ root }}/users/edit/{{ user.id }}">
-                                <button class="w3-btn w3-margin-right w3-green">
+                                <button class="btn-success m-right">
                                     <i class="fa fa-pencil"></i>
                                 </button>
                             </a>
 
-                            <button class="w3-btn w3-red" onclick="openDeleteModal('users', { id : {{ user.id }}, token: '{{ session.token }}', text: '{{ user.username }}' })">
+                            <button class="btn-danger" onclick="openDeleteModal('users', { id : {{ user.id }}, token: '{{ session.token }}', text: '{{ user.username }}' })">
                                 <i class="fa fa-close"></i>
                             </button>
                         </td>

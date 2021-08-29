@@ -1,0 +1,46 @@
+/* General */
+
+body {
+    font-family: "Lato", sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: table;
+    width: 100%;
+}
+
+.container {
+    padding: 0.01em 16px;
+}
+
+main {
+    max-width: 80%;
+    margin: auto;
+
+    @extend .container;
+}
+
+footer {
+    /*position: fixed;*/
+    margin-top: 20px;
+    left: 0;
+    bottom: 0;
+    color: white;
+    width: 100%;
+    display: table-row;
+    height: 50px;
+}
+
+a {
+    text-decoration: none;
+    color: $blue;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 20px 0;
+}
+
+img {
+    vertical-align: middle;
+}

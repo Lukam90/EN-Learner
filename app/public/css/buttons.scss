@@ -1,0 +1,57 @@
+@mixin button {
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.success-btn {
+    @include button;
+
+    background-color: #04AA6D;
+
+    &:hover {
+        background-color: #46a049;
+    }
+}
+
+.info-btn {
+    @include button;
+
+    background-color: #2196F3;
+
+    &:hover {
+        background: #0b7dda;
+    }
+}
+
+.warning-btn {
+    @include button;
+
+    background-color: #ff9800;
+
+    &:hover {
+        background: #e68a00;
+    }
+}
+
+.danger-btn {
+    @include button;
+
+    background-color: #f44336;
+
+    &:hover {
+        background: #da190b;
+    }
+}
+
+.default-btn {
+    @include button;
+    
+    background-color: #e7e7e7;
+    color: black;
+
+    &:hover {
+        background: #ddd;
+    }
+}

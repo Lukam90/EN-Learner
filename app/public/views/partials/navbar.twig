@@ -1,15 +1,27 @@
+{% block styles %}
+<link rel="stylesheet" href="{{ public }}/css/navbar.css">
+{% endblock %}
+
 <nav>
-    <a href="{{ root }}/" id="nav-title" class="nav-item w3-mobile">English Learner</a>
+    <a href="{{ root }}/" id="nav-title">English Learner</a>
 
     {% if session.user_id %}
-        <a href="{{ root }}/users/profile/{{ session.user_id }}" class="nav-item w3-mobile">Bienvenue {{ session.username }}</a>
-        <a href="{{ root }}/users/logout" class="nav-item w3-mobile">Déconnexion</a>
+        <a href="{{ root }}/users/profile/{{ session.user_id }}">Bienvenue {{ session.username }}</a>
+        <a href="{{ root }}/users/logout">Déconnexion</a>
     {% else %}
-        <a href="{{ root }}/users/register" class="nav-item w3-mobile">Inscription</a>
-        <a href="{{ root }}/users/login" class="nav-item w3-mobile">Connexion</a>
+        <a href="{{ root }}/users/register">Inscription</a>
+        <a href="{{ root }}/users/login">Connexion</a>
     {% endif %}
 
-    <a href="{{ root }}/users" class="nav-item w3-mobile">Communauté</a>
-    <a href="{{ root }}/themes" class="nav-item w3-mobile">Listes</a>
-    <a href="{{ root }}/slides" class="nav-item w3-mobile">Présentation</a>
+    <a href="{{ root }}/users">Communauté</a>
+    <a href="{{ root }}/themes">Listes</a>
+    <a href="{{ root }}/slides">Présentation</a>
+
+    <a href="javascript:void(0);" class="burger" onclick="slideNav();">
+        <i class="fa fa-bars"></i>
+    </a>
 </nav>
+
+{% block scripts %}
+<script src="{{ public }}/js/navbar.js"></script>
+{% endblock %}

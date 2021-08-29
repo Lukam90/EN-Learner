@@ -1,0 +1,38 @@
+/* Stats */
+
+.stats {
+    @include shadow;
+    @include container;
+    @include center;
+    @include margin("right");
+
+    a, h1, h2 {
+        color: #000;
+    }
+}
+
+// Blocs
+
+#themes {
+    background-color: rgba(37, 102, 28, 0.5);
+
+    &:hover {
+        background-color: rgba(37, 102, 28, 0.8);
+    }
+}
+
+#expressions {
+    background-color: rgba(0, 0, 128, 0.5);
+
+    &:hover {
+        background-color: rgba(0, 0, 128, 0.8);
+    }
+}
+
+#users {
+    background-color: rgba(255, 166, 0, 0.5);
+
+    &:hover {
+        background-color: rgba(255, 166, 0, 0.8);
+    }
+}

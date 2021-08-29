@@ -7,7 +7,7 @@
 
     {% if canAdd %}
         <a href="{{ root }}/themes/new">
-            <button class="w3-btn w3-margin-bottom w3-blue">
+            <button class="btn-info m-bottom">
                 <i class="fa fa-plus"></i> Ajouter un thème
             </button>
         </a>
@@ -16,45 +16,47 @@
     {% endif %}
 
     {% if themes %}
-        <table class="w3-table w3-striped w3-hoverable">
-            <thead>
-                <tr>
-                    <th>Titre</th>
-                    <th>Auteur</th>
-                    <th>Nb Expressions</th>
-                    {% if canAdd %}
-                    <th></th>
-                    {% endif %}
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Titre</th>
+                        <th>Auteur</th>
+                        <th>Nb Expressions</th>
+                        {% if canAdd %}
+                        <th></th>
+                        {% endif %}
+                    </tr>
+                </thead>
 
-            <tbody>
-                {% for theme in themes %}
-                <tr>
-                    <td>
-                        <a class="w3-text-blue" href="{{ root }}/themes/show/{{ theme.id }}">{{ theme.title }}</a>
-                    </td>
+                <tbody>
+                    {% for theme in themes %}
+                    <tr>
+                        <td>
+                            <a href="{{ root }}/themes/show/{{ theme.id }}">{{ theme.title }}</a>
+                        </td>
 
-                    <td>{{ theme.author }}</td>
-                    <td>{{ theme.nbExpressions }}</td>
+                        <td>{{ theme.author }}</td>
+                        <td>{{ theme.nbExpressions }}</td>
 
-                    {% if theme.canEdit %}
-                    <td>
-                        <a href="{{ root }}/themes/edit/{{ theme.id }}">
-                            <button class="w3-btn w3-margin-right w3-green">
-                                <i class="fa fa-pencil"></i>
+                        {% if theme.canEdit %}
+                        <td>
+                            <a href="{{ root }}/themes/edit/{{ theme.id }}">
+                                <button class="btn-success m-right">
+                                    <i class="fa fa-pencil"></i>
+                                </button>
+                            </a>
+
+                            <button class="btn-danger" onclick="openDeleteModal('themes', { id: {{ theme.id }}, token: '{{ session.token }}', text: '{{ theme.title }}' })">
+                                <i class="fa fa-close"></i>
                             </button>
-                        </a>
-
-                        <button class="w3-btn w3-red" onclick="openDeleteModal('themes', { id: {{ theme.id }}, token: '{{ session.token }}', text: '{{ theme.title }}' })">
-                            <i class="fa fa-close"></i>
-                        </button>
-                    </td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
         <p>Aucun thème n'est enregistré.</p>
     {% endif %}

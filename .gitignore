@@ -5,3 +5,5 @@ app/tests/*.png
 
 composer.lock
 package-lock.json
+
+*.css.map
