@@ -4,7 +4,9 @@
     $textColor: #fff;
 
     @if ($baseColor == "blue") {
-        background-color: #2196F3;
+        background-color: $blue;
+    } @else if ($baseColor == "green") {
+        background-color: $green;
     }
 
     color: $textColor;
@@ -87,6 +89,10 @@
     } @else {
         padding: 8px 16px;
     }
+}
+
+@mixin max-width($size) {
+    max-width: $size;
 }
 
 @mixin border {

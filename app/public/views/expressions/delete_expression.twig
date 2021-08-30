@@ -1,17 +1,15 @@
-<div id="delete-modal" class="w3-modal">
-    <div class="w3-modal-content" style="max-width: 500px;">
-        <div class="w3-container">
-            <form action="#" class="container" id="delete-form" method="post">
-                <h3>Voulez-vous supprimer cette expression ?</h3>
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <span onclick="closeDeleteModal();" id="close" class="modal-close">&times;</span>
+        
+        <form action="#" id="delete-form" method="post">
+            <h3>Voulez-vous supprimer cette expression ?</h3>
 
-                <p><span id="delete-text"></span></p>
+            <p><span id="delete-text"></span></p>
 
-                <input type="hidden" id="delete-token" name="token" value="">
+            <input type="hidden" id="delete-token" name="token" value="">
 
-                <button class="btn-danger m-bottom">Confirmer</button>
-            </form>
-
-            <span onclick="closeDeleteModal();" id="close" class="w3-button w3-display-topright">&times;</span>
-        </div>
+            <button class="btn-danger m-bottom">Confirmer</button>
+        </form>
     </div>
 </div>
