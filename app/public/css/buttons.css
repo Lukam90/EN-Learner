@@ -1,48 +1,48 @@
-.success-btn {
+.btn-success {
   border: none;
   color: white;
   padding: 8px 16px;
   cursor: pointer;
   background-color: #04AA6D;
 }
-.success-btn:hover {
+.btn-success:hover {
   background-color: #46a049;
 }
 
-.info-btn {
+.btn-info {
   border: none;
   color: white;
   padding: 8px 16px;
   cursor: pointer;
   background-color: #2196F3;
 }
-.info-btn:hover {
+.btn-info:hover {
   background: #0b7dda;
 }
 
-.warning-btn {
+.btn-warning {
   border: none;
   color: white;
   padding: 8px 16px;
   cursor: pointer;
   background-color: #ff9800;
 }
-.warning-btn:hover {
+.btn-warning:hover {
   background: #e68a00;
 }
 
-.danger-btn {
+.btn-danger {
   border: none;
   color: white;
   padding: 8px 16px;
   cursor: pointer;
   background-color: #f44336;
 }
-.danger-btn:hover {
+.btn-danger:hover {
   background: #da190b;
 }
 
-.default-btn {
+.btn-default {
   border: none;
   color: white;
   padding: 8px 16px;
@@ -50,7 +50,7 @@
   background-color: #e7e7e7;
   color: black;
 }
-.default-btn:hover {
+.btn-default:hover {
   background: #ddd;
 }
 

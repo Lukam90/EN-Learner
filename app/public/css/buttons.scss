@@ -5,7 +5,7 @@
     cursor: pointer;
 }
 
-.success-btn {
+.btn-success {
     @include button;
 
     background-color: #04AA6D;
@@ -15,7 +15,7 @@
     }
 }
 
-.info-btn {
+.btn-info {
     @include button;
 
     background-color: #2196F3;
@@ -25,7 +25,7 @@
     }
 }
 
-.warning-btn {
+.btn-warning {
     @include button;
 
     background-color: #ff9800;
@@ -35,7 +35,7 @@
     }
 }
 
-.danger-btn {
+.btn-danger {
     @include button;
 
     background-color: #f44336;
@@ -45,7 +45,7 @@
     }
 }
 
-.default-btn {
+.btn-default {
     @include button;
     
     background-color: #e7e7e7;

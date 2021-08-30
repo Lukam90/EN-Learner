@@ -1,122 +1,14 @@
 /* Mixins */
 
-@mixin w3mobile {
+/*@mixin w3mobile {
     display: block;
     width: 100%;
-}
-
-@mixin w3bgColor($color) {
-    @if ($color == "blue") {
-        color: #fff;
-        background-color: #2196F3;
-    }
-}
-
-@mixin w3container {
-    //@extend .w3-container, .w3-container:after, .w3-container:before;
-    padding: 0.01em 16px;
-}
-
-@mixin w3center {
-    text-align: center;
-}
-
-@mixin w3card {
-    // w3-card-2
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-}
-
-@mixin w3nPadding($size) {
-    padding-top: $size;
-    padding-bottom: $size;
-}
-
-// Footer
-
-footer {
-    @include w3container;
-    @include w3center;
-    @include w3bgColor("blue");
-}
-
-// Stats
-
-
-
-// Slides
-
-.slides {
-    @include container;
-    @include center;
-    @include w3nPadding(64px);
-    //@include w3margin("top");
-    @include w3card;
-
-    margin-top: 16px;
-}
-
-/* General Elements */
-
-a {
-    color: inherit
-}
+}*/
 
 /* W3.CSS Elements */
 
-.w3-image {
-    max-width: 100%;
-    height: auto
-}
-
-//.w3-tooltip,
 .w3-display-container {
     position: relative
-}
-
-/*
-.w3-tooltip .w3-text {
-    display: none
-}
-
-.w3-tooltip:hover .w3-text {
-    display: inline-block
-}
-
-.w3-ripple:active {
-    opacity: 0.5
-}
-
-.w3-ripple {
-    transition: opacity 0s
-}
-*/
-
-.w3-input {
-    padding: 8px;
-    display: block;
-    border: none;
-    border-bottom: 1px solid #ccc;
-    width: 100%
-}
-
-.w3-select {
-    padding: 9px 0;
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid #ccc
-}
-
-.w3-check,
-.w3-radio {
-    width: 24px;
-    height: 24px;
-    position: relative;
-    top: 6px
-}
-
-.w3-main,
-#main {
-    transition: margin-left .4s
 }
 
 .w3-modal {
@@ -179,28 +71,6 @@ a {
 .w3-quarter {
     float: left;
     width: 100%
-}
-
-@media (min-width:601px) {
-    .w3-quarter {
-        width: 24.99999%
-    }
-
-    .w3-third {
-        width: 33.33333%
-    }
-    
-    .w3-half {
-        width: 49.99999%
-    }
-
-    .w3-twothird {
-        width: 66.66666%
-    }
-
-    .w3-threequarter {
-        width: 74.99999%
-    }
 }
 
 .w3-content {
@@ -372,61 +242,6 @@ a {
 .w3-card-4,
 .w3-hover-shadow:hover {
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19)
-}
-
-// Padding
-
-.w3-padding-small {
-    padding: 4px 8px
-}
-
-.w3-padding {
-    padding: 8px 16px
-}
-
-.w3-padding-large {
-    padding: 12px 24px
-}
-
-.w3-padding-16 {
-    padding-top: 16px;
-    padding-bottom: 16px
-}
-
-.w3-padding-24 {
-    padding-top: 24px;
-    padding-bottom: 24px
-}
-
-.w3-padding-32 {
-    padding-top: 32px;
-    padding-bottom: 32px
-}
-
-.w3-padding-48 {
-    padding-top: 48px;
-    padding-bottom: 48px
-}
-
-.w3-padding-64 {
-    padding-top: 64px;
-    padding-bottom: 64px
-}
-
-.w3-padding-top-64 {
-    padding-top: 64px
-}
-
-.w3-padding-top-48 {
-    padding-top: 48px
-}
-
-.w3-padding-top-32 {
-    padding-top: 32px
-}
-
-.w3-padding-top-24 {
-    padding-top: 24px
 }
 
 // Float

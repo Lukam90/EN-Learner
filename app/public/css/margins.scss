@@ -12,6 +12,11 @@
     @include margin("bottom");
 }
 
+.m-vertical {
+    @include margin("top");
+    @include margin("bottom");
+}
+
 .m-left {
     @include margin("left");
 }

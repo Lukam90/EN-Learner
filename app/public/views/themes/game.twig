@@ -10,24 +10,24 @@ Flashcards > {{ title }}
 
 {% block content %}
     <p>
-        <a class="w3-text-blue" href="{{ root }}/themes/show/{{ id }}">&lt; Retour à la liste</a>
+        <a href="{{ root }}/themes/show/{{ id }}">&lt; Retour à la liste</a>
     </p>
 
     <h2>Flashcards > {{ title }}</h2>
 
-    <div class="w3-container">
+    <div class="container">
     {% if not started %}
         <form action="{{ root }}/themes/start/{{ id }}" method="post">
-            <div class="w3-third">
+            <div class="third">
                 <p>Niveau de difficulté</p>
 
-                <select class="w3-select w3-margin-bottom" name="level">
+                <select class="input" name="level">
                     {% for level in levels %}
                     <option value="{{ level }}">{{ level }}</option>
                     {% endfor %}
                 </select>
 
-                <button class="w3-btn w3-green">Let's go !</button>
+                <button class="btn-success">Let's go !</button>
             </div>
         </form>
     {% else %}
@@ -59,7 +59,7 @@ Flashcards > {{ title }}
 
         <div class="w3-container">
             <a href="{{ root }}/themes/start/{{ id }}">
-                <button class="w3-btn w3-green w3-margin-top w3-margin-bottom" id="restart">Rejouer ?</button>
+                <button class="btn-success m-vertical" id="restart">Rejouer ?</button>
             </a>
         </div>
     {% endif %}

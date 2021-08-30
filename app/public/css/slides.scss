@@ -1,0 +1,10 @@
+@import "mixins";
+
+.slides {
+    @include shadow;
+    @include container;
+    @include center;
+
+    @include padding(64px);
+    @include margin("top");
+}

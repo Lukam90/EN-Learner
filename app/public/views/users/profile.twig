@@ -17,18 +17,18 @@
                 <label for="username">Pseudo</label>
                 <input type="text" name="username" id="username" value="{{ username }}" class="w3-input w3-border w3-margin-bottom">
 
-                <p class="w3-text-blue">{{ tips.username }}</p>
+                <p class="tip">{{ tips.username }}</p>
 
-                <p class="w3-text-red">{{ errors.username }}</p>
+                <p class="error">{{ errors.username }}</p>
 
                 {# Adresse e-mail #}
 
                 <label for="email">Adresse e-mail</label>
                 <input type="text" name="email" id="email" value="{{ email }}" class="w3-input w3-border w3-margin-bottom">
 
-                <p class="w3-text-blue">{{ tips.email }}</p>
+                <p class="tip">{{ tips.email }}</p>
 
-                <p class="w3-text-red">{{ errors.email }}</p>
+                <p class="error">{{ errors.email }}</p>
 
                 {# Jeton CSRF #}
 
@@ -49,25 +49,25 @@
                 <label for="old">Ancien mot de passe</label>
                 <input type="password" name="old" id="old" value="{{ old }}" class="w3-input w3-border w3-margin-bottom">
 
-                <p class="w3-text-blue">{{ tips.old }}</p>
+                <p class="tip">{{ tips.old }}</p>
 
-                <p class="w3-text-red">{{ errors.old }}</p>
+                <p class="error">{{ errors.old }}</p>
 
                 {# Nouveau mot de passe #}
 
                 <label for="new">Nouveau mot de passe</label>
                 <input type="password" name="new" id="new" value="{{ new }}" class="w3-input w3-border w3-margin-bottom">
 
-                <p class="w3-text-blue">{{ tips.new }}</p>
+                <p class="tip">{{ tips.new }}</p>
 
-                <p class="w3-text-red">{{ errors.new }}</p>
+                <p class="error">{{ errors.new }}</p>
 
                 {# Confirmation de mot de passe #}
 
                 <label for="confirm">Confirmer le nouveau mot de passe</label>
                 <input type="password" name="confirm" id="confirm" value="{{ confirm }}" class="w3-input w3-border w3-margin-bottom">
 
-                <p class="w3-text-red">{{ errors.confirm }}</p>
+                <p class="error">{{ errors.confirm }}</p>
 
                 {# Jeton CSRF #}
 
@@ -79,7 +79,7 @@
 
                 {#
                 <p>
-                    <a class="w3-text-blue" href="{{ root }}/reset">Ancien mot de passe oublié ?</a>
+                    <a class="tip" href="{{ root }}/reset">Ancien mot de passe oublié ?</a>
                 </p>
                 #}
             </form>
@@ -87,6 +87,6 @@
     {% else %}
         <p>Vous n'êtes pas autorisé(e) à consulter cette page de profil.</p>
 
-        <p>Veuillez revenir à la <a class="w3-text-blue" href="{{ root }}/">page d'accueil</a>.</p>
+        <p>Veuillez revenir à la <a class="tip" href="{{ root }}/">page d'accueil</a>.</p>
     {% endif %}
 {% endblock %}

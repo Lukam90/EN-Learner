@@ -272,6 +272,16 @@ class UsersController extends Controller {
             $email = Post::var("email");
             $password = Post::var("password");
 
+            $isEmpty = empty($email) || empty($password);
+
+            if ($isEmpty) {
+                Session::alert("Les champs doivent être renseignés.");
+
+                header("Location: http://localhost/en_app/users/login");
+
+                return;
+            }
+
             $loggedIn = $this->userModel->login($email, $password);
 
             if ($loggedIn) {
@@ -380,8 +390,12 @@ class UsersController extends Controller {
 
         // Rendu
 
+        $roles = ["Suspendu", "Membre", "Modérateur", "Administrateur"];
+
         echo $this->twig->render("users/edit_user.twig", [
             "session" => Session::all(),
+
+            "roles" => $roles,
 
             "id" => $id,
             "username" => $username,

@@ -1,0 +1,40 @@
+/* Messages */
+
+// Info Messages
+
+.tip {
+    color: $blue;
+}
+
+.error {
+    color: $red;
+}
+
+// Flash Messages
+
+.flash {
+    @include container;
+    @include margin("vertical");
+    @include border;
+
+    position: relative;
+
+    &:before,
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.flash-success {
+    @extend .flash;
+
+    background-color: $paleBlue;
+}
+
+.flash-error {
+    @extend .flash;
+
+    background-color: $paleRed;
+}

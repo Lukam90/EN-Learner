@@ -5,15 +5,15 @@
 {% block content %}
     <h3>Edition du thème : {{ title }}</h3>
 
-    <form action="{{ root }}/themes/edit/{{ id }}" class="w3-container w3-third" method="post">
+    <form action="{{ root }}/themes/edit/{{ id }}" class="third" method="post">
         {# Titre #}
 
         <label for="title">Titre</label>
-        <input type="text" name="title" id="title" value="{{ title }}" class="w3-input w3-border w3-margin-bottom">
+        <input type="text" name="title" id="title" value="{{ title }}" class="input">
 
-        <p class="w3-text-blue">{{ tips.title }}</p>
+        <p class="tip">{{ tips.title }}</p>
 
-        <p class="w3-text-red">{{ errors.title }}</p>
+        <p class="error">{{ errors.title }}</p>
 
         {# Jeton CSRF #}
 
@@ -21,12 +21,12 @@
 
         {# Bouton d'édition #}
 
-        <button class="w3-btn w3-green">Editer</button>
+        <button class="btn-success">Editer</button>
 
         {# Lien de retour #}
 
         <p>
-            <a class="w3-text-blue" href="{{ root }}/themes/">&lt; Retour à la liste</a>
+            <a href="{{ root }}/themes/">&lt; Retour à la liste</a>
         </p>
     </form>
 {% endblock %}

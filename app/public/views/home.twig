@@ -6,40 +6,42 @@
 
 <h1>Il y a actuellement...</h1>
 
-{# Nombre de thèmes #}
+<div class="row">
+    {# Nombre de thèmes #}
 
-<div class="w3-third">
-    <a href="{{ root }}/themes">
-        <div id="themes" class="stats">
-            <h1>{{ nbThemes }}</h1>
+    <div class="column">
+        <a href="{{ root }}/themes">
+            <div id="themes" class="stats">
+                <h1>{{ nbThemes }}</h1>
 
-            <h2>thème{% if nbThemes > 1 %}s{% endif %}</h2>
-        </div>
-    </a>
-</div>
+                <h2>thème{% if nbThemes > 1 %}s{% endif %}</h2>
+            </div>
+        </a>
+    </div>
 
-{# Nombre d'utilisateurs #}
+    {# Nombre d'utilisateurs #}
 
-<div class="w3-third">
-    <a href="{{ root }}/users">
-        <div id="users" class="stats">
-            <h1>{{ nbUsers }}</h1>
+    <div class="column">
+        <a href="{{ root }}/users">
+            <div id="users" class="stats">
+                <h1>{{ nbUsers }}</h1>
 
-            <h2>utilisateur{% if nbUsers > 1 %}s{% endif %}</h2>
-        </div>
-    </a>
-</div>
+                <h2>utilisateur{% if nbUsers > 1 %}s{% endif %}</h2>
+            </div>
+        </a>
+    </div>
 
-{# Nombre d'expressions #}
+    {# Nombre d'expressions #}
 
-<div class="w3-third">
-    <a href="{{ root }}/themes">
-        <div id="expressions" class="stats">
-            <h1>{{ nbExpressions }}</h1>
+    <div class="column">
+        <a href="{{ root }}/themes">
+            <div id="expressions" class="stats">
+                <h1>{{ nbExpressions }}</h1>
 
-            <h2>expression{% if nbExpressions > 1 %}s{% endif %}</h2>
-        </div>
-    </a>
+                <h2>expression{% if nbExpressions > 1 %}s{% endif %}</h2>
+            </div>
+        </a>
+    </div>
 </div>
 
 {% endblock %}

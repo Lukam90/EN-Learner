@@ -6,9 +6,7 @@
     <form action="{{ root }}/users/edit/{{ id }}" class="w3-container w3-quarter" method="post">
         {# Rôle #}
 
-        {% set roles = ["Suspendu", "Membre", "Modérateur", "Administrateur"] %}
-
-        <select class="w3-select w3-margin-bottom" name="role">
+        <select class="input" name="role">
             <option value="" disabled>Rôle de l'utilisateur</option>
             {% for option in roles %}
             <option value="{{ option }}" {% if role == option %} selected {% endif %}>{{ option }}</option>
@@ -21,7 +19,7 @@
 
         {# Bouton #}
 
-        <button class="success">Editer</button>
+        <button class="btn-success">Editer</button>
 
         {# Lien de retour #}
 

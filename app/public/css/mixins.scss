@@ -13,9 +13,9 @@
 }
 
 @mixin padding ($size: "", $direction: "") {
-    @if (direction == "top") {
+    @if ($direction == "top") {
         padding-top: $size; // 24, 32, 48, 64
-    } @else if (direction == "vertical") {
+    } @else if ($direction == "vertical") {
         padding-top: $size;
         padding-bottom: $size;
     } @else if ($size == "small") {
@@ -25,6 +25,16 @@
     } @else {
         padding: 8px 16px;
     }
+}
+
+@mixin colors($baseColor) {
+    $textColor: #fff;
+
+    @if ($baseColor == "blue") {
+        background-color: #2196F3;
+    }
+
+    color: $textColor;
 }
 
 @mixin border {
@@ -41,4 +51,12 @@
 
 @mixin center {
     text-align: center;
+}
+
+@mixin input {
+    padding: 8px;
+    display: block;
+    //border: none;
+    //border-bottom: 1px solid #ccc;
+    width: 100%;
 }

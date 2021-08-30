@@ -5,8 +5,8 @@
 {# Success Messages #}
 
 {% if session.success %}
-    <div class="{{ container }} w3-pale-blue">
-        <span class="{{ top }}" onclick="{{ close }}">&times;</span>
+    <div class="flash-success" id="flash-success">
+        <span class="{{ top }}" onclick="closeMessage('flash-success')">&times;</span>
         
         <p>{{ session.success }}</p>
     </div>
@@ -15,8 +15,8 @@
 {# Error Messages #}
 
 {% if session.alert %}
-    <div class="{{ container }} w3-pale-red">
-        <span class="{{ top }}" onclick="{{ close }}">&times;</span>
+    <div class="flash-error" id="flash-error">
+        <span class="{{ top }}" onclick="closeMessage('flash-error');">&times;</span>
         
         <p>{{ session.alert }}</p>
     </div>

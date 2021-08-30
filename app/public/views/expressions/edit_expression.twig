@@ -5,35 +5,33 @@
 {% block content %}
     <h3>Edition de l'expression</h3>
 
-    <form action="{{ root }}/expressions/edit/{{ id }}" class="w3-container w3-half" method="post">
+    <form action="{{ root }}/expressions/edit/{{ id }}" class="half" method="post">
         {# Expression (FR) #}
 
         <label for="french">Expression</label>
-        <input type="text" name="french" id="french" value="{{ french }}" class="w3-input w3-border w3-margin-bottom">
+        <input type="text" name="french" id="french" value="{{ french }}" class="input">
 
-        {{ forms.text("french", french, "Expression") }}
+        <p class="tip">{{ tips.french }}</p>
 
-        <p class="w3-text-blue">{{ tips.french }}</p>
-
-        <p class="w3-text-red">{{ errors.french }}</p>
+        <p class="error">{{ errors.french }}</p>
 
         {# Traduction (EN) #}
 
         <label for="english">Traduction</label>
-        <input type="text" name="english" id="english" value="{{ english }}" class="w3-input w3-border w3-margin-bottom">
+        <input type="text" name="english" id="english" value="{{ english }}" class="input">
 
-        <p class="w3-text-blue">{{ tips.english }}</p>
+        <p class="tip">{{ tips.english }}</p>
 
-        <p class="w3-text-red">{{ errors.english }}</p>
+        <p class="error">{{ errors.english }}</p>
 
         {# Phonétique #}
 
         <label for="phonetics">Phonétique</label>
-        <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="w3-input w3-border w3-margin-bottom">
+        <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="input">
 
-        <p class="w3-text-blue">{{ tips.phonetics }}</p>
+        <p class="tip">{{ tips.phonetics }}</p>
 
-        <p class="w3-text-red">{{ errors.phonetics }}</p>
+        <p class="error">{{ errors.phonetics }}</p>
 
         {# Jeton CSRF #}
 
@@ -41,7 +39,7 @@
 
         {# Bouton #}
 
-        <button class="w3-btn w3-green">Editer</button>
+        <button class="btn-success">Editer</button>
 
         {# Lien de retour #}
 
