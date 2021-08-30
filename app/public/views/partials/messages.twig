@@ -1,12 +1,8 @@
-{% set container = "w3-panel w3-display-container w3-border" %}
-{% set top = "w3-button w3-large w3-display-topright" %}
-{% set close = "this.parentElement.style.display='none';" %}
-
 {# Success Messages #}
 
 {% if session.success %}
     <div class="flash-success" id="flash-success">
-        <span class="{{ top }}" onclick="closeMessage('flash-success')">&times;</span>
+        <span class="btn-close" onclick="closeMessage('flash-success')">&times;</span>
         
         <p>{{ session.success }}</p>
     </div>
@@ -16,7 +12,7 @@
 
 {% if session.alert %}
     <div class="flash-error" id="flash-error">
-        <span class="{{ top }}" onclick="closeMessage('flash-error');">&times;</span>
+        <span class="btn-close" onclick="closeMessage('flash-error');">&times;</span>
         
         <p>{{ session.alert }}</p>
     </div>

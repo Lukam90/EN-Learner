@@ -1,3 +1,65 @@
+// Colors
+
+@mixin colors($baseColor) {
+    $textColor: #fff;
+
+    @if ($baseColor == "blue") {
+        background-color: #2196F3;
+    }
+
+    color: $textColor;
+}
+
+// Display
+
+@mixin position ($direction) {
+    position: absolute;
+
+    @if ($direction == "topleft") {
+        left: 0;
+        top: 0;
+    } @else if ($direction == "topright") {
+        right: 0;
+        top: 0;
+    } @else if ($direction == "bottomleft") {
+        left: 0;
+        bottom: 0;
+    } @else if ($direction == "bottomright") {
+        right: 0;
+        bottom: 0;
+    } @else if ($direction == "left") {
+        top: 50%;
+        left: 0%;
+
+        transform: translate(0%, -50%);
+        -ms-transform: translate(-0%, -50%);
+    } @else if ($direction == "right") {
+        top: 50%;
+        right: 0%;
+
+        transform: translate(0%, -50%);
+        -ms-transform: translate(0%, -50%);
+    } @else if ($direction == "topmiddle") {
+        left: 50%;
+        top: 0;
+
+        transform: translate(-50%, 0%);
+        -ms-transform: translate(-50%, 0%);
+    } @else if ($direction == "bottommiddle") {
+        left: 50%;
+        bottom: 0;
+
+        transform: translate(-50%, 0%);
+        -ms-transform: translate(-50%, 0%);
+    } @else { // middle
+        top: 50%;
+        left: 50%;
+
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+    }
+}
+
 @mixin margin($direction: "") {
     @if ($direction == "top") {
         margin-top: 16px;
@@ -27,16 +89,6 @@
     }
 }
 
-@mixin colors($baseColor) {
-    $textColor: #fff;
-
-    @if ($baseColor == "blue") {
-        background-color: #2196F3;
-    }
-
-    color: $textColor;
-}
-
 @mixin border {
     border: 1px solid #ccc;
 }
@@ -53,10 +105,17 @@
     text-align: center;
 }
 
+// Elements
+
+@mixin button {
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
 @mixin input {
     padding: 8px;
     display: block;
-    //border: none;
-    //border-bottom: 1px solid #ccc;
     width: 100%;
 }

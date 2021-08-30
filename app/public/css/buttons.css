@@ -1,57 +1,17 @@
-.btn-success {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  background-color: #04AA6D;
-}
-.btn-success:hover {
-  background-color: #46a049;
-}
+/* Error: Undefined mixin.
+ *   ,
+ * 2 |     @include button;
+ *   |     ^^^^^^^^^^^^^^^
+ *   '
+ *   css/buttons.scss 2:5  root stylesheet */
 
-.btn-info {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  background-color: #2196F3;
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Undefined mixin.\a   \2577 \a 2 \2502      @include button;\a   \2502      ^^^^^^^^^^^^^^^\a   \2575 \a   css/buttons.scss 2:5  root stylesheet";
 }
-.btn-info:hover {
-  background: #0b7dda;
-}
-
-.btn-warning {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  background-color: #ff9800;
-}
-.btn-warning:hover {
-  background: #e68a00;
-}
-
-.btn-danger {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  background-color: #f44336;
-}
-.btn-danger:hover {
-  background: #da190b;
-}
-
-.btn-default {
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  cursor: pointer;
-  background-color: #e7e7e7;
-  color: black;
-}
-.btn-default:hover {
-  background: #ddd;
-}
-
-/*# sourceMappingURL=buttons.css.map */
