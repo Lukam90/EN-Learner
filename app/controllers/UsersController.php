@@ -125,7 +125,7 @@ class UsersController extends Controller {
         if ($userId != $id) {
             Session::alert("Vous n'êtes pas autorisé(e) à accéder à cette page de profil utilisateur.");
 
-            header("Location: http://localhost/en_app");
+            Redirection::to("/");
 
             return;
         }
@@ -222,7 +222,7 @@ class UsersController extends Controller {
                 if ($registered) {
                     Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
 
-                    header("Location: http://localhost/en_app/users/login");
+                    Redirection::to("/users/login");
 
                     exit;
                 } else {
@@ -277,7 +277,7 @@ class UsersController extends Controller {
             if ($isEmpty) {
                 Session::alert("Les champs doivent être renseignés.");
 
-                header("Location: http://localhost/en_app/users/login");
+                Redirection::to("/users/login");
 
                 return;
             }
@@ -336,7 +336,7 @@ class UsersController extends Controller {
 
         Session::logout();
 
-        header("Location: http://localhost/en_app");
+        Redirection::to("/");
     }
 
     /**
@@ -383,7 +383,7 @@ class UsersController extends Controller {
                 Session::error();
             }
 
-            header("Location: http://localhost/en_app/users");
+            Redirection::to("/users");
 
             return;
         }
@@ -447,7 +447,7 @@ class UsersController extends Controller {
                 Session::error();
             }
 
-            header("Location: http://localhost/en_app/users");
+            Redirection::to("/users");
 
             return;
         }

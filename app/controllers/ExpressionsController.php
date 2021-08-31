@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\core\Redirection;
 use app\core\Request;
 use app\core\Session;
 
@@ -96,7 +97,7 @@ class ExpressionsController extends Controller {
                     Session::error();
                 }
 
-                header("Location: http://localhost/en_app/themes/show/$themeId");
+                Redirection::to("/themes/show/$themeId");
 
                 return;
             }
@@ -195,7 +196,7 @@ class ExpressionsController extends Controller {
                     Session::error();
                 }
 
-                header("Location: http://localhost/en_app/themes/show/$themeId");
+                Redirection::to("/themes/show/$themeId");
 
                 return;
             }
@@ -259,7 +260,7 @@ class ExpressionsController extends Controller {
                 Session::error();
             }
 
-            header("Location: http://localhost/en_app/themes/show/$themeId");
+            Redirection::to("/themes/show/$themeId");
 
             return;
         }
@@ -271,7 +272,7 @@ class ExpressionsController extends Controller {
 
             "id" => $id,
             "themeId" => $themeId,
-            
+
             "french" => $french,
             "english" => $english,
             "phonetics" => $phonetics

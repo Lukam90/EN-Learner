@@ -101,7 +101,7 @@ class ThemesController extends Controller {
         if (! $theme) {
             Session::alert("Le thème n'existe pas.");
 
-            header("Location: http://localhost/en_app/themes");
+            Redirection::to("/themes");
 
             return;
         }
@@ -222,7 +222,7 @@ class ThemesController extends Controller {
                     Session::error();
                 }
 
-                header("Location: http://localhost/en_app/themes");
+                Redirection::to("/themes");
 
                 return;
             }
@@ -304,7 +304,7 @@ class ThemesController extends Controller {
                     Session::error();
                 }
 
-                header("Location: http://localhost/en_app/themes");
+                Redirection::to("/themes");
 
                 return;
             }
@@ -362,7 +362,7 @@ class ThemesController extends Controller {
                 Session::error();
             }
 
-            header("Location: http://localhost/en_app/themes");
+            Redirection::to("/themes");
 
             return;
         }
@@ -389,7 +389,7 @@ class ThemesController extends Controller {
         if (! $theme) {
             Session::alert("Le thème n'existe pas.");
 
-            header("Location: http://localhost/en_app/themes");
+            Redirection::to("/themes");
 
             return;
         }

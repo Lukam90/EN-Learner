@@ -3,30 +3,32 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <h2>{{ title }}</h2>
+<h2>{{ title }}</h2>
 
-    <form action="{{ root }}/users/edit/{{ id }}" class="w3-container w3-quarter" method="post">
-        {# Rôle #}
+<form action="{{ root }}/users/edit/{{ id }}" class="w3-container w3-quarter" method="post">
+    {# Rôle #}
 
-        <select class="input" name="role">
-            <option value="" disabled>Rôle de l'utilisateur</option>
-            {% for option in roles %}
-            <option value="{{ option }}" {% if role == option %} selected {% endif %}>{{ option }}</option>
-            {% endfor %}
-        </select>
+    <select class="input" name="role">
+        <option value="" disabled>Rôle de l'utilisateur</option>
+        {% for option in roles %}
+        <option value="{{ option }}" {% if role == option %} selected {% endif %}>{{ option }}</option>
+        {% endfor %}
+    </select>
 
-        {# Token CSRF #}
+    {# Token CSRF #}
 
-        <input type="hidden" name="token" value="{{ session.token }}">
+    <input type="hidden" name="token" value="{{ session.token }}">
 
-        {# Bouton #}
+    {# Bouton #}
 
-        <button class="btn-success">Editer</button>
+    <button class="btn-success">Editer</button>
 
-        {# Lien de retour #}
+    {# Lien de retour #}
 
-        <p>
-            <a href="{{ root }}/users">&lt; Retour à la liste</a>
-        </p>
-    </form>
+    <hr>
+
+    <p>
+        <a href="{{ root }}/users">&lt; Retour à la liste</a>
+    </p>
+</form>
 {% endblock %}

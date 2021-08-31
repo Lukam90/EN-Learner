@@ -25,7 +25,7 @@ class User extends Model {
                             `password` VARCHAR(255) NOT NULL,
                             role VARCHAR(20) NOT NULL DEFAULT 'Membre',
                             created_at DATE DEFAULT CURRENT_TIMESTAMP
-                        )");
+                        )");//
 
         return $this->run();
     }

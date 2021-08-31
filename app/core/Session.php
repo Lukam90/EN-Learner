@@ -137,7 +137,7 @@ class Session {
     public static function redirectHomeWith($type, $message) {
         self::set($type, $message);
 
-        header("Location: http://localhost/en_app");
+        Redirection::to("/");
 
         exit;
     }
@@ -149,7 +149,7 @@ class Session {
     public static function logoutWith($type, $message) {
         self::set($type, $message);
 
-        header("Location: http://localhost/en_app/users/logout");
+        Redirection::to("/users/logout");
 
         exit;
     }
@@ -238,7 +238,7 @@ class Session {
         if (! $exists) {
             self::alert("L'utilisateur n'existe pas.");
 
-            header("Location: http://localhost/en_app/users");
+            Redirection::to("/users");
 
             return;
         }
@@ -256,7 +256,7 @@ class Session {
         if (! $exists) {
             self::alert("Le thème n'existe pas.");
 
-            header("Location: http://localhost/en_app/themes");
+            Redirection::to("/themes");
 
             return;
         }
@@ -274,7 +274,7 @@ class Session {
         if (! $exists) {
             self::alert("L'expression n'existe pas.");
     
-            header("Location: http://localhost/en_app/expressions");
+            Redirection::to("/expressions");
     
             return;
         }

@@ -50,6 +50,14 @@ abstract class Redirection {
     /* Redirections */
 
     /**
+     * Specific Page
+     */
+
+    public static function to($path) {
+        header("Location: http://localhost/en_app" . $path);
+    }
+
+    /**
      * Home Page
      */
 

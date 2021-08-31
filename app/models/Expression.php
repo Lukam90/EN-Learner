@@ -25,7 +25,8 @@ class Expression extends Model {
                             phonetics VARCHAR(255) NOT NULL,
                             user_id INTEGER NOT NULL,
                             theme_id INTEGER NOT NULL,
-                            FOREIGN KEY (user_id) REFERENCES users (id),
+                            FOREIGN KEY (user_id) REFERENCES users (id)
+                            ON DELETE CASCADE,
                             FOREIGN KEY (theme_id) REFERENCES themes (id)
                             ON DELETE CASCADE
                         )");
