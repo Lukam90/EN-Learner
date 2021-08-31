@@ -1,0 +1,62 @@
+/* Stats */
+
+.column {
+    float: left;
+    width: 30%;
+    padding: 0 10px;
+
+    a {
+        color: $black;
+    }
+}
+
+.row {
+    margin: 0 -5px;
+
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.stats {
+    @include shadow;
+    @include padding(16px);
+
+    text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+
+// Blocks
+
+#themes {
+    background-color: rgba(37, 102, 28, 0.5);
+
+    &:hover {
+        background-color: rgba(37, 102, 28, 0.8);
+    }
+}
+
+#expressions {
+    background-color: rgba(0, 0, 128, 0.5);
+
+    &:hover {
+        background-color: rgba(0, 0, 128, 0.8);
+    }
+}
+
+#users {
+    background-color: rgba(255, 166, 0, 0.5);
+
+    &:hover {
+        background-color: rgba(255, 166, 0, 0.8);
+    }
+}

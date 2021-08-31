@@ -2,14 +2,10 @@
 
 {% block title %}Présentation{% endblock %}
 
-{% block styles %}
-<link rel="stylesheet" href="{{ public }}/css/slides.css">
-{% endblock %}
-
 {% block content %}
     <div class="content">
         <div class="slides">
-            <embed src="{{ public }}/views/slides/ENL-Slides.pdf" width="100%" height="550px" />
+            <embed src="{{ public }}/views/slides/ENL-Slides.pdf" type="application/pdf" width="100%" height="550px" />
         </div>
     </div>
 {% endblock %}

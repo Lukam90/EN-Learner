@@ -1,0 +1,14 @@
+.flashcard {
+    //w3-card-4 w3-margin w3-half
+    @include shadow;
+    @include margin;
+}
+
+.close,
+.answers {
+    display: none;
+}
+
+.close:hover {
+    color: red;
+}

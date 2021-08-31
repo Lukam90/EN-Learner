@@ -1,0 +1,24 @@
+/* Forms */
+
+form {
+    .quarter,
+    .third,
+    .half,
+    .two-third,
+    .three-quarter {
+        @include container;
+    }
+}
+
+.input {
+    @include input;
+    @include border;
+    @include margin("bottom");
+}
+
+.checkbox {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    top: 6px;
+}

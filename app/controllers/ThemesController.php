@@ -470,12 +470,15 @@ class ThemesController extends Controller {
 
         // Rendu
 
+        $pageTitle = "Flashcards > $title";
+
         echo $this->twig->render("themes/game.twig", [
             "session" => Session::all(),
 
             "started" => $started,
             "id" => $id,
             "title" => $title,
+            "pageTitle" => $pageTitle,
             "levels" => $levels,
             "flashcards" => $flashcards
         ]);

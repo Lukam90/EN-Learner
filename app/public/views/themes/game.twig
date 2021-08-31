@@ -1,11 +1,7 @@
 {% extends "layout.twig" %}
 
 {% block title %}
-Flashcards > {{ title }}
-{% endblock %}
-
-{% block styles %}
-<link href="{{ public }}/css/game.css" rel="stylesheet">
+    {{ pageTitle }}
 {% endblock %}
 
 {% block content %}
@@ -13,9 +9,10 @@ Flashcards > {{ title }}
         <a href="{{ root }}/themes/show/{{ id }}">&lt; Retour à la liste</a>
     </p>
 
-    <h2>Flashcards > {{ title }}</h2>
+    <hr>
 
-    <div class="container">
+    <h2>{{ pageTitle }}</h2>
+
     {% if not started %}
         <form action="{{ root }}/themes/start/{{ id }}" method="post">
             <div class="third">
@@ -36,8 +33,9 @@ Flashcards > {{ title }}
         {% for flashcard in flashcards %}
             {% set index = index + 1 %}
 
-            <div class="w3-card-4 w3-margin w3-half" id="card{{ index }}" onclick="showAnswer({{ index }});">
-                <div class="w3-display-container close" onclick="closeCard(this);">
+            <div class="flashcard" id="card{{ index }}" onclick="showAnswer({{ index }});">
+                {# <div class="w3-display-container close" onclick="closeCard(this);"> #}
+                <div class="close" onclick="closeCard(this);">
                     <div class="w3-button w3-large w3-display-topright">&times;</div>
                 </div>
 
@@ -55,15 +53,15 @@ Flashcards > {{ title }}
                     </div>
                 </div>
             </div>
+            
         {% endfor %}
 
-        <div class="w3-container">
+        <div class="container" id="restart">
             <a href="{{ root }}/themes/start/{{ id }}">
-                <button class="btn-success m-vertical" id="restart">Rejouer ?</button>
+                <button class="btn-success m-vertical">Rejouer ?</button>
             </a>
         </div>
     {% endif %}
-    </div>
 {% endblock %}
 
 {% block scripts %}

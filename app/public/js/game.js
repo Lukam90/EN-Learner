@@ -5,6 +5,7 @@ function showAnswer(index) {
     if (answer.style.display != "block") {
         answer.style.display = "block";
         closeBtn.style.display = "block";
+        closeBtn.style.position = "relative";
     }
 }
 

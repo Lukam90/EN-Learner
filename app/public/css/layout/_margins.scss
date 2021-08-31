@@ -1,0 +1,26 @@
+/* Margins */
+
+.margins {
+    @include margin;
+}
+
+.m-top {
+    @include margin("top");
+}
+
+.m-bottom {
+    @include margin("bottom");
+}
+
+.m-vertical {
+    @include margin("top");
+    @include margin("bottom");
+}
+
+.m-left {
+    @include margin("left");
+}
+
+.m-right {
+    @include margin("right");
+}
