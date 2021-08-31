@@ -1,37 +1,7 @@
-/* Mixins */
-
-/*@mixin w3mobile {
-    display: block;
-    width: 100%;
-}*/
-
 /* W3.CSS Elements */
 
 .w3-display-container {
     position: relative
-}
-
-.w3-modal {
-    z-index: 3;
-    display: none;
-    padding-top: 100px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4)
-}
-
-.w3-modal-content {
-    margin: auto;
-    background-color: #fff;
-    position: relative;
-    padding: 0;
-    outline: 0;
-    width: 600px
 }
 
 .w3-block {
@@ -62,23 +32,6 @@
     display: table;
     clear: both
 }
-
-/*
-.w3-col,
-.w3-half,
-.w3-third,
-.w3-twothird,
-.w3-threequarter,
-.w3-quarter {
-    float: left;
-    width: 100%
-}
-
-.w3-content {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 980px;
-}*/
 
 .w3-show-block,
 .w3-show {

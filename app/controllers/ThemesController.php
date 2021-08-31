@@ -351,6 +351,8 @@ class ThemesController extends Controller {
 
         $title = $theme->title;
 
+        $nbExpressions = $this->themeModel->countExpressions($id);
+
         // Suppression
 
         if (Request::isPost()) {
@@ -377,6 +379,8 @@ class ThemesController extends Controller {
             "session" => Session::all(),
 
             "pageTitle" => "Suppression du thème : $title",
+
+            "nbExpressions" => $nbExpressions,
 
             "title" => $title,
             "id" => $id

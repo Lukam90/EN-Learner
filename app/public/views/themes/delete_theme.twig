@@ -6,9 +6,9 @@
     <form action="{{ root }}/themes/delete/{{ id }}" id="delete-form" method="post">
         <h2>Voulez-vous supprimer ce thème ?</h2>
 
-        <h3>Titre : <span class="tip">{{ title }}</span></h3>
+        <h3>Titre : <span class="blue">{{ title }}</span></h3>
 
-        <hr>
+        <h3><span class="green">{{ nbExpressions }}</span> expression{% if nbExpressions > 1 %}s{% endif %}</h3>
 
         <h3 class="error">
             <i class="fa fa-warning m-right"></i>

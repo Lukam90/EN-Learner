@@ -6,11 +6,11 @@
     <form action="{{ root }}/users/delete/{{ id }}" id="delete-form" method="post">
         <h2>Voulez-vous supprimer cet utilisateur ?</h2>
 
-        <h3>Pseudo : <span class="tip">{{ username }}</span></h3>
+        <h3>Pseudo : <span class="blue">{{ username }}</span></h3>
 
-        <h3>{{ nbThemes }} thème{% if nbThemes > 1 %}s{% endif %}</h3>
+        <h3><span class="green">{{ nbThemes }}</span> thème{% if nbThemes > 1 %}s{% endif %}</h3>
 
-        <h3>{{ nbExpressions }} expression{% if nbExpressions > 1 %}s{% endif %}</h3>
+        <h3><span class="green">{{ nbExpressions }}</span> expression{% if nbExpressions > 1 %}s{% endif %}</h3>
 
         <h3 class="error">
             <i class="fa fa-warning m-right"></i>

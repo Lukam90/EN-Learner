@@ -3,7 +3,9 @@
 {% block content %}
     <h2>Profil de l'utilisateur {{ session.username }}</h2>
 
-    <p>{{ nbThemes }} thème{% if nbThemes > 1 %}s{% endif %} + {{ nbExpressions }} expression{% if nbExpressions > 1 %}s{% endif %}</p>
+    <h3><span class="green">{{ nbThemes }}</span> thème{% if nbThemes > 1 %}s{% endif %}</h3>
+
+    <h3><span class="green">{{ nbExpressions }}</span> expression{% if nbExpressions > 1 %}s{% endif %}</h3>
 
     <div class="third">
         <h3>Identifiants</h3>

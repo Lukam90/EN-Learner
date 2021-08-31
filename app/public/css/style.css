@@ -301,10 +301,10 @@ form .three-quarter {
   right: 0;
   top: 0;
   color: #000;
-  font-size: 18px;
+  font-size: 24px;
 }
 .btn-close:hover {
-  background-color: #ccc;
+  color: #f44336;
 }
 
 /* Tables */
