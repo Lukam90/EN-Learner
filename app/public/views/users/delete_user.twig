@@ -1,26 +1,32 @@
 {% extends "layout.twig" %}
 
 {% block content %}
-<form action="{{ root }}/users/delete/{{ id }}" method="post">
-    <h2>Voulez-vous supprimer cet utilisateur ?</h2>
+    {% include "partials/delete.twig" %}
 
-    <h3>Pseudo : <span class="tip">{{ username }}</span></h3>
+    <form action="{{ root }}/users/delete/{{ id }}" id="delete-form" method="post">
+        <h2>Voulez-vous supprimer cet utilisateur ?</h2>
 
-    <h3 class="error">
-        <i class="fa fa-warning m-right"></i>
-        La suppression de cet utilisateur entraîne la suppression de tous ses thèmes et expressions.
-    </h3>
+        <h3>Pseudo : <span class="tip">{{ username }}</span></h3>
 
-    <input type="hidden" name="token" value="{{ session.token }}">
+        <h3>{{ nbThemes }} thème{% if nbThemes > 1 %}s{% endif %}</h3>
 
-    <button class="btn-danger m-bottom">Confirmer</button>
-</form>
+        <h3>{{ nbExpressions }} expression{% if nbExpressions > 1 %}s{% endif %}</h3>
 
-<hr>
+        <h3 class="error">
+            <i class="fa fa-warning m-right"></i>
+            La suppression de cet utilisateur entraîne la suppression de tous ses thèmes et expressions.
+        </h3>
 
-{# Lien de retour #}
+        <input type="hidden" name="token" value="{{ session.token }}">
 
-<p>
+        <button class="btn-danger m-bottom" id="open-btn">Confirmer</button>
+    </form>
+
+    <hr>
+
     <a href="{{ root }}/users">&lt; Retour à la liste</a>
-</p>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ public }}/js/delete.js"></script>
 {% endblock %}

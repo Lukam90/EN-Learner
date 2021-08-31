@@ -3,7 +3,7 @@
 {% block content %}
     {% include "partials/delete.twig" %}
 
-    <form action="{{ root }}/themes/delete/{{ id }}" method="post">
+    <form action="{{ root }}/themes/delete/{{ id }}" id="delete-form" method="post">
         <h2>Voulez-vous supprimer ce thème ?</h2>
 
         <h3>Titre : <span class="tip">{{ title }}</span></h3>
@@ -17,6 +17,14 @@
 
         <input type="hidden" name="token" value="{{ session.token }}">
 
-        <button class="btn-danger m-bottom" onclick="">Confirmer</button>
+        <button class="btn-danger m-bottom" id="open-btn">Confirmer</button>
     </form>
+
+    <hr>
+
+    <a href="{{ root }}/themes">&lt; Retour à la liste</a>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ public }}/js/delete.js"></script>
 {% endblock %}

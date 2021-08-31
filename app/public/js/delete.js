@@ -1,39 +1,20 @@
 const deleteModal = document.getElementById("delete-modal");
+const deleteForm = document.getElementById("delete-form");
 
-function openDeleteModal(type, values) {
+const openBtn = document.getElementById("open-btn");
+const closeBtn = document.getElementById("close-btn");
+const confirmBtn = document.getElementById("confirm-btn");
+
+openBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+
     deleteModal.style.display = 'block';
+});
 
-    // Values
-
-    const id = values["id"];
-    const token = values["token"];
-    const text = values["text"];
-
-    // Form & Data
-
-    const link = `http://localhost/en_app/${type}/delete/${id}`;
-
-    const deleteForm = document.getElementById("delete-form");
-    const deleteToken = document.getElementById("delete-token");
-    const deleteText = document.getElementById("delete-text");
-
-    // AJAX Request
-    
-    const xmlHttp = new XMLHttpRequest();
-
-    xmlHttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            deleteForm.action = link;
-            deleteText.innerHTML = text;
-            deleteToken.value = token;
-        }
-    }
-
-    xmlHttp.open("GET", link, true);
-    xmlHttp.send();
-}
-
-function closeDeleteModal() {
+closeBtn.addEventListener("click", () => {
     deleteModal.style.display = 'none';
-}
+});
 
+confirmBtn.addEventListener("click", () => {
+    deleteForm.submit();
+});

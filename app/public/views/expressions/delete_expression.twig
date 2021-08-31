@@ -1,17 +1,27 @@
 {% extends "layout.twig" %}
 
 {% block content %}
-<form action="{{ root }}/expressions/delete/{{ id }}" method="post">
-    <h2>Voulez-vous supprimer cette expression ?</h2>
+    {% include "partials/delete.twig" %}
 
-    <h3>FR : <span class="tip">{{ french }}</span></h3>
+    <form action="{{ root }}/expressions/delete/{{ id }}" id="delete-form" method="post">
+        <h2>Voulez-vous supprimer cette expression ?</h2>
 
-    <h3>EN : <span class="tip">{{ english }}</span></h3>
+        <h3>FR : <span class="tip">{{ french }}</span></h3>
 
-    <h3>Phonétique : <span class="tip">{{ phonetics }}</span></h3>
+        <h3>EN : <span class="tip">{{ english }}</span></h3>
 
-    <input type="hidden" name="token" value="{{ session.token }}">
+        <h3>Phonétique : <span class="tip">{{ phonetics }}</span></h3>
 
-    <button class="btn-danger m-bottom">Confirmer</button>
-</form>
+        <input type="hidden" name="token" value="{{ session.token }}">
+
+        <button class="btn-danger m-bottom" id="open-btn">Confirmer</button>
+    </form>
+
+    <hr>
+
+    <a href="{{ root }}/themes/show/{{ themeId }}">&lt; Retour à la liste</a>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ public }}/js/delete.js"></script>
 {% endblock %}

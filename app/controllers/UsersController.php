@@ -70,9 +70,9 @@ class UsersController extends Controller {
             $color = "";
 
             if ($role == "Administrateur") {
-                $color = "w3-text-red";
+                $color = "red";
             } else if ($role == "Modérateur") {
-                $color = "w3-text-green";
+                $color = "green";
             }
 
             // Edition
@@ -435,6 +435,9 @@ class UsersController extends Controller {
 
         $username = $user->username;
 
+        $nbThemes = $this->userModel->countThemes($id);
+        $nbExpressions = $this->userModel->countExpressions($id);
+
         // Envoi des données
 
         if (Request::isPost()) {
@@ -465,7 +468,10 @@ class UsersController extends Controller {
             "pageTitle" => "Suppression de l'utilisateur $username",
 
             "id" => $id,
-            "username" => $username
+            "username" => $username,
+
+            "nbThemes" => $nbThemes,
+            "nbExpressions" => $nbExpressions
         ]);
     }
 

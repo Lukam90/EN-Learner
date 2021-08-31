@@ -1,5 +1,17 @@
 /* Variables */
 /* Mixins */
+.red {
+  color: #f44336;
+}
+
+.blue {
+  color: #2196f3;
+}
+
+.green {
+  color: #4caf50;
+}
+
 /* General */
 body {
   font-family: "Lato", sans-serif;
@@ -342,7 +354,7 @@ tr:hover {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 600px;
+  width: 250px;
 }
 
 .modal-close {
