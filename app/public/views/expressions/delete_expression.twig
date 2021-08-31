@@ -1,15 +1,19 @@
-<div id="delete-modal" class="modal">
-    <div class="modal-content">
-        <span onclick="closeDeleteModal();" id="close" class="modal-close">&times;</span>
-        
-        <form action="#" id="delete-form" method="post">
-            <h3>Voulez-vous supprimer cette expression ?</h3>
+{% extends "layout.twig" %}
 
-            <p><span id="delete-text"></span></p>
+{% block title %}Suppression de l'expression{% endblock %}
 
-            <input type="hidden" id="delete-token" name="token" value="">
+{% block content %}
+<form action="{{ root }}/expressions/delete/{{ id }}" method="post">
+    <h3>Voulez-vous supprimer cette expression ?</h3>
 
-            <button class="btn-danger m-bottom">Confirmer</button>
-        </form>
-    </div>
-</div>
+    <h4>FR : <strong>{{ french }}</strong></h4>
+
+    <h4>EN : <strong>{{ english }}</strong></h4>
+
+    <h4>Phonétique : <strong>{{ phonetics }}</strong></h4>
+
+    <input type="hidden" name="token" value="{{ session.token }}">
+
+    <button class="btn-danger m-bottom">Confirmer</button>
+</form>
+{% endblock %}

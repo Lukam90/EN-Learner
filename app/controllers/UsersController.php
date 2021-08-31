@@ -394,6 +394,8 @@ class UsersController extends Controller {
 
         $label = "Editer";
 
+        $title = "Edition du statut de $username";
+
         echo $this->twig->render("users/edit_user.twig", [
             "session" => Session::all(),
 
@@ -401,6 +403,7 @@ class UsersController extends Controller {
             "label" => $label,
 
             "id" => $id,
+            "title" => $title,
             "username" => $username,
             "role" => $role,
         ]);
@@ -420,6 +423,12 @@ class UsersController extends Controller {
         // Utilisateur inexistant
 
         Session::errorIfUserNotExists($id);
+
+        // Utilisateur existant
+
+        $user = $this->userModel->findOneById($id);
+
+        $username = $user->username;
 
         // Envoi des données
 
@@ -447,7 +456,9 @@ class UsersController extends Controller {
 
         echo $this->twig->render("users/delete_user.twig", [
             "session" => Session::all(),
-            "superuser" => $isSuperUser
+
+            "id" => $id,
+            "username" => $username
         ]);
     }
 

@@ -341,6 +341,12 @@ class ThemesController extends Controller {
 
         Session::errorIfThemeNotExists($id);
 
+        // Thème existant
+
+        $theme = $this->themeModel->findOneById($id);
+
+        $title = $theme->title;
+
         // Suppression
 
         if (Request::isPost()) {
@@ -365,6 +371,9 @@ class ThemesController extends Controller {
 
         echo $this->twig->render("themes/delete_theme.twig", [
             "session" => Session::all(),
+
+            "title" => $title,
+            "id" => $id
         ]);
     }
 

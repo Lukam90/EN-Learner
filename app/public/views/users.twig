@@ -15,9 +15,7 @@
                         <th>Inscrit(e) le</th>
                         <th>Contributions</th>
                         {% if superuser %}
-                            <th></th>
-
-                            {% include "users/delete_user.twig" %}
+                        <th></th>
                         {% endif %}
                     </tr>
                 </thead>
@@ -41,9 +39,11 @@
                                 </button>
                             </a>
 
-                            <button class="btn-danger" onclick="openDeleteModal('users', { id : {{ user.id }}, token: '{{ session.token }}', text: '{{ user.username }}' })">
-                                <i class="fa fa-close"></i>
-                            </button>
+                            <a href="{{ root }}/users/delete/{{ user.id }}">
+                                <button class="btn-danger">
+                                    <i class="fa fa-close"></i>
+                                </button>
+                            </a>
                         </td>
                         {% endif %}
                     </tr>
@@ -54,8 +54,4 @@
     {% else %}
         <p>Aucun utilisateur n'est enregistré.</p>
     {% endif %}
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ public }}/js/delete.js"></script>
 {% endblock %}

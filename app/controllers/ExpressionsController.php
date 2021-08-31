@@ -114,6 +114,8 @@ class ExpressionsController extends Controller {
             "errors" => $errors,
 
             "id" => $themeId,
+            "themeId" => $themeId,
+
             "french" => $french,
             "english" => $english,
             "phonetics" => $phonetics
@@ -212,6 +214,7 @@ class ExpressionsController extends Controller {
 
             "id" => $id,
             "themeId" => $themeId,
+
             "french" => $french,
             "english" => $english,
             "phonetics" => $phonetics
@@ -234,6 +237,10 @@ class ExpressionsController extends Controller {
         // Expression courante
 
         $expression = $this->expressionModel->findOneById($id);
+
+        $french = $expression->french;
+        $english = $expression->english;
+        $phonetics = $expression->phonetics;
 
         $themeId = $expression->theme_id;
 
@@ -261,6 +268,13 @@ class ExpressionsController extends Controller {
 
         echo $this->twig->render("expressions/delete_expression.twig", [
             "session" => Session::all(),
+
+            "id" => $id,
+            "themeId" => $themeId,
+            
+            "french" => $french,
+            "english" => $english,
+            "phonetics" => $phonetics
         ]);
     }
 }

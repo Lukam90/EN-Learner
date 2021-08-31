@@ -1,15 +1,17 @@
-<div id="delete-modal" class="modal">
-    <div class="modal-content">
-        <span onclick="closeDeleteModal();" id="close" class="modal-close">&times;</span>
+{% extends "layout.twig" %}
 
-        <form action="#" id="delete-form" method="post">
-            <h3>Voulez-vous supprimer cet utilisateur ?</h3>
+{% block title %}Suppression de l'utilisateur : {{ username }}{% endblock %}
 
-            <p>Pseudo : <span id="delete-text"></span></p>
+{% block content %}
+<form action="{{ root }}/users/delete/{{ id }}" method="post">
+    <h3>Voulez-vous supprimer cet utilisateur ?</h3>
 
-            <input type="hidden" id="delete-token" name="token" value="">
+    <h4>Pseudo : <strong>{{ username }}</strong></h4>
 
-            <button type="submit" class="btn-danger m-bottom">Confirmer</button>
-        </form>
-    </div>
-</div>
+    <h5 class="error"><strong>Attention :</strong> La suppression de cet utilisateur entraîne la suppression de tous ses thèmes et expressions.</h5>
+
+    <input type="hidden" name="token" value="{{ session.token }}">
+
+    <button class="btn-danger m-bottom">Confirmer</button>
+</form>
+{% endblock %}
