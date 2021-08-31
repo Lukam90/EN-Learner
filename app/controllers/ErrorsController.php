@@ -16,6 +16,8 @@ class ErrorsController extends Controller {
     public function notAuthorized() {
         echo $this->twig->render("errors/403.twig", [
             "session" => Session::all(),
+
+            "pageTitle" => "403 - Accès non autorisé",
         ]);
     }
 
@@ -24,6 +26,8 @@ class ErrorsController extends Controller {
     public function notFound() {
         echo $this->twig->render("errors/404.twig", [
             "session" => Session::all(),
+
+            "pageTitle" => "404 - Page inconnue",
         ]);
     }
 }

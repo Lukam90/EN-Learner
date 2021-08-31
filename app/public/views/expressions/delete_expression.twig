@@ -1,16 +1,14 @@
 {% extends "layout.twig" %}
 
-{% block title %}Suppression de l'expression{% endblock %}
-
 {% block content %}
 <form action="{{ root }}/expressions/delete/{{ id }}" method="post">
-    <h3>Voulez-vous supprimer cette expression ?</h3>
+    <h2>Voulez-vous supprimer cette expression ?</h2>
 
-    <h4>FR : <strong>{{ french }}</strong></h4>
+    <h3>FR : <span class="tip">{{ french }}</span></h3>
 
-    <h4>EN : <strong>{{ english }}</strong></h4>
+    <h3>EN : <span class="tip">{{ english }}</span></h3>
 
-    <h4>Phonétique : <strong>{{ phonetics }}</strong></h4>
+    <h3>Phonétique : <span class="tip">{{ phonetics }}</span></h3>
 
     <input type="hidden" name="token" value="{{ session.token }}">
 

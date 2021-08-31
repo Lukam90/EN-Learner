@@ -40,8 +40,9 @@ class HomeController extends Controller {
 
         echo $this->twig->render("home.twig", [
             "session" => Session::all(),
-            
-            "title"         => "Accueil",
+
+            "pageTitle" => "Accueil",
+
             "nbUsers"       => $nbUsers,
             "nbThemes"      => $nbThemes,
             "nbExpressions" => $nbExpressions

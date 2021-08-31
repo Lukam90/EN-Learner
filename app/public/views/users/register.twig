@@ -1,9 +1,7 @@
 {% extends "layout.twig" %}
-
-{% block title %}Inscription{% endblock %}
     
 {% block content %}
-    <h2>Inscription</h2>
+    <h2>{{ pageTitle }}</h2>
 
     <form action="{{ root }}/users/register" class="container half" method="post">
         <label for="username">Pseudo</label>

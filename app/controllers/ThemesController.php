@@ -80,6 +80,8 @@ class ThemesController extends Controller {
         echo $this->twig->render("themes.twig", [
             "session" => Session::all(),
 
+            "pageTitle" => "Thèmes",
+
             "themes" => $themes,
             "canAdd" => $canAdd,
         ]);
@@ -152,6 +154,8 @@ class ThemesController extends Controller {
         echo $this->twig->render("themes/show_theme.twig", [
             "session" => Session::all(),
             "canAdd" => Session::isLoggedIn(),
+
+            "pageTitle" => $title,
 
             "id" => $themeId,
             "title" => $title,
@@ -230,15 +234,15 @@ class ThemesController extends Controller {
 
         // Rendu
 
-        $label = "Ajouter";
-
         echo $this->twig->render("themes/new_theme.twig", [
             "session" => Session::all(),
 
             "tips" => $validator->getTips(),
             "errors" => $errors,
 
-            "label" => $label,
+            "pageTitle" => "Ajout d'un thème",
+            "label" => "Ajouter",
+
             "title" => $title,
         ]);
     }
@@ -312,8 +316,6 @@ class ThemesController extends Controller {
 
         // Rendu
 
-        $label = "Editer";
-
         echo $this->twig->render("themes/edit_theme.twig", [
             "session" => Session::all(),
 
@@ -321,7 +323,9 @@ class ThemesController extends Controller {
             "errors" => $errors,
 
             "id" => $id,
-            "label" => $label,
+            "pageTitle" => "Edition du thème : $title",
+            "label" => "Editer",
+
             "title" => $title,
         ]);
     }
@@ -371,6 +375,8 @@ class ThemesController extends Controller {
 
         echo $this->twig->render("themes/delete_theme.twig", [
             "session" => Session::all(),
+
+            "pageTitle" => "Suppression du thème : $title",
 
             "title" => $title,
             "id" => $id

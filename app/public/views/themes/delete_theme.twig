@@ -1,19 +1,22 @@
 {% extends "layout.twig" %}
 
-{% block title %}Suppression du thème : {{ title }}{% endblock %}
-
 {% block content %}
-<form action="{{ root }}/themes/delete/{{ id }}" method="post">
-    <h3>Voulez-vous supprimer ce thème ?</h3>
+    {% include "partials/delete.twig" %}
 
-    <h4>Titre : <strong>{{ title }}</strong></h4>
+    <form action="{{ root }}/themes/delete/{{ id }}" method="post">
+        <h2>Voulez-vous supprimer ce thème ?</h2>
 
-    <hr>
+        <h3>Titre : <span class="tip">{{ title }}</span></h3>
 
-    <h5 class="error"><strong>Attention :</strong> La suppression de ce thème entraîne la suppression de toutes ses expressions.</h5>
+        <hr>
 
-    <input type="hidden" name="token" value="{{ session.token }}">
+        <h3 class="error">
+            <i class="fa fa-warning m-right"></i>
+            La suppression de ce thème entraîne la suppression de toutes ses expressions.
+        </h3>
 
-    <button class="btn-danger m-bottom">Confirmer</button>
-</form>
+        <input type="hidden" name="token" value="{{ session.token }}">
+
+        <button class="btn-danger m-bottom" onclick="">Confirmer</button>
+    </form>
 {% endblock %}

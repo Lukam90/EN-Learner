@@ -1,7 +1,5 @@
 {% extends "layout.twig" %}
 
-{% block title %}Edition de l'expression{% endblock %}
-
 {% block content %}
     <form action="{{ root }}/expressions/edit/{{ id }}" class="half" method="post">
         {% include "expressions/form_expression.twig" %}

@@ -99,6 +99,8 @@ class UsersController extends Controller {
             "session" => Session::all(),
             "superuser" => $isSuperUser,
 
+            "pageTitle" => "Communauté",
+
             "users" => $users
         ]);
 
@@ -145,6 +147,8 @@ class UsersController extends Controller {
 
         echo $this->twig->render("users/profile.twig", [
             "session" => Session::all(),
+
+            "pageTitle" => "Profil de l'utilisateur $username",
 
             "id" => $id,
             "username" => $username,
@@ -239,6 +243,8 @@ class UsersController extends Controller {
             "tips" => $validator->getTips(),
             "errors" => $errors,
 
+            "pageTitle" => "Inscription",
+
             "username" => $username,
             "email" => $email,
             "password" => $password,
@@ -313,6 +319,8 @@ class UsersController extends Controller {
             "session" => Session::all(),
 
             "errors" => $errors,
+
+            "pageTitle" => "Connexion",
 
             "email" => $email,
             "password" => $password
@@ -392,18 +400,15 @@ class UsersController extends Controller {
 
         $roles = ["Suspendu", "Membre", "Modérateur", "Administrateur"];
 
-        $label = "Editer";
-
-        $title = "Edition du statut de $username";
-
         echo $this->twig->render("users/edit_user.twig", [
             "session" => Session::all(),
 
             "roles" => $roles,
-            "label" => $label,
+            "label" => "Editer",
+
+            "pageTitle" => "Edition du statut de $username",
 
             "id" => $id,
-            "title" => $title,
             "username" => $username,
             "role" => $role,
         ]);
@@ -457,6 +462,8 @@ class UsersController extends Controller {
         echo $this->twig->render("users/delete_user.twig", [
             "session" => Session::all(),
 
+            "pageTitle" => "Suppression de l'utilisateur $username",
+
             "id" => $id,
             "username" => $username
         ]);
@@ -472,7 +479,7 @@ class UsersController extends Controller {
         // Rendu
 
         echo $this->twig->render("users/reset.twig", [
-            "key" => "value"
+            "pageTitle" => "Réinitialisation du mot de passe"
         ]);
     }
 
@@ -486,7 +493,7 @@ class UsersController extends Controller {
         // Rendu
 
         echo $this->twig->render("users/confirm.twig", [
-            "key" => "value"
+            "pageTitle" => "Confirmation du changement de mot de passe"
         ]);
     }
 }

@@ -1,14 +1,15 @@
 {% extends "layout.twig" %}
 
-{% block title %}Suppression de l'utilisateur : {{ username }}{% endblock %}
-
 {% block content %}
 <form action="{{ root }}/users/delete/{{ id }}" method="post">
-    <h3>Voulez-vous supprimer cet utilisateur ?</h3>
+    <h2>Voulez-vous supprimer cet utilisateur ?</h2>
 
-    <h4>Pseudo : <strong>{{ username }}</strong></h4>
+    <h3>Pseudo : <span class="tip">{{ username }}</span></h3>
 
-    <h5 class="error"><strong>Attention :</strong> La suppression de cet utilisateur entraîne la suppression de tous ses thèmes et expressions.</h5>
+    <h3 class="error">
+        <i class="fa fa-warning m-right"></i>
+        La suppression de cet utilisateur entraîne la suppression de tous ses thèmes et expressions.
+    </h3>
 
     <input type="hidden" name="token" value="{{ session.token }}">
 

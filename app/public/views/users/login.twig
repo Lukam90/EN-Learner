@@ -1,9 +1,7 @@
 {% extends "layout.twig" %}
-
-{% block title %}Connexion{% endblock %}
     
 {% block content %}
-    <h2>Connexion</h2>
+    <h2>{{ pageTitle }}</h2>
 
     <form action="{{ root }}/users/login" class="third" method="post">
         {# Adresse e-mail #}

@@ -19,6 +19,8 @@ class SlidesController extends Controller {
 
         echo $this->twig->render("slides.twig", [
             "session" => Session::all(),
+
+            "pageTitle" => "Présentation"
         ]);
     }
 }

@@ -1,11 +1,9 @@
 {% extends "layout.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
-
 {% block content %}
-<h2>{{ title }}</h2>
+<h2>{{ pageTitle }}</h2>
 
-<form action="{{ root }}/users/edit/{{ id }}" class="w3-container w3-quarter" method="post">
+<form action="{{ root }}/users/edit/{{ id }}" class="quarter" method="post">
     {# Rôle #}
 
     <select class="input" name="role">

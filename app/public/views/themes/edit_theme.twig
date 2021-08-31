@@ -1,8 +1,10 @@
 {% extends "layout.twig" %}
 
-{% block title %}Edition du thème : {{ title }}{% endblock %}
+{% block title %}{{ pageTitle }}{% endblock %}
 
 {% block content %}
+    <h2>{{ pageTitle }}</h2>
+
     <form action="{{ root }}/themes/edit/{{ id }}" class="third" method="post">
         {% include "themes/form_theme.twig" %}
     </form>
