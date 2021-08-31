@@ -1,0 +1,32 @@
+{# Titre #}
+
+{% if label == "Ajouter" %}
+<h3>Ajout d'un thème</h3>
+{% else %}
+<h3>Edition du thème : {{ title }}</h3>
+{% endif %}
+
+{# Titre #}
+
+<label for="title">Titre</label>
+<input type="text" name="title" id="title" value="{{ title }}" class="input">
+
+{# Messages #}
+
+<p class="tip">{{ tips.title }}</p>
+
+<p class="error">{{ errors.title }}</p>
+
+{# Jeton CSRF #}
+
+<input type="hidden" name="token" value="{{ session.token }}">
+
+{# Bouton d'action #}
+
+<button class="btn-success">{{ label }}</button>
+
+{# Lien de retour #}
+
+<p>
+    <a href="{{ root }}/themes/">&lt; Retour à la liste</a>
+</p>

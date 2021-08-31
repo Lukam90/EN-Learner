@@ -4,23 +4,6 @@
 
 {% block content %}
     <form action="{{ root }}/themes/new" class="third" method="post">
-        <h3>Ajout d'un thème</h3>
-
-        <label for="title">Titre</label>
-        <input type="text" name="title" id="title" value="{{ title }}" class="input">
-
-        <p class="tip">{{ tips.title }}</p>
-
-        <p class="error">{{ errors.title }}</p>
-
-        <input type="hidden" name="token" value="{{ session.token }}">
-
-        <button type="submit" class="btn-success">Ajouter</button>
-
-        {# Lien de retour #}
-
-        <p>
-            <a href="{{ root }}/themes/">&lt; Retour à la liste</a>
-        </p>
+        {% include "themes/form_theme.twig" %}
     </form>
 {% endblock %}

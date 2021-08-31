@@ -392,10 +392,13 @@ class UsersController extends Controller {
 
         $roles = ["Suspendu", "Membre", "Modérateur", "Administrateur"];
 
+        $label = "Editer";
+
         echo $this->twig->render("users/edit_user.twig", [
             "session" => Session::all(),
 
             "roles" => $roles,
+            "label" => $label,
 
             "id" => $id,
             "username" => $username,

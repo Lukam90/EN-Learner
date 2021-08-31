@@ -3,48 +3,7 @@
 {% block title %}Ajout d'une expression{% endblock %}
 
 {% block content %}
-    <h2>Ajout d'une expression</h2>
-
     <form action="{{ root }}/expressions/new/{{ id }}" class="half" method="post">
-        {# Expression (FR) #}
-
-        <label for="french">Expression</label>
-        <input type="text" name="french" id="french" value="{{ french }}" class="input">
-
-        <p class="tip">{{ tips.french }}</p>
-
-        <p class="error">{{ errors.french }}</p>
-
-        {# Traduction (EN) #}
-
-        <label for="english">Traduction</label>
-        <input type="text" name="english" id="english" value="{{ english }}" class="input">
-
-        <p class="tip">{{ tips.english }}</p>
-
-        <p class="error">{{ errors.english }}</p>
-
-        {# Phonétique #}
-
-        <label for="phonetics">Phonétique</label>
-        <input type="text" name="phonetics" id="phonetics" value="{{ phonetics }}" class="input">
-
-        <p class="tip">{{ tips.phonetics }}</p>
-
-        <p class="error">{{ errors.phonetics }}</p>
-
-        {# Jeton CSRF #}
-
-        <input type="hidden" name="token" value="{{ session.token }}">
-
-        {# Bouton #}
-
-        <button class="btn-info">Ajouter</button>
-
-        {# Lien de retour #}
-
-        <p>
-            <a href="{{ root }}/themes/show/{{ id }}">&lt; Retour à la liste</a>
-        </p>
+        {% include "expressions/form_expression.twig" %}
     </form>
 {% endblock %}

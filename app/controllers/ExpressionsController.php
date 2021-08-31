@@ -104,9 +104,12 @@ class ExpressionsController extends Controller {
 
         // Rendu
 
+        $label = "Ajouter";
+
         echo $this->twig->render("expressions/new_expression.twig", [
             "session" => Session::all(),
             
+            "label" => $label,
             "tips" => $validator->getTips(),
             "errors" => $errors,
 
@@ -198,9 +201,12 @@ class ExpressionsController extends Controller {
 
         // Rendu
 
+        $label = "Editer";
+
         echo $this->twig->render("expressions/edit_expression.twig", [
             "session" => Session::all(),
             
+            "label" => $label,
             "tips" => $validator->getTips(),
             "errors" => $errors,
 
