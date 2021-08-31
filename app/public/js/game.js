@@ -1,14 +1,27 @@
-function showAnswer(index) {
-    let answer = document.querySelector(`#card${index} > .answers`);
-    let closeBtn = document.querySelector(`#card${index} > .close`);
+const flashcards = document.getElementsByClassName("flashcard");
+const answers = document.getElementsByClassName("answers");
+const closeButtons = document.getElementsByClassName("card-close");
 
-    if (answer.style.display != "block") {
-        answer.style.display = "block";
-        closeBtn.style.display = "block";
-        closeBtn.style.position = "relative";
+const nb = flashcards.length;
+
+showAnswers();
+closeCards();
+
+function showAnswers() {
+    for (let index = 0 ; index < nb ; index++) {
+        flashcards[index].addEventListener("click", () => {
+            answers[index].style.display = "block";
+            closeButtons[index].style.display = "block";
+        });
     }
 }
 
-function closeCard(event) {
-    event.parentElement.style.display = "none";
+function closeCards() {
+    for (let index = 0 ; index < nb ; index++) {
+        closeButtons[index].addEventListener("click", () => {
+            flashcards[index].style.display = "none";
+        });
+
+        closeButtons[index].style.display = "none";
+    }
 }

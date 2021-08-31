@@ -28,35 +28,27 @@
             </div>
         </form>
     {% else %}
-        {% set index = 0 %}
-
         {% for flashcard in flashcards %}
-            {% set index = index + 1 %}
+            <ul class="m-top">
+                <li class="flashcard">
+                    <h2>
+                        {{ flashcard.french }}
 
-            <div class="flashcard" id="card{{ index }}" onclick="showAnswer({{ index }});">
-                {# <div class="w3-display-container close" onclick="closeCard(this);"> #}
-                <div class="close" onclick="closeCard(this);">
-                    <div class="w3-button w3-large w3-display-topright">&times;</div>
-                </div>
-
-                <div class="center">
-                    <h2>{{ flashcard.french }}</h2>
-                </div>
-
-                <div class="answers">
-                    <div class="center">
-                        <h2>{{ flashcard.english }}</h2>
-                    </div>
+                        <span class="card-close">&times;</span>
+                    </h2>
                     
-                    <div class="center">
-                        <h3><em>{{ flashcard.phonetics }}</em></h3>
+                    <div class="answers">
+                        <h2>{{ flashcard.english }}</h2>
+
+                        <h3>
+                            <em>{{ flashcard.phonetics }}</em>
+                        </h3>
                     </div>
-                </div>
-            </div>
-            
+                </li>
+            </ul>
         {% endfor %}
 
-        <div class="container" id="restart">
+        <div class="container">
             <a href="{{ root }}/themes/start/{{ id }}">
                 <button class="btn-success m-vertical">Rejouer ?</button>
             </a>

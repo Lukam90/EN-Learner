@@ -415,17 +415,40 @@ tr:hover {
 }
 
 /* Game */
-.flashcard {
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.2), 0 4px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 16px;
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 10px;
+}
+ul li {
+  border: 1px solid #ddd;
+  margin-top: -1px;
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  text-align: center;
+  font-size: 18px;
+  color: black;
+  display: block;
+  position: relative;
+}
+ul li:hover {
+  background-color: #eee;
 }
 
-.close,
 .answers {
   display: none;
 }
 
-.close:hover {
+.card-close {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  padding: 12px 16px;
+  transform: translate(0%, -50%);
+}
+.card-close:hover {
   color: red;
 }
 

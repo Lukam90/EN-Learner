@@ -1,16 +1,41 @@
 /* Game */
 
-.flashcard {
-    //w3-card-4 w3-margin w3-half
-    @include shadow;
-    @include margin;
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+
+    li {
+        border: 1px solid #ddd;
+        margin-top: -1px; // Prevent double borders
+        background-color: #f6f6f6;
+        padding: 12px;
+        text-decoration: none;
+        text-align: center;
+        font-size: 18px;
+        color: black;
+        display: block;
+        position: relative;
+
+        &:hover {
+            background-color: #eee;
+        }
+    }
 }
 
-.close,
 .answers {
     display: none;
 }
 
-.close:hover {
-    color: red;
+.card-close {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    padding: 12px 16px;
+    transform: translate(0%, -50%);
+
+    &:hover {
+        color: red;
+    }
 }
