@@ -5,7 +5,7 @@
         <a href="{{ root }}/themes">&lt; Liste des thèmes</a>
     </p>
 
-    <h2>{{ title }}</h2>
+    <h2>{{ pageTitle }}</h2>
 
     {% if canAdd %}
         <a href="{{ root }}/expressions/new/{{ id }}">
@@ -48,7 +48,7 @@
 
                         {% if canAdd %}
                         <td>
-                            {% if 1 %}
+                            {% if expression.canEdit %}
                             <a href="{{ root }}/expressions/edit/{{ expression.id }}">
                                 <button class="btn-success m-right">
                                     <i class="fa fa-pencil"></i>

@@ -12,13 +12,24 @@ use app\models\Theme;
 use app\models\User;
 use app\models\Expression;
 
-use app\controllers\Controller;
+use app\controllers\ModelController;
 
 use app\validation\ThemeValidation;
 
-class ThemesController extends Controller {
+class ThemesController extends ModelController {
+    // Modèles
+
     private $themeModel;
     private $userModel;
+    private $expressionModel;
+
+    // Validateur
+
+    private $validator;
+
+    // Constantes
+
+    const TIP_TITLE = "Le titre doit être renseigné et contenir jusqu'à 50 caractères.";
 
     // Constructeur
 
@@ -27,7 +38,191 @@ class ThemesController extends Controller {
 
         $this->themeModel = new Theme();
         $this->userModel = new User();
+        $this->expressionModel = new Expression();
+
+        $this->validator = new ThemeValidation();
     }
+
+    /**
+     * Fonctions utilitaires
+     */
+
+    // Indications
+
+    public function setTip() {
+        $this->validator->setTip("title", self::TIP_TITLE);
+    }
+
+    // Autorisation > Edition / Suppression
+    // Thème / Expression
+
+    public function canEditTheme($themeId) {
+        $userId = Session::get("user_id");
+
+        $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
+        $isSuperUser = $this->userModel->isSuperUser($userId);
+
+        $isAuthorized = $belongsTo || $isSuperUser;
+
+        return $isAuthorized;
+    }
+
+    // Si non autorisé
+
+    public function stopIfErrors($themeId) {
+        // Utilisateur non connecté
+
+        Session::errorIfNotLoggedIn();
+
+        // Thème non existant
+
+        Session::errorIfThemeNotExists($themeId);
+
+        // Edition / Suppression
+
+        if (! canEditTheme($themeId) ) {
+            Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
+
+            Redirection::to("/themes");
+
+            return;
+        }
+    }
+
+    // Sélection des thèmes
+
+    public function getThemes() {
+        return $this->themeModel->findAll();
+    }
+
+    // Sélection du thème courant
+
+    public function getCurrentTheme($themeId) {
+        return $this->themeModel->findOneById($themeId);
+    }
+
+    // Thème inexistant > Erreur
+
+    public function themeNotExists($theme) {
+        if (! $theme) {
+            Session::alert("Le thème n'existe pas.");
+
+            Redirection::to("/themes");
+
+            return;
+        }
+    }
+
+    // Auteur d'un thème
+
+    public function getAuthor($themeId) {
+        return $this->themeModel->findUser($themeId);
+    }
+    
+    // Nombre d'expressions
+
+    public function getNbExpressions($themeId) {
+        return $this->themeModel->countExpressions($themeId);
+    }
+
+    // Nouveau thème
+
+    public function insertTheme($title) {
+        $theme = [
+            "title" => $title,
+            "user_id" => Session::get("user_id"),
+        ];
+
+        $saved = $this->themeModel->insert($theme);
+
+        if ($saved) {
+            Session::success("Le thème a bien été ajouté.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/themes");
+
+        return;
+    }
+
+    // Edition d'un thème
+
+    public function updateTheme($themeId, $title) {
+        $saved = $this->themeModel->update($themeId, $title);
+
+        if ($saved) {
+            Session::success("Le thème a bien été édité.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/themes");
+
+        return;
+    }
+
+    // Titre validé
+
+    public function getCheckedTitle() {
+        return $this->validator->checkTitle();
+    }
+
+    /*
+
+    // 
+
+    public function () {
+        
+    }
+
+    // 
+
+    public function () {
+        
+    }
+
+    // 
+
+    public function () {
+        
+    }
+
+    // 
+
+    public function () {
+        
+    }
+
+    // 
+
+    public function () {
+        
+    }
+
+    // %
+
+    public function () {
+        
+    }
+
+    // %
+
+    public function () {
+        
+    }
+
+    // %
+
+    public function () {
+        
+    }
+
+    */
+
+    /**
+     * Pages
+     */
 
     // Liste des thèmes
 
@@ -36,11 +231,11 @@ class ThemesController extends Controller {
 
         /* Données de base */
 
-        $list = $this->themeModel->findAll();
-
-        $themes = [];
+        $list = $this->getThemes();
 
         $canAdd = Session::isLoggedIn();
+
+        $themes = [];
 
         /* Boucle d'affichage */
 
@@ -48,28 +243,18 @@ class ThemesController extends Controller {
             // Thème
 
             $themeId = $theme->id;
-            $title = $theme->title;
-            $author = $this->themeModel->findUser($themeId);
-            $nbExpressions = $this->themeModel->countExpressions($themeId);
 
-            // Auteur
+            $author = $this->getAuthor($themeId);
+            $nbExpressions = $this->getNbExpressions($themeId);
 
-            $username = $author->username;
-            $userId = $author->id;
-
-            // Edition
-
-            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
-            $isSuperUser = $this->userModel->isSuperUser($userId);
-
-            $canEdit = $canAdd && ($belongsTo || $isSuperUser);
+            $canEdit = $canAdd && $this->canEditTheme($themeId);
 
             // Enregistrement
 
             $themes[] = [
                 "id" => $themeId,
-                "title" => $title,
-                "author" => $username,
+                "title" => $theme->title,
+                "author" => $author->username,
                 "nbExpressions" => $nbExpressions,
                 "canEdit" => $canEdit
             ];
@@ -98,19 +283,11 @@ class ThemesController extends Controller {
 
         // Thème courant
 
-        $theme = $this->themeModel->findOneById($themeId);
+        $theme = $this->getCurrentTheme($themeId);
 
-        if (! $theme) {
-            Session::alert("Le thème n'existe pas.");
-
-            Redirection::to("/themes");
-
-            return;
-        }
+        Session::errorIfThemeNotExists($themeId);
 
         // Données
-
-        $title = $theme->title;
 
         $list = $this->themeModel->findExpressions($themeId);
 
@@ -118,21 +295,14 @@ class ThemesController extends Controller {
 
         // Boucle d'affichage
 
-        $expressionModel = new Expression();
+        $userId = Session::get("user_id");
 
         foreach ($list as $expression) {
-            // Lecture
+            $expressionId = $expression->id;
 
-            $id = $expression->id;
-            $french = $expression->french;
-            $english = $expression->english;
-            $phonetics = $expression->phonetics;
+            $author = $this->expressionModel->findUser($expressionId)->username;
 
-            $author = $expressionModel->findUser($id)->username;
-
-            $userId = $expression->user_id;
-
-            $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
+            $belongsTo = $this->expressionModel->belongsTo($userId, $expressionId);
             $isSuperUser = $this->userModel->isSuperUser($userId);
 
             $canEdit = $belongsTo || $isSuperUser;
@@ -140,10 +310,10 @@ class ThemesController extends Controller {
             // Enregistrement
 
             $expressions[] = [
-                "id" => $id,
-                "french" => $french,
-                "english" => $english,
-                "phonetics" => $phonetics,
+                "id" => $expressionId,
+                "french" => $expression->french,
+                "english" => $expression->english,
+                "phonetics" => $expression->phonetics,
                 "author" => $author,
                 "canEdit" => $canEdit,
             ];
@@ -155,10 +325,9 @@ class ThemesController extends Controller {
             "session" => Session::all(),
             "canAdd" => Session::isLoggedIn(),
 
-            "pageTitle" => $title,
+            "pageTitle" => $theme->title,
 
             "id" => $themeId,
-            "title" => $title,
             "expressions" => $expressions,
             "nbExpressions" => count($expressions)
         ]);
@@ -177,13 +346,9 @@ class ThemesController extends Controller {
 
         Session::errorIfNotLoggedIn();
 
-        // Validation
-
-        $validator = new ThemeValidation();
-
         // Indication
 
-        $validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
+        $this->setTip();
 
         // Envoi des données
 
@@ -194,41 +359,22 @@ class ThemesController extends Controller {
         if (Request::isPost()) {
             // Sécurité
 
-            sleep(1);
-
-            Session::errorIfNotToken();
+            $this->secure();
 
             // Titre
 
-            $title = $validator->title();
+            $title = $this->getCheckedTitle();
 
             // Validation
 
-            $errors = $validator->getErrors();
+            $errors = $this->getErrors();
 
             $valid = empty($errors["title"]);
 
             // Ajout
 
-            $userId = Session::get("user_id");
-
             if ($valid) {
-                $newTheme = [
-                    "title" => $title,
-                    "user_id" => $userId,
-                ];
-
-                $saved = $this->themeModel->insert($newTheme);
-
-                if ($saved) {
-                    Session::success("Le thème a bien été ajouté.");
-                } else {
-                    Session::error();
-                }
-
-                Redirection::to("/themes");
-
-                return;
+                $this->insertTheme($title);
             }
         }
 
@@ -237,7 +383,7 @@ class ThemesController extends Controller {
         echo $this->twig->render("themes/new_theme.twig", [
             "session" => Session::all(),
 
-            "tips" => $validator->getTips(),
+            "tips" => $this->getTips(),
             "errors" => $errors,
 
             "pageTitle" => "Ajout d'un thème",
@@ -247,34 +393,26 @@ class ThemesController extends Controller {
         ]);
     }
 
+    
+
     /**
      * Edition d'un thème (titre)
      */
 
-    public function edit($id) {
+    public function edit($themeId) {
         Session::start();
 
-        // Utilisateur non connecté
+        $this->canEditTheme($themeId);
 
-        Session::errorIfNotLoggedIn();
+        // Thème courant
 
-        // Thème non existant
-
-        Session::errorIfThemeNotExists($id);
-
-        // Titre
-
-        $theme = $this->themeModel->findOneById($id);
+        $theme = $this->getCurrentTheme($themeId);
 
         $title = $theme->title;
 
-        // Validation
-
-        $validator = new ThemeValidation();
-
         // Indication
 
-        $validator->setTip("title", "Le titre doit être renseigné et contenir jusqu'à 50 caractères.");
+        $this->setTip();
 
         // Envoi des données
 
@@ -283,34 +421,22 @@ class ThemesController extends Controller {
         if (Request::isPost()) {
             // Sécurité
 
-            sleep(1);
-
-            Session::errorIfNotToken();
+            $this->secure();
 
             // Titre
 
-            $title = $validator->title();
+            $title = $this->getCheckedTitle();
 
             // Validation
 
-            $errors = $validator->getErrors();
+            $errors = $this->getErrors();
 
             $valid = empty($errors["title"]);
 
             // Edition
 
             if ($valid) {
-                $saved = $this->themeModel->update($id, $title);
-
-                if ($saved) {
-                    Session::success("Le thème a bien été édité.");
-                } else {
-                    Session::error();
-                }
-
-                Redirection::to("/themes");
-
-                return;
+                $this->updateTheme($themeId, $title);
             }
         }
 
@@ -319,10 +445,10 @@ class ThemesController extends Controller {
         echo $this->twig->render("themes/edit_theme.twig", [
             "session" => Session::all(),
 
-            "tips" => $validator->getTips(),
+            "tips" => $this->getTips(),
             "errors" => $errors,
 
-            "id" => $id,
+            "id" => $themeId,
             "pageTitle" => "Edition du thème : $title",
             "label" => "Editer",
 
@@ -334,24 +460,18 @@ class ThemesController extends Controller {
      * Suppression d'un thème (titre)
      */
 
-    public function delete($id) {
+    public function delete($themeId) {
         Session::start();
 
-        // Utilisateur non connecté
-
-        Session::errorIfNotLoggedIn();
-
-        // Thème inexistant
-
-        Session::errorIfThemeNotExists($id);
+        $this->stopIfErrors();
 
         // Thème existant
 
-        $theme = $this->themeModel->findOneById($id);
+        $theme = $this->themeModel->findOneById($themeId);
 
         $title = $theme->title;
 
-        $nbExpressions = $this->themeModel->countExpressions($id);
+        $nbExpressions = $this->themeModel->countExpressions($themeId);
 
         // Suppression
 
@@ -360,7 +480,7 @@ class ThemesController extends Controller {
 
             Session::errorIfNotToken();
 
-            $deleted = $this->themeModel->delete($id);
+            $deleted = $this->themeModel->delete($themeId);
 
             if ($deleted) {
                 Session::success("Le thème a bien été supprimé.");
@@ -382,33 +502,27 @@ class ThemesController extends Controller {
 
             "nbExpressions" => $nbExpressions,
 
-            "title" => $title,
-            "id" => $id
+            "id" => $themeId,
+            "title" => $title
         ]);
     }
 
     // Jeu de flashcards
 
-    public function start($id) {
+    public function start($themeId) {
         Session::start();
 
         // Thème courant
 
-        $theme = $this->themeModel->findOneById($id);
+        $theme = $this->themeModel->findOneById($themeId);
 
-        if (! $theme) {
-            Session::alert("Le thème n'existe pas.");
-
-            Redirection::to("/themes");
-
-            return;
-        }
+        $this->themeNotExists();
 
         // Données
 
         $title = $theme->title;
 
-        $list = $this->themeModel->findExpressions($id);
+        $list = $this->themeModel->findExpressions($themeId);
 
         $count = count($list);        
 

@@ -10,24 +10,105 @@ use app\core\Redirection;
 
 use app\models\User;
 
-use app\controllers\Controller;
+use app\controllers\ModelController;
 
 use app\validation\UserValidation;
 
-class UsersController extends Controller {
+class UsersController extends ModelController {
     // Attributs
 
     private $userModel; // Modèle (User)
 
-    /**
-     * Constructeur
-     */
+    // Constantes
+
+    const TIP_USERNAME = "Le pseudo doit faire entre 2 et 32 caractères alphanumériques (espaces inclus).";
+    const TIP_EMAIL = "L'adresse e-mail doit être valide et peut comporter jusqu'à 100 caractères.";
+    const TIP_PASSWORD = "Le mot de passe doit comporter 8 à 32 caractères alphanumériques, avec au moins une minuscule, une majuscule et un chiffre.";
+
+    // Constructeur
 
     public function __construct() {
         $this->init();
 
         $this->userModel = new User();
+        $this->validator = new UserValidation();
     }
+
+    /**
+     * Fonctions utilitaires
+     */
+
+    // Indications
+
+    public function setTips() {
+        $validator->setTip("username", self::TIP_USERNAME);
+        $validator->setTip("email", self::TIP_EMAIL);
+        $validator->setTip("password", self::TIP_PASSWORD);
+    }
+
+    // Ensemble des utilisateurs
+
+    public function getAllUsers() {
+        return $this->userModel->findAll();
+    }
+
+    // Sélection d'un utilisateur (ID)
+
+    public function getOneUser($userId) {
+        return $this->userModel->findOneById($userId);
+    }
+
+    // Super utilisateur (modérateur, administrateur)
+
+    public function isSuperUser($userId) {
+        return $this->userModel->isSuperUser($userId);
+    }
+
+    // Nombre de thèmes
+
+    public function getNbThemes($userId) {
+        return $this->userModel->countThemes($userId);
+    }
+
+    // Nombre d'expressions
+
+    public function getNbExpressions($userId) {
+        return $this->userModel->countExpressions($userId);
+    }
+
+    
+
+    /*
+    
+    %
+    
+
+    
+
+    
+
+    
+
+    public function () {
+
+    }
+
+    public function () {
+        
+    }
+
+    public function () {
+        
+    }
+
+    public function () {
+        
+    }
+
+    public function () {
+        
+    }
+    */
 
     /**
      * Liste des utilisateurs
@@ -43,12 +124,12 @@ class UsersController extends Controller {
         if (Session::isLoggedIn()) {
             $userId = Session::get("user_id");
 
-            $isSuperUser = $this->userModel->isSuperUser($userId);
+            $isSuperUser = $this->isSuperUser($userId);
         }
         
         // Données
 
-        $list = $this->userModel->findAll();
+        $list = $this->getAllUsers();
 
         $users = [];
 
@@ -56,14 +137,12 @@ class UsersController extends Controller {
             // Lecture
 
             $userId = $user->id;
-            $username = $user->username;
-            $role = $user->role;
 
             $createdAt = new \DateTime($user->created_at);
             $createdAt = $createdAt->format("d/m/Y");
 
-            $nbThemes = $this->userModel->countThemes($userId);
-            $nbExpressions = $this->userModel->countExpressions($userId);
+            $nbThemes = $this->countThemes($userId);
+            $nbExpressions = $this->countExpressions($userId);
 
             // Couleur / Rôle
 
@@ -83,8 +162,8 @@ class UsersController extends Controller {
 
             $users[] = [
                 "id" => $userId,
-                "username" => $username,
-                "role" => $role,
+                "username" => $user->username,
+                "role" => $user->role,
                 "color" => $color,
                 "createdAt" => $createdAt,
                 "nbThemes" => $nbThemes,
@@ -132,7 +211,7 @@ class UsersController extends Controller {
             return;
         }
 
-        $user = $this->userModel->findOneById($id);
+        $user = $this->getOneUser($id);
 
         $username = $user->username;
         $email = $user->email;
@@ -173,15 +252,9 @@ class UsersController extends Controller {
 
         Session::errorIfLoggedIn();
 
-        // Validation
-
-        $validator = new UserValidation();
-
         // Indications
 
-        $validator->setTip("username", "Le pseudo doit faire entre 2 et 32 caractères alphanumériques (espaces inclus).");
-        $validator->setTip("email", "L'adresse e-mail doit être valide et peut comporter jusqu'à 100 caractères.");
-        $validator->setTip("password", "Le mot de passe doit comporter 8 à 32 caractères alphanumériques, avec au moins une minuscule, une majuscule et un chiffre.");
+        $this->setTips();
 
         // Données du formulaire
 
@@ -364,7 +437,7 @@ class UsersController extends Controller {
 
         // Utilisateur sélectionné
 
-        $user = $this->userModel->findOneById($id);
+        $user = $this->getOneUser($id);
 
         $id = $user->id;
         $username = $user->username;
@@ -418,7 +491,7 @@ class UsersController extends Controller {
      * Suppression d'un utilisateur
      */
 
-    public function delete($id) {
+    public function delete($userId) {
         Session::start();
 
         // Utilisateur non autorisé
@@ -427,23 +500,23 @@ class UsersController extends Controller {
 
         // Utilisateur inexistant
 
-        Session::errorIfUserNotExists($id);
+        Session::errorIfUserNotExists($userId);
 
         // Utilisateur existant
 
-        $user = $this->userModel->findOneById($id);
+        $user = $this->getOneUser($userId);
 
         $username = $user->username;
 
-        $nbThemes = $this->userModel->countThemes($id);
-        $nbExpressions = $this->userModel->countExpressions($id);
+        $nbThemes = $this->getNbThemes($userId);
+        $nbExpressions = $this->getNbExpressions($userId);
 
         // Envoi des données
 
         if (Request::isPost()) {
-            sleep(1);
+            // Sécurité
 
-            Session::errorIfNotToken();
+            $this->secure();
 
             // Suppression
 

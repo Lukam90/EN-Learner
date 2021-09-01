@@ -26,4 +26,12 @@ abstract class Controller {
         $this->twig->addGlobal('root', $this->root);
         $this->twig->addGlobal('public', $this->root . "/app/public");
     }
+
+    // Sécurité
+
+    public function secure() {
+        sleep(1);
+
+        Session::errorIfNotToken();
+    }
 }

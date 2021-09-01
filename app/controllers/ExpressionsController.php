@@ -14,7 +14,15 @@ use app\controllers\Controller;
 use app\validation\ExpressionValidation;
 
 class ExpressionsController extends Controller {
+    // Modèle
+
     private $expressionModel;
+
+    // Constantes
+
+    const TIP_FRENCH = "L'expression doit être renseignée et contenir jusqu'à 255 caractères.";
+    const TIP_ENGLISH = "La traduction doit être renseignée et contenir jusqu'à 255 caractères.";
+    const TIP_PHONETICS = "La transcription phonétique doit être renseignée et contenir jusqu'à 255 caractères.";
 
     // Constructeur
 
@@ -23,6 +31,20 @@ class ExpressionsController extends Controller {
 
         $this->expressionModel = new Expression();
     }
+
+    /**
+     * Fonctions utilitaires
+     */
+
+    public function setTips() {
+        $validator->setTip("french", "L'expression doit être renseignée et contenir jusqu'à 255 caractères.");
+        $validator->setTip("english", "La traduction doit être renseignée et contenir jusqu'à 255 caractères.");
+        $validator->setTip("phonetics", "La transcription phonétique doit être renseignée et contenir jusqu'à 255 caractères.");
+    }
+
+    /**
+     * Pages
+     */
 
     // Ajout d'une nouvelle expression
 

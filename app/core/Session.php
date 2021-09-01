@@ -131,18 +131,6 @@ class Session {
     }
 
     /**
-     * Redirect with message
-     */
-
-    public static function redirectHomeWith($type, $message) {
-        self::set($type, $message);
-
-        Redirection::to("/");
-
-        exit;
-    }
-
-    /**
      * Logout with message
      */
 
@@ -152,26 +140,6 @@ class Session {
         Redirection::to("/users/logout");
 
         exit;
-    }
-
-    /**
-     * Error if logged in
-     */
-
-    public static function errorIfLoggedIn() {
-        if (self::isLoggedIn()) {
-            self::redirectHomeWith("alert", "Vous êtes déjà connecté(e).");
-        }
-    }
-
-    /**
-     * Error if not logged in
-     */
-
-    public static function errorIfNotLoggedIn() {
-        if (! self::isLoggedIn()) {
-            self::redirectHomeWith("alert", "Vous devez être connecté(e) pour accéder à cette page.");
-        }
     }
 
     /**
@@ -188,7 +156,9 @@ class Session {
         $isAuthorized = $userModel->$isMethod($userId);
 
         if (! $isAuthorized) {
-            self::redirectHomeWith("alert", "Vous n'êtes pas autorisé(e) à effectuer cette action.");
+            self::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
+
+            Redirection::to("/");
         }
     }
 
@@ -213,14 +183,16 @@ class Session {
      */
     
     public static function errorIfBanned() {
-        self::redirectHomeWith("alert", "Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
+        self::alert("Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
+
+        Redirection::to("/");
     }
 
      /**
      * Error if not matching token
      */
 
-    public static function errorIfNotToken() {
+    public static function expiredToken() {
         if (Post::var("token") != self::get("token")) {
             self::logoutWith("alert", "Le token CSRF a expiré. Veuillez vous reconnecter.");
         }
@@ -286,7 +258,9 @@ class Session {
 
     public static function redirectIfLoggedIn() {
         if (self::isLoggedIn()) {
-            self::redirectHomeWith("success", "Vous êtes connecté(e).");
+            self::success("Vous êtes connecté(e).");
+
+            Redirection::to("/");
         }
     }
 

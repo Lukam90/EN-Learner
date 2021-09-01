@@ -19,7 +19,7 @@ class UserValidation extends Validation {
 
     // Pseudo
 
-    public function username() {
+    public function checkUsername() {
         $username = "";
 
         if (! Post::empty("username")) {
@@ -47,7 +47,7 @@ class UserValidation extends Validation {
 
     // E-mail
 
-    public function email() {
+    public function checkEmail() {
         $email = "";
 
         if (! Post::empty("email")) {
@@ -73,7 +73,7 @@ class UserValidation extends Validation {
 
     // Mot de passe
 
-    public function password() {
+    public function checkPassword() {
         $password = "";
 
         if (! Post::empty("password")) {
@@ -107,7 +107,7 @@ class UserValidation extends Validation {
 
     // Confirmation du mot de passe
 
-    public function confirm($password) {
+    public function checkConfirm($password) {
         $confirm = "";
 
         if (! Post::empty("confirm")) {

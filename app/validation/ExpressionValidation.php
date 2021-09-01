@@ -17,69 +17,49 @@ class ExpressionValidation extends Validation {
         $this->expressionModel = new Expression();
     }
 
-    // Expression (FR)
+    // Général
 
-    public function french() {
-        $french = "";
+    public function check($field, $label) {
+        $res = "";
 
-        if (! Post::empty("french")) {
-            $french = Post::var("french");
+        if (! Post::empty($field)) {
+            $res = Post::var($field);
 
-            $this->setTip("french", "L'expression doit être renseignée et contenir jusqu'à 255 caractères.");
+            $this->setTip($field, "$label doit être renseignée et contenir jusqu'à 255 caractères.");
     
-            if (strlen($french) <= 255) {
-                $this->erase("french");
+            if (strlen($res) <= 255) {
+                $this->erase($field);
             } else {
-                $this->setError("french", "L'expression ne doit pas dépasser 255 caractères.");
+                $this->setError($field, "$label ne doit pas dépasser 255 caractères.");
             }
         } else {
-            $this->setError("french", "L'expression doit être renseignée.");
+            $this->setError($field, "$label doit être renseignée.");
         }
+
+        return $res;
+    }
+
+    // Expression (FR)
+
+    public function checkFrench() {
+        $french = check("french", "L'expression");
 
         return $french;
     }
 
     // Traduction (EN)
 
-    public function english() {
-        $english = "";
-
-        if (! Post::empty("english")) {
-            $english = Post::var("english");
-
-            $this->setTip("english", "La traduction doit être renseignée et contenir jusqu'à 255 caractères.");
-    
-            if (strlen($english) <= 255) {
-                $this->erase("english");
-            } else {
-                $this->setError("english", "La traduction ne doit pas dépasser 255 caractères.");
-            }
-        } else {
-            $this->setError("english", "La traduction doit être renseignée.");
-        }
+    public function checkEnglish() {
+        $english = check("english", "La traduction");
 
         return $english;
     }
 
     // Transcription phonétique
 
-    public function phonetics() {
-        $phonetics = "";
-    
-        if (! Post::empty("phonetics")) {
-            $phonetics = Post::var("phonetics");
-    
-            $this->setTip("phonetics", "La transcription phonétique doit être renseignée et contenir jusqu'à 255 caractères.");
-    
-            if (strlen($phonetics) <= 255) {
-                $this->erase("phonetics");
-            } else {
-                $this->setError("phonetics", "La transcription phonétique ne doit pas dépasser 255 caractères.");
-            }
-        } else {
-            $this->setError("phonetics", "La transcription phonétique doit être renseignée.");
-        }
-    
+    public function checkPhonetics() {
+        $phonetics = check("phonetics", "La transcription phonétique");
+
         return $phonetics;
     }
 }

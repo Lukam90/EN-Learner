@@ -25,8 +25,8 @@
                         <td class="{{ user.color }}">{{ user.role }}</td>
                         <td>{{ user.createdAt }}</td>
                         <td>
-                            {{ user.nbThemes }} thème{% if user.nbThemes > 1 %}s{% endif %}<br>
-                            {{ user.nbExpressions }} expression{% if user.nbExpressions > 1 %}s{% endif %}
+                            <strong>{{ user.nbThemes }}</strong> thème{% if user.nbThemes > 1 %}s{% endif %}<br>
+                            <strong>{{ user.nbExpressions }}</strong> expression{% if user.nbExpressions > 1 %}s{% endif %}
                         </td>
 
                         {% if session.user_id %}

@@ -19,7 +19,7 @@ class ThemeValidation extends Validation {
 
     // Titre
 
-    public function title() {
+    public function checkTitle() {
         $title = "";
 
         if (! Post::empty("title")) {
