@@ -2,12 +2,13 @@
 
 namespace app\controllers;
 
-use app\core\Redirection;
 use app\core\Request;
 use app\core\Session;
+use app\core\Redirection;
 
 use app\models\Theme;
 use app\models\Expression;
+use app\models\User;
 
 use app\controllers\DataController;
 
@@ -25,6 +26,8 @@ class ExpressionsController extends DataController {
     public function __construct() {
         $this->init();
 
+        $this->userModel = new User();
+        $this->themeModel = new Theme();
         $this->expressionModel = new Expression();
 
         $this->validator = new ExpressionValidation();
@@ -174,7 +177,7 @@ class ExpressionsController extends DataController {
 
         $this->isLoggedIn();
 
-        // Existence du thème
+        // Existence du thèmeù
 
         $this->themeExists($themeId);
 
@@ -259,7 +262,7 @@ class ExpressionsController extends DataController {
 
         // Données existantes
 
-        $expression = $this->getOneById($id);
+        $expression = $this->getOneById($expressionId);
 
         $french = $expression["french"];
         $english = $expression["english"];
@@ -371,7 +374,7 @@ class ExpressionsController extends DataController {
 
             "pageTitle" => "Suppression de l'expression",
 
-            "id" => $id,
+            "id" => $expressionId,
             "themeId" => $themeId,
 
             "french" => $french,

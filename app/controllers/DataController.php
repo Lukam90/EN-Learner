@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\core\Session;
+use app\core\Redirection;
 
 use app\controllers\ModelController;
 

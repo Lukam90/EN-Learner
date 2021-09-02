@@ -56,8 +56,6 @@ abstract class ModelController extends Controller {
     
     public function isSuperUser() {
         $userId = Session::get("user_id");
-
-        \var_dump($userId);
         
         return $this->userModel->isSuperUser($userId);
     }

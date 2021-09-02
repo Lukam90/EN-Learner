@@ -47,12 +47,12 @@ class Theme extends Model {
 
     // Sélection d'une ligne par un ID
 
-    public function findOneById($id) {
+    public function findOneById($themeId) {
         $this->setQuery("SELECT *
                          FROM themes
                          WHERE id = :id");
 
-        return $this->fetchOne("id", $id);
+        return $this->fetchOne("id", $themeId);
     }
 
     // Sélection d'un thème par le titre
@@ -134,13 +134,13 @@ class Theme extends Model {
 
     // Edition d'un thème
 
-    public function update($id, $title) {
+    public function update($themeId, $title) {
         $this->setQuery("UPDATE themes
                          SET title = :title
                          WHERE id = :id");
 
         $data = [
-            "id" => $id,
+            "id" => $themeId,
             "title" => $title
         ];
 
@@ -149,11 +149,11 @@ class Theme extends Model {
 
     // Suppression d'une ligne par un ID
 
-    public function delete($id) {
+    public function delete($themeId) {
         $this->setQuery("DELETE FROM themes
                          WHERE id = :id");
 
-        $data = ["id" => $id];
+        $data = ["id" => $themeId];
 
         return $this->bindValues($data);
     }

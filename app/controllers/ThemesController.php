@@ -505,14 +505,14 @@ class ThemesController extends DataController {
 
         // Niveaux de difficulté
 
-        $levels = ["Facile"];
+        $levels = ["Facile (10)"];
 
         if ($count >= 15 && $count < 20) {
-            $levels = ["Facile", "Moyen"];
+            $levels = ["Facile (10)", "Moyen (15)"];
         }
         
         if ($count >= 20) {
-            $levels = ["Facile", "Moyen", "Difficile"];
+            $levels = ["Facile (10)", "Moyen (15)", "Difficile (20)"];
         }
 
         // Lancement du jeu
@@ -525,13 +525,13 @@ class ThemesController extends DataController {
             // Choix du niveau
 
             switch ($level) {
-                case "Facile":
+                case "Facile (10)":
                     $nb = 10;
                     break;
-                case "Moyen":
+                case "Moyen (15)":
                     $nb = 15;
                     break;
-                case "Difficile":
+                case "Difficile (20)":
                     $nb = 20;
                     break;
             }
