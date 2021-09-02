@@ -42,23 +42,178 @@ class UsersController extends ModelController {
         $validator->setTip("password", self::TIP_PASSWORD);
     }
 
+    /* Utilisateurs */
+
     // Ensemble des utilisateurs
 
     public function getAllUsers() {
         return $this->userModel->findAll();
     }
 
-    // Sélection d'un utilisateur (ID)
+    // Sélection d'un utilisateur par l'ID
 
-    public function getOneUser($userId) {
+    public function getUserById($userId) {
         return $this->userModel->findOneById($userId);
     }
+
+    // Sélection d'un utilisateur par l'e-mail
+
+    public function getUserByEmail($email) {
+        return $this->userModel->findOneByEmail($email);
+    }
+
+    // Utilisateur existant
+
+    public function exists($userId) {
+        $exists = $this->getUserById($userId);
+
+        if (! $exists) {
+            self::alert("L'utilisateur n'existe pas.");
+
+            Redirection::to("/users");
+
+            return;
+        }
+    }
+
+    // Couleur / Rôle
+
+    public function setColor($role) {
+        $color = "black";
+
+        if ($role == "Administrateur") {
+            $color = "red";
+        } else if ($role == "Modérateur") {
+            $color = "green";
+        }
+
+        return $color;
+    }
+
+    // Utilisateur non suspendu
+
+    public function notSuspended($email) {
+        $user = $this->getUserByEmail($email);
+
+        $isSuspended = ($user->role === "Suspendu");
+
+        if ($isSuspended) {
+            Session::alert("Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
+
+            Redirection::to("/");
+
+            return;
+        }
+    }
+
+    // Connexion d'un utilisateur
+
+    public function canLogIn($email, $password) {
+        $isLoggedIn = $this->userModel->login($email, $password);
+
+        if ($isLoggedIn) {
+            $errors = $this->getErrors();
+
+            $errors["login"] = "";
+
+            // Utilisateur trouvé
+
+            $user = $this->getUserByEmail($email);
+
+            // Utilisateur autorisé
+
+            $this->notSuspended($email);
+
+            Session::login($user);
+
+            Session::success("Vous êtes connecté(e).");
+
+            Redirection::to("/");
+
+            return;
+        } else {
+            $errors["login"] = "Les identifiants sont incorrects. Veuillez réessayer.";
+        }
+    }
+
+    // Même utilisateur
+
+    public function sameUser($userId) {
+        $currentUserId = Session::get("user_id");
+
+        return $currentUserId == $userId;
+    }
+
+    // Accès à la page de profil
+
+    public function canAccess($userId) {
+        if (! $this->sameUser($userId)) {
+            Session::alert("Vous n'êtes pas autorisé(e) à accéder à cette page de profil utilisateur.");
+
+            Redirection::to("/");
+
+            return;
+        }
+    }
+
+    /* CRUD */
+
+    // Ajout d'un nouvel utilisateur
+
+    public function insertUser($username, $email, $password) {
+        $newUser = [
+            "username" => $username,
+            "email" => $email,
+            "password" => $password,
+            "role" => "Membre"
+        ];
+
+        $registered = $this->userModel->insert($newUser);
+
+        if ($registered) {
+            Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
+
+            Redirection::to("/users/login");
+
+            return;
+        } else {
+            Session::error();
+        }
+    }
+
+    // Suppression d'un utilisateur
+
+    public function deleteUser($themeId) {
+        $deleted = $this->userModel->delete($themeId);
+
+        if ($deleted) {
+            Session::success("L'utilisateur a bien été supprimé.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/users");
+
+        return;
+    }
+
+    /* Thèmes */
 
     // Nombre de thèmes
 
     public function getNbThemes($userId) {
         return $this->userModel->countThemes($userId);
     }
+
+    // L'utilisateur est l'auteur du thème
+
+    public function ownsTheme($themeId) {
+        $userId = Session::get("user_id");
+
+        $this->themeModel->belongsTo($userId, $themeId);
+    }
+
+    /* Expressions */
 
     // Nombre d'expressions
 
@@ -92,44 +247,28 @@ class UsersController extends ModelController {
         return $this->validator->checkConfirm($password);
     }
 
-    /*
-    
-    // 
+    // Formulaire d'inscription
 
-    public function () {
-        
+    public function validateRegisterForm($errors) {
+        empty($errors["username"])
+        && empty($errors["email"])
+        && empty($errors["password"])
+        && empty($errors["confirm"]);
     }
 
-    // 
+    // Formulaire de connexion
 
-    public function () {
-        
+    public function validateLoginForm($email, $password) {
+        $isEmpty = empty($email) || empty($password);
+
+        if ($isEmpty) {
+            Session::alert("Les champs doivent être renseignés.");
+
+            Redirection::to("/users/login");
+
+            return;
+        }
     }
-
-    // 
-
-    public function () {
-        
-    }
-
-    // 
-
-    public function () {
-        
-    }
-
-    // 
-
-    public function () {
-        
-    }
-
-    // 
-
-    public function () {
-        
-    }
-    */
 
     /**
      * Liste des utilisateurs
@@ -168,17 +307,11 @@ class UsersController extends ModelController {
 
             // Couleur / Rôle
 
-            $color = "";
-
-            if ($role == "Administrateur") {
-                $color = "red";
-            } else if ($role == "Modérateur") {
-                $color = "green";
-            }
+            $color = $this->setColor($role);
 
             // Edition
 
-            $canEdit = true;// $this->themeModel->belongsTo($userId, $themeId);
+            $canEdit = $this->isSuperUser() || $this->ownsTheme($themeId);
 
             // Enregistrement
 
@@ -212,28 +345,20 @@ class UsersController extends ModelController {
      * Profil d'un utilisateur
      */
 
-    public function profile($id) {
+    public function profile($userId) {
         Session::start();
-
-        // Erreur si non connecté
-
-        $this->notLoggedIn();
 
         // Utilisateur connecté
 
-        $userId = Session::get("user_id");
+        $this->isLoggedIn();
 
-        // Même utilisateur
+        // Utilisateur autorisé
 
-        if ($userId != $id) {
-            Session::alert("Vous n'êtes pas autorisé(e) à accéder à cette page de profil utilisateur.");
+        $this->canAccess($userId);
 
-            Redirection::to("/");
+        // Utilisateur courant
 
-            return;
-        }
-
-        $user = $this->getOneUser($id);
+        $user = $this->getUserById($userId);
 
         $username = $user->username;
         $email = $user->email;
@@ -241,8 +366,8 @@ class UsersController extends ModelController {
 
         // Stats
 
-        $nbThemes = $this->userModel->countThemes($userId);
-        $nbExpressions = $this->userModel->countExpressions($userId);
+        $nbThemes = $this->getNbThemes($userId);
+        $nbExpressions = $this->getNbExpressions($userId);
 
         // Rendu
 
@@ -292,41 +417,21 @@ class UsersController extends ModelController {
         if (Request::isPost()) {
             sleep(1);
 
-            $username = $this->validator->checkUsername();
-            $email = $this->validator->checkEmail();
-            $password = $this->validator->checkPassword();
-            $confirm = $this->validator->checkConfirm($password);
+            $username = $this->getCheckedUsername();
+            $email = $this->getCheckedEmail();
+            $password = $this->getCheckedPassword();
+            $confirm = $this->getCheckedConfirm($password);
 
             // Validation
 
             $errors = $this->getErrors();
 
-            $valid = empty($errors["username"])
-                     && empty($errors["email"])
-                     && empty($errors["password"])
-                     && empty($errors["confirm"]);
+            $valid = $this->validateRegisterForm($errors);
 
             // Enregistrement
 
             if ($valid) {
-                $newUser = [
-                    "username" => $username,
-                    "email" => $email,
-                    "password" => $password,
-                    "role" => "Membre"
-                ];
-
-                $registered = $this->userModel->insert($newUser);
-
-                if ($registered) {
-                    Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
-
-                    Redirection::to("/users/login");
-
-                    exit;
-                } else {
-                    Session::error();
-                }
+                $this->insertUser($username, $email, $password);
             }
         }
 
@@ -354,9 +459,9 @@ class UsersController extends ModelController {
     public function login() {
         Session::start();
 
-        // Erreur si utilisateur déjà connecté
+        // Invité / Utilisateur non connecté
 
-        Session::errorIfLoggedIn();
+        $this->isGuest();
 
         // Données du formulaire
 
@@ -368,44 +473,20 @@ class UsersController extends ModelController {
         $errors = [];
 
         if (Request::isPost()) {
+            // Données
+
             sleep(1);
 
             $email = Post::var("email");
             $password = Post::var("password");
 
-            $isEmpty = empty($email) || empty($password);
+            // Champs renseignés
 
-            if ($isEmpty) {
-                Session::alert("Les champs doivent être renseignés.");
+            $this->validateLoginForm($email, $password);
 
-                Redirection::to("/users/login");
+            // Connexion d'un utilisateur
 
-                return;
-            }
-
-            $loggedIn = $this->userModel->login($email, $password);
-
-            if ($loggedIn) {
-                $errors["login"] = "";
-
-                $user = $this->userModel->findOneByEmail($email);
-
-                $isBanned = ($user->role === "Suspendu");
-
-                // Utilisateur banni
-
-                if ($isBanned) {
-                    Session::errorIfBanned();
-                }
-
-                // Utilisateur autorisé
-
-                Session::login($user);
-
-                Session::redirectIfLoggedIn();
-            } else {
-                $errors["login"] = "Les identifiants sont incorrects. Veuillez réessayer.";
-            }
+            $this->canLogIn($email, $password);
         }
 
         // Rendu
@@ -459,7 +540,7 @@ class UsersController extends ModelController {
 
         // Utilisateur sélectionné
 
-        $user = $this->getOneUser($id);
+        $user = $this->getUserById($id);
 
         $id = $user->id;
         $username = $user->username;
@@ -520,13 +601,13 @@ class UsersController extends ModelController {
 
         Session::errorIfNotSuperUser();
 
-        // Utilisateur inexistant
-
-        Session::errorIfUserNotExists($userId);
-
         // Utilisateur existant
 
-        $user = $this->getOneUser($userId);
+        $this->exists($userId);
+
+        // Utilisateur courant
+
+        $user = $this->getUserById($userId);
 
         $username = $user->username;
 
@@ -542,17 +623,7 @@ class UsersController extends ModelController {
 
             // Suppression
 
-            $deleted = $this->userModel->delete($id);
-
-            if ($deleted) {
-                Session::success("L'utilisateur a bien été supprimé.");
-            } else {
-                Session::error();
-            }
-
-            Redirection::to("/users");
-
-            return;
+            $this->deleteUser($userId);
         }
 
         // Rendu

@@ -130,87 +130,15 @@ class Session {
         return self::has("user_id");
     }
 
-    /**
-     * Logout with message
-     */
-
-    public static function logoutWith($type, $message) {
-        self::set($type, $message);
-
-        Redirection::to("/users/logout");
-
-        exit;
-    }
-
-    /**
-     * Error if not authorized
-     */
-
-    public static function errorIfNotAuthorized($isMethod) {
-        self::errorIfNotLoggedIn();
-
-        $userId = self::get("user_id");
-
-        $userModel = new User();
-
-        $isAuthorized = $userModel->$isMethod($userId);
-
-        if (! $isAuthorized) {
-            self::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
-
-            Redirection::to("/");
-        }
-    }
-
-    /**
-     * Error if not superuser (moderator or admin)
-     */
-
-    public static function errorIfNotSuperUser() {
-        self::errorIfNotAuthorized("isSuperUser");
-    }
-
-    /**
-     * Error if not admin
-     */
-
-    public static function errorIfNotAdmin() {
-        self::errorIfNotAuthorized("isAdmin");
-    }
-
-    /**
-     * Error if banned
-     */
-    
-    public static function errorIfBanned() {
-        self::alert("Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
-
-        Redirection::to("/");
-    }
-
      /**
      * Error if not matching token
      */
 
     public static function expiredToken() {
         if (Post::var("token") != self::get("token")) {
-            self::logoutWith("alert", "Le token CSRF a expiré. Veuillez vous reconnecter.");
-        }
-    }
+            self::alert("Le token CSRF a expiré. Veuillez vous reconnecter.");
 
-    /**
-     * Error if user not exists
-     */
-    
-    public static function errorIfUserNotExists($userId) {
-        $userModel = new User();
-
-        $exists = $userModel->findOneById($userId);
-
-        if (! $exists) {
-            self::alert("L'utilisateur n'existe pas.");
-
-            Redirection::to("/users");
+            Redirection::to("/users/logout");
 
             return;
         }
@@ -231,18 +159,6 @@ class Session {
             Redirection::to("/expressions");
     
             return;
-        }
-    }
-
-    /**
-     * Redirect if logged in
-     */
-
-    public static function redirectIfLoggedIn() {
-        if (self::isLoggedIn()) {
-            self::success("Vous êtes connecté(e).");
-
-            Redirection::to("/");
         }
     }
 
