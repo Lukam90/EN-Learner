@@ -9,11 +9,11 @@ use app\core\Session;
 use app\models\Theme;
 use app\models\Expression;
 
-use app\controllers\Controller;
+use app\controllers\ModelController;
 
 use app\validation\ExpressionValidation;
 
-class ExpressionsController extends Controller {
+class ExpressionsController extends ModelController {
     // Modèle
 
     private $expressionModel;
@@ -30,6 +30,8 @@ class ExpressionsController extends Controller {
         $this->init();
 
         $this->expressionModel = new Expression();
+
+        $this->validator = new ExpressionValidation();
     }
 
     /**
@@ -37,9 +39,9 @@ class ExpressionsController extends Controller {
      */
 
     public function setTips() {
-        $validator->setTip("french", "L'expression doit être renseignée et contenir jusqu'à 255 caractères.");
-        $validator->setTip("english", "La traduction doit être renseignée et contenir jusqu'à 255 caractères.");
-        $validator->setTip("phonetics", "La transcription phonétique doit être renseignée et contenir jusqu'à 255 caractères.");
+        $validator->setTip("french", self::TIP_FRENCH);
+        $validator->setTip("english", self::TIP_ENGLISH);
+        $validator->setTip("phonetics", self::TIP_PHONETICS);
     }
 
     /**
@@ -53,7 +55,7 @@ class ExpressionsController extends Controller {
 
         // Utilisateur non connecté
 
-        Session::errorIfNotLoggedIn();
+        $this->notLoggedIn();
 
         // Existence du thème
 
@@ -61,13 +63,11 @@ class ExpressionsController extends Controller {
 
         // Validation
 
-        $validator = new ExpressionValidation();
+        
 
         // Indications
 
-        $validator->setTip("french", "L'expression doit être renseignée et contenir jusqu'à 255 caractères.");
-        $validator->setTip("english", "La traduction doit être renseignée et contenir jusqu'à 255 caractères.");
-        $validator->setTip("phonetics", "La transcription phonétique doit être renseignée et contenir jusqu'à 255 caractères.");
+        $this->setTips();
 
         // Envoi des données
 
@@ -129,7 +129,7 @@ class ExpressionsController extends Controller {
 
         $label = "Ajouter";
 
-        echo $this->twig->render("expressions/new_expression.twig", [
+        $this->render("expressions/new_expression.twig", [
             "session" => Session::all(),
             
             "label" => $label,
@@ -154,7 +154,7 @@ class ExpressionsController extends Controller {
 
         // Utilisateur non connecté
 
-        Session::errorIfNotLoggedIn();
+        $this->notLoggedIn();
 
         // Expression inexistante
 
@@ -170,34 +170,28 @@ class ExpressionsController extends Controller {
 
         $themeId = $expression->theme_id;
 
-        // Validation
-
-        $validator = new ExpressionValidation();
-
         // Indications
 
-        $validator->setTip("french", "L'expression doit être renseignée et contenir jusqu'à 255 caractères.");
-        $validator->setTip("english", "La traduction doit être renseignée et contenir jusqu'à 255 caractères.");
-        $validator->setTip("phonetics", "La transcription phonétique doit être renseignée et contenir jusqu'à 255 caractères.");
+        $this->setTips();
 
         // Envoi des données
 
         $errors = [];
 
         if (Request::isPost()) {
-            sleep(1);
+            // Sécurité
 
-            Session::errorIfNotToken();
+            $this->secure();
 
             // Données
 
-            $french = $validator->french();
-            $english = $validator->english();
-            $phonetics = $validator->phonetics();
+            $french = $this->validator->checkFrench();
+            $english = $this->validator->checkEnglish();
+            $phonetics = $this->validator->checkPhonetics();
 
             // Validation
 
-            $errors = $validator->getErrors();
+            $errors = $this->getErrors();
 
             $valid = empty($errors["french"]) &&
                      empty($errors["english"]) &&
@@ -228,10 +222,10 @@ class ExpressionsController extends Controller {
 
         // Rendu
 
-        echo $this->twig->render("expressions/edit_expression.twig", [
+        $this->render("expressions/edit_expression.twig", [
             "session" => Session::all(),
             
-            "tips" => $validator->getTips(),
+            "tips" => $this->getTips(),
             "errors" => $errors,
 
             "pageTitle" => "Edition de l'expression",
@@ -253,7 +247,7 @@ class ExpressionsController extends Controller {
 
         // Utilisateur non connecté
 
-        Session::errorIfNotLoggedIn();
+        $this->notLoggedIn();
 
         // Expression inexistante
 
@@ -272,9 +266,9 @@ class ExpressionsController extends Controller {
         // Suppression
 
         if (Request::isPost()) {
-            sleep(1);
+            // Sécurité
 
-            Session::errorIfNotToken();
+            $this->secure();
 
             $deleted = $this->expressionModel->delete($id);
 
@@ -291,7 +285,7 @@ class ExpressionsController extends Controller {
 
         // Rendu
 
-        echo $this->twig->render("expressions/delete_expression.twig", [
+        $this->render("expressions/delete_expression.twig", [
             "session" => Session::all(),
 
             "pageTitle" => "Suppression de l'expression",

@@ -20,12 +20,7 @@ class ThemesController extends ModelController {
     // Modèles
 
     private $themeModel;
-    private $userModel;
     private $expressionModel;
-
-    // Validateur
-
-    private $validator;
 
     // Constantes
 
@@ -53,30 +48,41 @@ class ThemesController extends ModelController {
         $this->validator->setTip("title", self::TIP_TITLE);
     }
 
-    // Autorisation > Edition / Suppression
-    // Thème / Expression
+    // Thème > Edition / Suppression
 
     public function canEditTheme($themeId) {
         $userId = Session::get("user_id");
 
-        $belongsTo = $this->themeModel->belongsTo($userId, $themeId);
-        $isSuperUser = $this->userModel->isSuperUser($userId);
+        $belongsTo = $this->ownsTheme($themeId);
+        $isSuperUser = $this->isSuperUser($userId);
 
         $isAuthorized = $belongsTo || $isSuperUser;
 
         return $isAuthorized;
     }
 
+    // Thème > Autorisation
+
+    public function isAuthorizedForTheme($themeId) {
+        if (! canEditTheme($themeId) ) {
+            Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
+
+            Redirection::to("/themes");
+
+            return;
+        }
+    }
+
     // Si non autorisé
 
     public function stopIfErrors($themeId) {
-        // Utilisateur non connecté
+        // Utilisateur connecté
 
-        Session::errorIfNotLoggedIn();
+        $this->isLoggedIn();
 
-        // Thème non existant
+        // Thème existant
 
-        Session::errorIfThemeNotExists($themeId);
+        $this->exists($themeId);
 
         // Edition / Suppression
 
@@ -97,11 +103,11 @@ class ThemesController extends ModelController {
 
     // Sélection du thème courant
 
-    public function getCurrentTheme($themeId) {
+    public function getOneTheme($themeId) {
         return $this->themeModel->findOneById($themeId);
     }
 
-    // Thème inexistant > Erreur
+    // Thème inexistant > Erreur (?)
 
     public function themeNotExists($theme) {
         if (! $theme) {
@@ -113,17 +119,35 @@ class ThemesController extends ModelController {
         }
     }
 
+    // Thème existant
+
+    public function exists($themeId) {
+        $exists = $this->getOneTheme($themeId);
+
+        if (! $exists) {
+            Session::alert("Le thème n'existe pas.");
+
+            Redirection::to("/themes");
+
+            return;
+        }
+    }
+
+    // L'utilisateur est l'auteur du thème
+
+    public function ownsTheme($themeId) {
+        $userId = Session::get("user_id");
+
+        return $this->themeModel->belongsTo($userId, $themeId);
+    }
+
     // Auteur d'un thème
 
-    public function getAuthor($themeId) {
-        return $this->themeModel->findUser($themeId);
+    public function getAuthorForTheme($themeId) {
+        return $this->themeModel->findUser($themeId)->username;
     }
     
-    // Nombre d'expressions
-
-    public function getNbExpressions($themeId) {
-        return $this->themeModel->countExpressions($themeId);
-    }
+    /* CRUD */
 
     // Nouveau thème
 
@@ -162,63 +186,84 @@ class ThemesController extends ModelController {
         return;
     }
 
+    // Suppression d'un thème
+
+    public function deleteTheme($themeId) {
+        $deleted = $this->themeModel->delete($themeId);
+
+        if ($deleted) {
+            Session::success("Le thème a bien été supprimé.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/themes");
+
+        return;
+    }
+
+    /* Expressions */
+
+    // Expressions d'un thème
+
+    public function getExpressions($themeId) {
+        $this->themeModel->findExpressions($themeId);
+    }
+
+    // Nombre d'expressions
+
+    public function getNbExpressions($themeId) {
+        return $this->themeModel->countExpressions($themeId);
+    }
+
+    // L'utilisateur est l'auteur de l'expression
+
+    public function ownsExpression($expressionId) {
+        $userId = Session::get("user_id");
+
+        return $this->expressionModel->belongsTo($userId, $expressionId);
+    }
+
+    // Auteur d'une expression
+
+    public function getAuthorForExpression($expressionId) {
+        return $this->expressionModel->findUser($expressionId)->username;
+    }
+
+    // Expression > Edition / Suppression
+
+    public function canEditExpression($expressionId) {
+        $userId = Session::get("user_id");
+
+        $belongsTo = $this->ownsExpression($expressionId);
+        $isSuperUser = $this->isSuperUser($userId);
+
+        $isAuthorized = $belongsTo || $isSuperUser;
+
+        return $isAuthorized;
+    }
+
+    // Expression > Autorisation
+
+    public function isAuthorizedForExpression($expressionId, $themeId) {
+        if (! canEditExpression($expressionId) ) {
+            Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
+
+            Redirection::to("/themes/show/$themeId");
+
+            return;
+        }
+    }
+
+    /* Validation */
+
     // Titre validé
 
     public function getCheckedTitle() {
         return $this->validator->checkTitle();
     }
 
-    /*
-
-    // 
-
-    public function () {
-        
-    }
-
-    // 
-
-    public function () {
-        
-    }
-
-    // 
-
-    public function () {
-        
-    }
-
-    // 
-
-    public function () {
-        
-    }
-
-    // 
-
-    public function () {
-        
-    }
-
-    // %
-
-    public function () {
-        
-    }
-
-    // %
-
-    public function () {
-        
-    }
-
-    // %
-
-    public function () {
-        
-    }
-
-    */
+    // µ
 
     /**
      * Pages
@@ -244,7 +289,9 @@ class ThemesController extends ModelController {
 
             $themeId = $theme->id;
 
-            $author = $this->getAuthor($themeId);
+            $title = $theme->title;
+
+            $author = $this->getAuthorForTheme($themeId);
             $nbExpressions = $this->getNbExpressions($themeId);
 
             $canEdit = $canAdd && $this->canEditTheme($themeId);
@@ -253,8 +300,8 @@ class ThemesController extends ModelController {
 
             $themes[] = [
                 "id" => $themeId,
-                "title" => $theme->title,
-                "author" => $author->username,
+                "title" => $title,
+                "author" => $author,
                 "nbExpressions" => $nbExpressions,
                 "canEdit" => $canEdit
             ];
@@ -262,7 +309,7 @@ class ThemesController extends ModelController {
 
         /* Rendu */
 
-        echo $this->twig->render("themes.twig", [
+        $this->render("themes.twig", [
             "session" => Session::all(),
 
             "pageTitle" => "Thèmes",
@@ -281,39 +328,44 @@ class ThemesController extends ModelController {
     public function show($themeId) {
         Session::start();
 
+        // Thème existant
+
+        $theme = $this->getOneTheme($themeId);
+
+        $this->exists($themeId);
+
         // Thème courant
 
-        $theme = $this->getCurrentTheme($themeId);
-
-        Session::errorIfThemeNotExists($themeId);
+        $title = $theme->title;
 
         // Données
 
-        $list = $this->themeModel->findExpressions($themeId);
+        $list = $this->getExpressions($themeId);
 
         $expressions = [];
 
         // Boucle d'affichage
 
-        $userId = Session::get("user_id");
-
         foreach ($list as $expression) {
+            // Lecture
+
             $expressionId = $expression->id;
 
-            $author = $this->expressionModel->findUser($expressionId)->username;
+            $french = $expression->french;
+            $english = $expression->english;
+            $phonetics = $expression->phonetics;
 
-            $belongsTo = $this->expressionModel->belongsTo($userId, $expressionId);
-            $isSuperUser = $this->userModel->isSuperUser($userId);
+            $author = $this->getAuthorForExpression($expressionId);
 
-            $canEdit = $belongsTo || $isSuperUser;
+            $canEdit = $this->canEditExpression($expressionId);
 
             // Enregistrement
 
             $expressions[] = [
                 "id" => $expressionId,
-                "french" => $expression->french,
-                "english" => $expression->english,
-                "phonetics" => $expression->phonetics,
+                "french" => $french,
+                "english" => $english,
+                "phonetics" => $phonetics,
                 "author" => $author,
                 "canEdit" => $canEdit,
             ];
@@ -321,11 +373,11 @@ class ThemesController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("themes/show_theme.twig", [
+        $this->render("themes/show_theme.twig", [
             "session" => Session::all(),
             "canAdd" => Session::isLoggedIn(),
 
-            "pageTitle" => $theme->title,
+            "pageTitle" => $title,
 
             "id" => $themeId,
             "expressions" => $expressions,
@@ -342,9 +394,9 @@ class ThemesController extends ModelController {
     public function new() {
         Session::start();
 
-        // Utilisateur non connecté
+        // Utilisateur connecté
 
-        Session::errorIfNotLoggedIn();
+        $this->isLoggedIn();
 
         // Indication
 
@@ -380,7 +432,7 @@ class ThemesController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("themes/new_theme.twig", [
+        $this->render("themes/new_theme.twig", [
             "session" => Session::all(),
 
             "tips" => $this->getTips(),
@@ -402,11 +454,21 @@ class ThemesController extends ModelController {
     public function edit($themeId) {
         Session::start();
 
-        $this->canEditTheme($themeId);
+        // Utilisateur connecté
+
+        $this->isLoggedIn();
+
+        // Thème existant
+
+        $this->exists($themeId);
+
+        // Utilisateur autorisé
+
+        $this->isAuthorizedForTheme($themeId);
 
         // Thème courant
 
-        $theme = $this->getCurrentTheme($themeId);
+        $theme = $this->getOneTheme($themeId);
 
         $title = $theme->title;
 
@@ -442,7 +504,7 @@ class ThemesController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("themes/edit_theme.twig", [
+        $this->render("themes/edit_theme.twig", [
             "session" => Session::all(),
 
             "tips" => $this->getTips(),
@@ -463,39 +525,41 @@ class ThemesController extends ModelController {
     public function delete($themeId) {
         Session::start();
 
-        $this->stopIfErrors();
+        // Utilisateur connecté
+
+        $this->isLoggedIn();
 
         // Thème existant
 
-        $theme = $this->themeModel->findOneById($themeId);
+        $this->exists($themeId);
+
+        // Utilisateur autorisé
+
+        $this->isAuthorizedForTheme($themeId);
+
+        // Thème courant
+
+        $theme = $this->getOneTheme($themeId);
 
         $title = $theme->title;
 
-        $nbExpressions = $this->themeModel->countExpressions($themeId);
+        $nbExpressions = $this->getNbExpressions($themeId);
 
         // Suppression
 
         if (Request::isPost()) {
-            sleep(1);
+            // Sécurité
 
-            Session::errorIfNotToken();
+            $this->secure();
 
-            $deleted = $this->themeModel->delete($themeId);
+            // Action
 
-            if ($deleted) {
-                Session::success("Le thème a bien été supprimé.");
-            } else {
-                Session::error();
-            }
-
-            Redirection::to("/themes");
-
-            return;
+            $this->deleteTheme($themeId);
         }
 
         // Rendu
 
-        echo $this->twig->render("themes/delete_theme.twig", [
+        $this->render("themes/delete_theme.twig", [
             "session" => Session::all(),
 
             "pageTitle" => "Suppression du thème : $title",
@@ -512,22 +576,23 @@ class ThemesController extends ModelController {
     public function start($themeId) {
         Session::start();
 
+        // Thème existant
+
+        $this->exists($themeId);
+
         // Thème courant
 
-        $theme = $this->themeModel->findOneById($themeId);
-
-        $this->themeNotExists();
+        $theme = $this->getOneTheme($themeId);
 
         // Données
 
         $title = $theme->title;
 
-        $list = $this->themeModel->findExpressions($themeId);
+        $list = $this->getExpressions($themeId);
 
-        $count = count($list);        
+        $count = count($list);
 
         $expressions = [];
-
         $flashcards = [];
 
         $started = false;
@@ -596,7 +661,7 @@ class ThemesController extends ModelController {
 
         $pageTitle = "Flashcards > $title";
 
-        echo $this->twig->render("themes/game.twig", [
+        $this->render("themes/game.twig", [
             "session" => Session::all(),
 
             "started" => $started,

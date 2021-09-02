@@ -217,24 +217,6 @@ class Session {
     }
 
     /**
-     * Error if theme not exists
-     */
-    
-    public static function errorIfThemeNotExists($themeId) {
-        $themeModel = new Theme();
-
-        $exists = $themeModel->findOneById($themeId);
-
-        if (! $exists) {
-            self::alert("Le thème n'existe pas.");
-
-            Redirection::to("/themes");
-
-            return;
-        }
-    }
-
-    /**
      * Error if expression not exists
      */
     

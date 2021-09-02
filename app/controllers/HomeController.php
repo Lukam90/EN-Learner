@@ -38,7 +38,7 @@ class HomeController extends Controller {
 
         // Rendu
 
-        echo $this->twig->render("home.twig", [
+        $this->render("home.twig", [
             "session" => Session::all(),
 
             "pageTitle" => "Accueil",

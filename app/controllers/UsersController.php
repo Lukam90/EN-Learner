@@ -15,10 +15,6 @@ use app\controllers\ModelController;
 use app\validation\UserValidation;
 
 class UsersController extends ModelController {
-    // Attributs
-
-    private $userModel; // Modèle (User)
-
     // Constantes
 
     const TIP_USERNAME = "Le pseudo doit faire entre 2 et 32 caractères alphanumériques (espaces inclus).";
@@ -58,12 +54,6 @@ class UsersController extends ModelController {
         return $this->userModel->findOneById($userId);
     }
 
-    // Super utilisateur (modérateur, administrateur)
-
-    public function isSuperUser($userId) {
-        return $this->userModel->isSuperUser($userId);
-    }
-
     // Nombre de thèmes
 
     public function getNbThemes($userId) {
@@ -76,34 +66,65 @@ class UsersController extends ModelController {
         return $this->userModel->countExpressions($userId);
     }
 
-    
+    /* Validation */
+
+    // Pseudo
+
+    public function getCheckedUsername() {
+        return $this->validator->checkUsername();
+    }
+
+    // Adresse e-mail
+
+    public function getCheckedEmail() {
+        return $this->validator->checkEmail();
+    }
+
+    // Mot de passe
+
+    public function getCheckedPassword() {
+        return $this->validator->checkPassword();
+    }
+
+    // Confirmation du mot de passe
+
+    public function getCheckedConfirm($password) {
+        return $this->validator->checkConfirm($password);
+    }
 
     /*
     
-    %
-    
-
-    
-
-    
-
-    
-
-    public function () {
-
-    }
+    // 
 
     public function () {
         
     }
 
-    public function () {
-        
-    }
+    // 
 
     public function () {
         
     }
+
+    // 
+
+    public function () {
+        
+    }
+
+    // 
+
+    public function () {
+        
+    }
+
+    // 
+
+    public function () {
+        
+    }
+
+    // 
 
     public function () {
         
@@ -122,9 +143,7 @@ class UsersController extends ModelController {
         $isSuperUser = false; 
 
         if (Session::isLoggedIn()) {
-            $userId = Session::get("user_id");
-
-            $isSuperUser = $this->isSuperUser($userId);
+            $isSuperUser = $this->isSuperUser();
         }
         
         // Données
@@ -138,11 +157,14 @@ class UsersController extends ModelController {
 
             $userId = $user->id;
 
+            $username = $user->username;
+            $role = $user->role;
+
             $createdAt = new \DateTime($user->created_at);
             $createdAt = $createdAt->format("d/m/Y");
 
-            $nbThemes = $this->countThemes($userId);
-            $nbExpressions = $this->countExpressions($userId);
+            $nbThemes = $this->getNbThemes($userId);
+            $nbExpressions = $this->getNbExpressions($userId);
 
             // Couleur / Rôle
 
@@ -162,8 +184,8 @@ class UsersController extends ModelController {
 
             $users[] = [
                 "id" => $userId,
-                "username" => $user->username,
-                "role" => $user->role,
+                "username" => $username,
+                "role" => $role,
                 "color" => $color,
                 "createdAt" => $createdAt,
                 "nbThemes" => $nbThemes,
@@ -174,7 +196,7 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("users.twig", [
+        $this->render("users.twig", [
             "session" => Session::all(),
             "superuser" => $isSuperUser,
 
@@ -195,7 +217,7 @@ class UsersController extends ModelController {
 
         // Erreur si non connecté
 
-        Session::errorIfNotLoggedIn();
+        $this->notLoggedIn();
 
         // Utilisateur connecté
 
@@ -224,7 +246,7 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("users/profile.twig", [
+        $this->render("users/profile.twig", [
             "session" => Session::all(),
 
             "pageTitle" => "Profil de l'utilisateur $username",
@@ -248,9 +270,9 @@ class UsersController extends ModelController {
     public function register() {
         Session::start();
 
-        // Utilisateur connecté
+        // Invité / Utilisateur non connecté
 
-        Session::errorIfLoggedIn();
+        $this->isGuest();
 
         // Indications
 
@@ -270,14 +292,14 @@ class UsersController extends ModelController {
         if (Request::isPost()) {
             sleep(1);
 
-            $username = $validator->username();
-            $email = $validator->email();
-            $password = $validator->password();
-            $confirm = $validator->confirm($password);
+            $username = $this->validator->checkUsername();
+            $email = $this->validator->checkEmail();
+            $password = $this->validator->checkPassword();
+            $confirm = $this->validator->checkConfirm($password);
 
             // Validation
 
-            $errors = $validator->getErrors();
+            $errors = $this->getErrors();
 
             $valid = empty($errors["username"])
                      && empty($errors["email"])
@@ -310,10 +332,10 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("users/register.twig", [
+        $this->render("users/register.twig", [
             "session" => Session::all(),
 
-            "tips" => $validator->getTips(),
+            "tips" => $this->getTips(),
             "errors" => $errors,
 
             "pageTitle" => "Inscription",
@@ -388,7 +410,7 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("users/login.twig", [
+        $this->render("users/login.twig", [
             "session" => Session::all(),
 
             "errors" => $errors,
@@ -429,7 +451,7 @@ class UsersController extends ModelController {
 
         // Utilisateur non connecté
 
-        Session::errorIfNotLoggedIn();
+        $this->notLoggedIn();
 
         // Utilisateur inexistant
 
@@ -473,7 +495,7 @@ class UsersController extends ModelController {
 
         $roles = ["Suspendu", "Membre", "Modérateur", "Administrateur"];
 
-        echo $this->twig->render("users/edit_user.twig", [
+        $this->render("users/edit_user.twig", [
             "session" => Session::all(),
 
             "roles" => $roles,
@@ -535,7 +557,7 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("users/delete_user.twig", [
+        $this->render("users/delete_user.twig", [
             "session" => Session::all(),
 
             "pageTitle" => "Suppression de l'utilisateur $username",
@@ -557,7 +579,7 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("users/reset.twig", [
+        $this->render("users/reset.twig", [
             "pageTitle" => "Réinitialisation du mot de passe"
         ]);
     }
@@ -571,7 +593,7 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        echo $this->twig->render("users/confirm.twig", [
+        $this->render("users/confirm.twig", [
             "pageTitle" => "Confirmation du changement de mot de passe"
         ]);
     }

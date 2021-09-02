@@ -27,6 +27,12 @@ abstract class Controller {
         $this->twig->addGlobal('public', $this->root . "/app/public");
     }
 
+    // Rendu
+
+    public function render($page, $values) {
+        echo $this->twig->render($page, $values);
+    }
+
     // Sécurité
 
     public function secure() {

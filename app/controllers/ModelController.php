@@ -1,5 +1,7 @@
 <?php
 
+namespace app\controllers;
+
 use app\core\Session;
 
 use app\controllers\Controller;
@@ -7,11 +9,17 @@ use app\controllers\Controller;
 abstract class ModelController extends Controller {
     /* Attributs */
 
+    // Validateur
+
     protected $validator;
+
+    // Modèle (Utilisateurs)
+
+    protected $userModel;
 
     /* Fonctions utilitaires */
 
-    // Sécurité
+    // Sécurité (DDoS, CSRF)
 
     public function secure() {
         sleep(1);
@@ -31,9 +39,9 @@ abstract class ModelController extends Controller {
         return $this->validator->getErrors();
     }
 
-    // Non invité / Déja connecté
+    // Utilisateur invité / déconnecté
 
-    public function alreadyLoggedIn () {
+    public function isGuest () {
         if (Session::isLoggedIn()) {
             Session::alert("Vous êtes déjà connecté(e).");
 
@@ -41,51 +49,21 @@ abstract class ModelController extends Controller {
         }
     }
 
-    // Non connecté
+    // Utilisateur connecté
 
-    public function notLoggedIn () {
+    public function isLoggedIn() {
         if (! Session::isLoggedIn()) {
             Session::alert("Vous devez être connecté(e) pour accéder à cette page.");
 
             Redirection::to("/");
         }
-    }    
+    }
 
-    /*
+    // L'utilisateur est un modérateur ou un administrateur
     
-
-
-
-    public function () {
+    public function isSuperUser() {
+        $userId = Session::get("user_id");
         
+        return $this->userModel->isSuperUser($userId);
     }
-
-    public function () {
-        
-    }
-
-    public function () {
-        
-    }
-
-    public function () {
-        
-    }
-
-    public function () {
-        
-    }
-
-    public function () {
-        
-    }
-
-    public function () {
-        
-    }
-
-    public function () {
-        
-    }
-    */
 }
