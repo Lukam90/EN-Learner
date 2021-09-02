@@ -37,9 +37,9 @@ class UsersController extends ModelController {
     // Indications
 
     public function setTips() {
-        $validator->setTip("username", self::TIP_USERNAME);
-        $validator->setTip("email", self::TIP_EMAIL);
-        $validator->setTip("password", self::TIP_PASSWORD);
+        $this->validator->setTip("username", self::TIP_USERNAME);
+        $this->validator->setTip("email", self::TIP_EMAIL);
+        $this->validator->setTip("password", self::TIP_PASSWORD);
     }
 
     /* Utilisateurs */
@@ -68,11 +68,9 @@ class UsersController extends ModelController {
         $exists = $this->getUserById($userId);
 
         if (! $exists) {
-            self::alert("L'utilisateur n'existe pas.");
+            Session::alert("L'utilisateur n'existe pas.");
 
             Redirection::to("/users");
-
-            return;
         }
     }
 
@@ -101,8 +99,6 @@ class UsersController extends ModelController {
             Session::alert("Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
 
             Redirection::to("/");
-
-            return;
         }
     }
 
@@ -129,8 +125,6 @@ class UsersController extends ModelController {
             Session::success("Vous êtes connecté(e).");
 
             Redirection::to("/");
-
-            return;
         } else {
             $errors["login"] = "Les identifiants sont incorrects. Veuillez réessayer.";
         }
@@ -157,8 +151,6 @@ class UsersController extends ModelController {
             Session::alert("Vous n'êtes pas autorisé(e) à accéder à cette page de profil utilisateur.");
 
             Redirection::to("/");
-
-            return;
         }
     }
 
@@ -181,8 +173,6 @@ class UsersController extends ModelController {
             Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
 
             Redirection::to("/users/login");
-
-            return;
         } else {
             Session::error();
         }
@@ -200,8 +190,6 @@ class UsersController extends ModelController {
         }
 
         Redirection::to("/users");
-
-        return;
     }
 
     // Suppression d'un utilisateur
@@ -216,8 +204,6 @@ class UsersController extends ModelController {
         }
 
         Redirection::to("/users");
-
-        return;
     }
 
     /* Thèmes */
@@ -290,8 +276,6 @@ class UsersController extends ModelController {
             Session::alert("Les champs doivent être renseignés.");
 
             Redirection::to("/users/login");
-
-            return;
         }
     }
 
@@ -463,6 +447,8 @@ class UsersController extends ModelController {
                 ];
 
                 $this->insertUser($values);
+
+                return;
             }
         }
 
@@ -513,11 +499,15 @@ class UsersController extends ModelController {
 
             // Champs renseignés
 
+            $errors = $this->getErrors();
+
             $this->validateLoginForm($email, $password);
 
             // Connexion d'un utilisateur
 
             $this->canLogIn($email, $password);
+
+            return;
         }
 
         // Rendu
@@ -551,7 +541,7 @@ class UsersController extends ModelController {
 
         Session::logout();
 
-        Redirection::to("/");
+        Redirection::to("/users/login");
     }
 
     /**
@@ -593,6 +583,8 @@ class UsersController extends ModelController {
             $role = Post::var("role");
 
             $this->changeRole($userId, $role);
+
+            return;
         }
 
         // Rendu
@@ -651,6 +643,8 @@ class UsersController extends ModelController {
             // Suppression
 
             $this->deleteUser($userId);
+
+            return;
         }
 
         // Rendu
@@ -660,7 +654,7 @@ class UsersController extends ModelController {
 
             "pageTitle" => "Suppression de l'utilisateur $username",
 
-            "id" => $id,
+            "id" => $userId,
             "username" => $username,
 
             "nbThemes" => $nbThemes,

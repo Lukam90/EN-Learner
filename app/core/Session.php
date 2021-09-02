@@ -151,9 +151,9 @@ class Session {
     public static function login($user) {
         self::setToken();
 
-        self::set("user_id", $user->id);
-        self::set("username", $user->username);
-        self::set("email", $user->email);
+        self::set("user_id", $user["id"]);
+        self::set("username", $user["username"]);
+        self::set("email", $user["email"]);
     }
 
     /**

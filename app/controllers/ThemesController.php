@@ -17,11 +17,6 @@ use app\controllers\DataController;
 use app\validation\ThemeValidation;
 
 class ThemesController extends DataController {
-    // Modèles
-
-    private $themeModel;
-    private $expressionModel;
-
     // Constantes
 
     const TIP_TITLE = "Le titre doit être renseigné et contenir jusqu'à 50 caractères.";
@@ -64,7 +59,7 @@ class ThemesController extends DataController {
     // Thème > Autorisation
 
     public function isAuthorizedForTheme($themeId) {
-        if (! canEditTheme($themeId) ) {
+        if (! $this->canEditTheme($themeId) ) {
             Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
 
             Redirection::to("/themes");
@@ -110,7 +105,9 @@ class ThemesController extends DataController {
     // Auteur d'un thème
 
     public function getAuthorForTheme($themeId) {
-        return $this->themeModel->findUser($themeId)->username;
+        $user = $this->themeModel->findUser($themeId);
+
+        return $user["username"];
     }
     
     /* CRUD */
@@ -260,11 +257,11 @@ class ThemesController extends DataController {
         foreach ($list as $expression) {
             // Lecture
 
-            $expressionId = $expression->id;
+            $expressionId = $expression["id"];
 
-            $french = $expression->french;
-            $english = $expression->english;
-            $phonetics = $expression->phonetics;
+            $french = $expression["french"];
+            $english = $expression["english"];
+            $phonetics = $expression["phonetics"];
 
             $author = $this->getAuthorForExpression($expressionId);
 
@@ -513,9 +510,9 @@ class ThemesController extends DataController {
         foreach ($list as $expression) {
             // Lecture
 
-            $french = $expression->french;
-            $english = $expression->english;
-            $phonetics = $expression->phonetics;
+            $french = $expression["french"];
+            $english = $expression["english"];
+            $phonetics = $expression["phonetics"];
 
             // Enregistrement
 
@@ -576,7 +573,7 @@ class ThemesController extends DataController {
             "session" => Session::all(),
 
             "started" => $started,
-            "id" => $id,
+            "id" => $themeId,
             "title" => $title,
             "pageTitle" => $pageTitle,
             "levels" => $levels,

@@ -52,7 +52,7 @@ class ExpressionsController extends DataController {
         $exists = $this->getOneById($expressionId);
     
         if (! $exists) {
-            self::alert("L'expression n'existe pas.");
+            Session::alert("L'expression n'existe pas.");
     
             Redirection::to("/themes");
     
@@ -132,9 +132,9 @@ class ExpressionsController extends DataController {
     // Indications
 
     public function setTips() {
-        $validator->setTip("french", self::TIP_FRENCH);
-        $validator->setTip("english", self::TIP_ENGLISH);
-        $validator->setTip("phonetics", self::TIP_PHONETICS);
+        $this->validator->setTip("french", self::TIP_FRENCH);
+        $this->validator->setTip("english", self::TIP_ENGLISH);
+        $this->validator->setTip("phonetics", self::TIP_PHONETICS);
     }
 
     // Expression

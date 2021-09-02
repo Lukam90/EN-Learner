@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\core\Session;
+
 use app\controllers\ModelController;
 
 abstract class DataController extends ModelController {
@@ -21,7 +23,7 @@ abstract class DataController extends ModelController {
     // Expressions d'un thème
 
     public function getExpressions($themeId) {
-        $this->themeModel->findExpressions($themeId);
+        return $this->themeModel->findExpressions($themeId);
     }
 
     // Nombre d'expressions
@@ -41,7 +43,9 @@ abstract class DataController extends ModelController {
     // Auteur d'une expression
 
     public function getAuthorForExpression($expressionId) {
-        return $this->expressionModel->findUser($expressionId)->username;
+        $user = $this->expressionModel->findUser($expressionId);
+
+        return $user["username"];
     }
 
     // Expression > Edition / Suppression

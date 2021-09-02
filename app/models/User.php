@@ -138,7 +138,7 @@ class User extends Model {
         // On vérifie si les mots de passe correspondent
 
         if ($row) {
-            $hashedPassword = $row->password;
+            $hashedPassword = $row["password"];
 
             return password_verify($password, $hashedPassword);
         } else {
