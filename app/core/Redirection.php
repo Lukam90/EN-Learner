@@ -164,7 +164,7 @@ abstract class Redirection {
 
     public static function slides() {
         $controller = new SlidesController();
-        $controller->render();
+        $controller->index();
     }
 
     /* Errors */

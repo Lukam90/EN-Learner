@@ -64,7 +64,7 @@ class ThemesController extends DataController {
 
             Redirection::to("/themes");
 
-            return;
+            exit;
         }
     }
 
@@ -72,26 +72,6 @@ class ThemesController extends DataController {
 
     public function getThemes() {
         return $this->themeModel->findAll();
-    }
-
-    // Sélection du thème courant
-
-    public function getOneTheme($themeId) {
-        return $this->themeModel->findOneById($themeId);
-    }
-
-    // Thème existant
-
-    public function exists($themeId) {
-        $exists = $this->getOneTheme($themeId);
-
-        if (! $exists) {
-            Session::alert("Le thème n'existe pas.");
-
-            Redirection::to("/themes");
-
-            return;
-        }
     }
 
     // L'utilisateur est l'auteur du thème
@@ -130,7 +110,7 @@ class ThemesController extends DataController {
 
         Redirection::to("/themes");
 
-        return;
+        exit;
     }
 
     // Edition d'un thème
@@ -146,7 +126,7 @@ class ThemesController extends DataController {
 
         Redirection::to("/themes");
 
-        return;
+        exit;
     }
 
     // Suppression d'un thème
@@ -162,7 +142,7 @@ class ThemesController extends DataController {
 
         Redirection::to("/themes");
 
-        return;
+        exit;
     }
 
     /* Validation */
@@ -238,9 +218,9 @@ class ThemesController extends DataController {
 
         // Thème existant
 
-        $theme = $this->getOneTheme($themeId);
+        $theme = $this->getOneThemeById($themeId);
 
-        $this->exists($themeId);
+        $this->themeExists($themeId);
 
         // Thème courant
 
@@ -368,7 +348,7 @@ class ThemesController extends DataController {
 
         // Thème existant
 
-        $this->exists($themeId);
+        $this->themeExists($themeId);
 
         // Utilisateur autorisé
 
@@ -376,7 +356,7 @@ class ThemesController extends DataController {
 
         // Thème courant
 
-        $theme = $this->getOneTheme($themeId);
+        $theme = $this->getOneThemeById($themeId);
 
         $title = $theme["title"];
 
@@ -439,7 +419,7 @@ class ThemesController extends DataController {
 
         // Thème existant
 
-        $this->exists($themeId);
+        $this->themeExists($themeId);
 
         // Utilisateur autorisé
 
@@ -447,7 +427,7 @@ class ThemesController extends DataController {
 
         // Thème courant
 
-        $theme = $this->getOneTheme($themeId);
+        $theme = $this->getOneThemeById($themeId);
 
         $title = $theme["title"];
 
@@ -486,11 +466,11 @@ class ThemesController extends DataController {
 
         // Thème existant
 
-        $this->exists($themeId);
+        $this->themeExists($themeId);
 
         // Thème courant
 
-        $theme = $this->getOneTheme($themeId);
+        $theme = $this->getOneThemeById($themeId);
 
         // Données
 

@@ -34,14 +34,6 @@ class UsersController extends ModelController {
      * Fonctions utilitaires
      */
 
-    // Indications
-
-    public function setTips() {
-        $this->validator->setTip("username", self::TIP_USERNAME);
-        $this->validator->setTip("email", self::TIP_EMAIL);
-        $this->validator->setTip("password", self::TIP_PASSWORD);
-    }
-
     /* Utilisateurs */
 
     // Ensemble des utilisateurs
@@ -71,6 +63,8 @@ class UsersController extends ModelController {
             Session::alert("L'utilisateur n'existe pas.");
 
             Redirection::to("/users");
+
+            exit;
         }
     }
 
@@ -88,6 +82,30 @@ class UsersController extends ModelController {
         return $color;
     }
 
+    // Utilisateur invité / déconnecté
+
+    public function isGuest () {
+        if (Session::isLoggedIn()) {
+            Session::alert("Vous êtes déjà connecté(e).");
+
+            Redirection::to("/");
+
+            exit;
+        }
+    }
+
+    // Utilisateur déjà connecté
+
+    public function isAlreadyLoggedIn() {
+        if (Session::isLoggedIn()) {
+            Session::alert("Vous êtes déjà connecté(e).");
+
+            Redirection::to("/");
+
+            exit;
+        }
+    }
+
     // Utilisateur non suspendu
 
     public function notSuspended($email) {
@@ -99,6 +117,8 @@ class UsersController extends ModelController {
             Session::alert("Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
 
             Redirection::to("/");
+
+            exit;
         }
     }
 
@@ -125,6 +145,8 @@ class UsersController extends ModelController {
             Session::success("Vous êtes connecté(e).");
 
             Redirection::to("/");
+
+            exit;
         } else {
             $errors["login"] = "Les identifiants sont incorrects. Veuillez réessayer.";
         }
@@ -138,10 +160,18 @@ class UsersController extends ModelController {
         return $currentUserId == $userId;
     }
 
+    // L'utilisateur est un administrateur
+    
+    public function isAdmin() {
+        $userId = Session::get("user_id");
+        
+        return $this->userModel->isAdmin($userId);
+    }
+
     // Utilisateur autorisé
 
     public function isAuthorized($userId) {
-        return $this->isSuperUser() || $this->sameUser($userId);
+        return $this->isAdmin() && ! $this->sameUser($userId);
     }
 
     // Accès à la page de profil
@@ -151,6 +181,20 @@ class UsersController extends ModelController {
             Session::alert("Vous n'êtes pas autorisé(e) à accéder à cette page de profil utilisateur.");
 
             Redirection::to("/");
+
+            exit;
+        }
+    }
+
+    // Accès à la page d'édition
+
+    public function canEdit($userId) {
+        if (! $this->isAuthorized($userId)) {
+            Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
+
+            Redirection::to("/");
+
+            exit;
         }
     }
 
@@ -173,6 +217,8 @@ class UsersController extends ModelController {
             Session::success("Votre inscription a été prise en compte avec succès. Bienvenue sur notre site, cher nouveau membre !");
 
             Redirection::to("/users/login");
+
+            exit;
         } else {
             Session::error();
         }
@@ -190,6 +236,8 @@ class UsersController extends ModelController {
         }
 
         Redirection::to("/users");
+
+        exit;
     }
 
     // Suppression d'un utilisateur
@@ -204,6 +252,8 @@ class UsersController extends ModelController {
         }
 
         Redirection::to("/users");
+
+        exit;
     }
 
     /* Thèmes */
@@ -231,6 +281,14 @@ class UsersController extends ModelController {
     }
 
     /* Validation */
+
+    // Indications
+
+    public function setTips() {
+        $this->validator->setTip("username", self::TIP_USERNAME);
+        $this->validator->setTip("email", self::TIP_EMAIL);
+        $this->validator->setTip("password", self::TIP_PASSWORD);
+    }
 
     // Pseudo
 
@@ -276,6 +334,8 @@ class UsersController extends ModelController {
             Session::alert("Les champs doivent être renseignés.");
 
             Redirection::to("/users/login");
+
+            exit;
         }
     }
 
@@ -320,7 +380,7 @@ class UsersController extends ModelController {
 
             // Edition
 
-            $canEdit = $this->isSuperUser() || $this->ownsTheme($themeId);
+            $canEdit = $this->isAuthorized($userId);
 
             // Enregistrement
 
@@ -385,7 +445,7 @@ class UsersController extends ModelController {
 
             "pageTitle" => "Profil de l'utilisateur $username",
 
-            "id" => $id,
+            "id" => $userId,
             "username" => $username,
             "email" => $email,
             "oldPassword" => $oldPassword,
@@ -447,8 +507,6 @@ class UsersController extends ModelController {
                 ];
 
                 $this->insertUser($values);
-
-                return;
             }
         }
 
@@ -480,6 +538,10 @@ class UsersController extends ModelController {
 
         $this->isGuest();
 
+        // Utilisateur déjà connecté
+
+        $this->isAlreadyLoggedIn();
+
         // Données du formulaire
 
         $email = "";
@@ -506,8 +568,6 @@ class UsersController extends ModelController {
             // Connexion d'un utilisateur
 
             $this->canLogIn($email, $password);
-
-            return;
         }
 
         // Rendu
@@ -542,6 +602,8 @@ class UsersController extends ModelController {
         Session::logout();
 
         Redirection::to("/users/login");
+
+        exit;
     }
 
     /**
@@ -561,7 +623,7 @@ class UsersController extends ModelController {
 
         // Utilisateur autorisé
 
-        $this->isAuthorized($userId);
+        $this->canEdit($userId);
 
         // Utilisateur sélectionné
 
@@ -583,8 +645,6 @@ class UsersController extends ModelController {
             $role = Post::var("role");
 
             $this->changeRole($userId, $role);
-
-            return;
         }
 
         // Rendu
@@ -622,7 +682,7 @@ class UsersController extends ModelController {
 
         // Utilisateur autorisé
 
-        $this->isAuthorized($userId);
+        $this->canEdit($userId);
 
         // Utilisateur sélectionné
 
@@ -643,8 +703,6 @@ class UsersController extends ModelController {
             // Suppression
 
             $this->deleteUser($userId);
-
-            return;
         }
 
         // Rendu

@@ -14,7 +14,7 @@ class SlidesController extends Controller {
         $this->init();
     }
 
-    public function render() {
+    public function index() {
         Session::start();
 
         $this->render("slides.twig", [

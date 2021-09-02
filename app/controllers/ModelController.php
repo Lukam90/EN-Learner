@@ -40,16 +40,6 @@ abstract class ModelController extends Controller {
         return $this->validator->getErrors();
     }
 
-    // Utilisateur invité / déconnecté
-
-    public function isGuest () {
-        if (Session::isLoggedIn()) {
-            Session::alert("Vous êtes déjà connecté(e).");
-
-            Redirection::to("/");
-        }
-    }
-
     // Utilisateur connecté
 
     public function isLoggedIn() {
@@ -57,6 +47,8 @@ abstract class ModelController extends Controller {
             Session::alert("Vous devez être connecté(e) pour accéder à cette page.");
 
             Redirection::to("/");
+
+            exit;
         }
     }
 
@@ -64,6 +56,8 @@ abstract class ModelController extends Controller {
     
     public function isSuperUser() {
         $userId = Session::get("user_id");
+
+        \var_dump($userId);
         
         return $this->userModel->isSuperUser($userId);
     }

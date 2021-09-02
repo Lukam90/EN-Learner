@@ -56,12 +56,12 @@ class User extends Model {
 
     // Sélection d'une ligne par un ID
 
-    public function findOneById($id) {
+    public function findOneById($userId) {
         $this->setQuery("SELECT *
                          FROM users
                          WHERE id = :id");
 
-        return $this->fetchOne("id", $id);
+        return $this->fetchOne("id", $userId);
     }
 
     // Sélection d'un utilisateur par son pseudo
@@ -148,46 +148,46 @@ class User extends Model {
 
     // Rôle de modérateur
 
-    public function isModerator($id) {
+    public function isModerator($userId) {
         $this->setQuery("SELECT COUNT(id) 
                          FROM users
                          WHERE role = 'Modérateur'
                          AND id = :id");
 
-        return (bool) $this->withID($id);
+        return (bool) $this->withID($userId);
     }
 
     // Rôle d'administrateur
 
-    public function isAdmin($id) {
+    public function isAdmin($userId) {
         $this->setQuery("SELECT id 
                          FROM users
                          WHERE role = 'Administrateur'
                          AND id = :id");
 
-        return (bool) $this->withID($id);
+        return (bool) $this->withID($userId);
     }
 
     // Rôle de modérateur ou d'administrateur
 
-    public function isSuperUser($id) {
+    public function isSuperUser($userId) {
         $this->setQuery("SELECT id 
                          FROM users
                          WHERE role IN ('Modérateur', 'Administrateur')
                          AND id = :id");
 
-        return (bool) $this->withID($id);
+        return (bool) $this->withID($userId);
     }
 
     // Utilisateur banni
 
-    public function isBanned($id) {
+    public function isBanned($userId) {
         $this->setQuery("SELECT id
                          FROM users
                          WHERE role = 'Suspendu'
                          AND id = :id");
 
-        return $this->withID($id);
+        return $this->withID($userId);
     }
 
     // Ajout d'une nouvelle ligne
@@ -205,13 +205,13 @@ class User extends Model {
 
     // Changement de pseudo
 
-    public function changeUsername($id, $username) {
+    public function changeUsername($userId, $username) {
         $this->setQuery("UPDATE users
                          SET username = :username
                          WHERE id = :id");
 
         $data = [
-            "id" => $id,
+            "id" => $userId,
             "username" => $username
         ];
 
@@ -220,13 +220,13 @@ class User extends Model {
 
     // Changement d'e-mail
 
-    public function changeEmail($id, $email) {
+    public function changeEmail($userId, $email) {
         $this->setQuery("UPDATE users
                          SET email = :email
                          WHERE id = :id");
 
         $data = [
-            "id" => $id,
+            "id" => $userId,
             "email" => $email
         ];
 
@@ -235,13 +235,13 @@ class User extends Model {
 
     // Changement de mot de passe
 
-    public function changePassword($id, $password) {
+    public function changePassword($userId, $password) {
         $this->setQuery("UPDATE users
                          SET password = :password
                          WHERE id = :id");
 
         $data = [
-            "id" => $id,
+            "id" => $userId,
             "password" => Security::hash($password)
         ];
 
@@ -250,13 +250,13 @@ class User extends Model {
 
     // Changement de rôle
 
-    public function changeRole($id, $role) {
+    public function changeRole($userId, $role) {
         $this->setQuery("UPDATE users
                          SET role = :role
                          WHERE id = :id");
 
         $data = [
-            "id" => $id,
+            "id" => $userId,
             "role" => $role
         ];
 
@@ -265,11 +265,11 @@ class User extends Model {
 
     // Suppression d'une ligne par un ID
 
-    public function delete($id) {
+    public function delete($userId) {
         $this->setQuery("DELETE FROM users
                          WHERE id = :id");
 
-        $data = ["id" => $id];
+        $data = ["id" => $userId];
 
         return $this->bindValues($data);
     }

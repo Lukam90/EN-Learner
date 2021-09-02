@@ -14,10 +14,6 @@ use app\controllers\DataController;
 use app\validation\ExpressionValidation;
 
 class ExpressionsController extends DataController {
-    // Modèle
-
-    private $expressionModel;
-
     // Constantes
 
     const TIP_FRENCH = "L'expression doit être renseignée et contenir jusqu'à 255 caractères.";
@@ -56,7 +52,7 @@ class ExpressionsController extends DataController {
     
             Redirection::to("/themes");
     
-            return;
+            exit;
         }
     }
 
@@ -86,7 +82,7 @@ class ExpressionsController extends DataController {
 
         Redirection::to("/themes/show/$themeId");
 
-        return;
+        exit;
     }
 
     // Edition d'une expression
@@ -108,7 +104,7 @@ class ExpressionsController extends DataController {
 
         Redirection::to("/themes/show/$themeId");
 
-        return;
+        exit;
     }
 
     // Suppression d'une expression
@@ -124,7 +120,7 @@ class ExpressionsController extends DataController {
 
         Redirection::to("/themes/show/$themeId");
 
-        return;
+        exit;
     }
 
     /* Validation */
@@ -180,7 +176,7 @@ class ExpressionsController extends DataController {
 
         // Existence du thème
 
-        //Session::errorIfThemeNotExists($themeId);
+        $this->themeExists($themeId);
 
         // Indications
 
@@ -259,7 +255,7 @@ class ExpressionsController extends DataController {
 
         // Utilisateur autorisé
 
-        $this->isAuthorizedForExpression($expressionId, $themeId);
+        $this->isAuthorizedForExpression($expressionId);
 
         // Données existantes
 

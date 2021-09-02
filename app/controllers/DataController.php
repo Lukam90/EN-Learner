@@ -63,13 +63,35 @@ abstract class DataController extends ModelController {
 
     // Expression > Autorisation
 
-    public function isAuthorizedForExpression($expressionId, $themeId) {
-        if (! canEditExpression($expressionId) ) {
+    public function isAuthorizedForExpression($expressionId) {
+        if (! $this->canEditExpression($expressionId) ) {
             Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
 
-            Redirection::to("/themes/show/$themeId");
+            Redirection::to("/themes");
 
-            return;
+            exit;
+        }
+    }
+
+    /* Thèmes */
+
+    // Sélection du thème courant
+
+    public function getOneThemeById($themeId) {
+        return $this->themeModel->findOneById($themeId);
+    }
+
+    // Thème existant
+
+    public function themeExists($themeId) {
+        $exists = $this->getOneThemeById($themeId);
+
+        if (! $exists) {
+            Session::alert("Le thème n'existe pas.");
+
+            Redirection::to("/themes");
+
+            exit;
         }
     }
 }

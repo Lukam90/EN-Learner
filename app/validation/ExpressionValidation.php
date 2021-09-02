@@ -42,7 +42,7 @@ class ExpressionValidation extends Validation {
     // Expression (FR)
 
     public function checkFrench() {
-        $french = check("french", "L'expression");
+        $french = $this->check("french", "L'expression");
 
         return $french;
     }
@@ -50,7 +50,7 @@ class ExpressionValidation extends Validation {
     // Traduction (EN)
 
     public function checkEnglish() {
-        $english = check("english", "La traduction");
+        $english = $this->check("english", "La traduction");
 
         return $english;
     }
@@ -58,7 +58,7 @@ class ExpressionValidation extends Validation {
     // Transcription phonétique
 
     public function checkPhonetics() {
-        $phonetics = check("phonetics", "La transcription phonétique");
+        $phonetics = $this->check("phonetics", "La transcription phonétique");
 
         return $phonetics;
     }
