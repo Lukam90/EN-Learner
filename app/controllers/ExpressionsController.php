@@ -9,11 +9,11 @@ use app\core\Session;
 use app\models\Theme;
 use app\models\Expression;
 
-use app\controllers\ModelController;
+use app\controllers\DataController;
 
 use app\validation\ExpressionValidation;
 
-class ExpressionsController extends ModelController {
+class ExpressionsController extends DataController {
     // Modèle
 
     private $expressionModel;
@@ -59,20 +59,6 @@ class ExpressionsController extends ModelController {
             return;
         }
     }
-
-    // Unicité d'une expression
-
-    /*public function isUnique($expressionId) {
-        $exists = $this->getOneById($expressionId);
-    
-        if ($exists) {
-            self::alert("L'expression n'existe pas.");
-    
-            Redirection::to("/themes");
-    
-            return;
-        }
-    }*/
 
     /* CRUD */
 
@@ -273,17 +259,17 @@ class ExpressionsController extends ModelController {
 
         // Utilisateur autorisé
 
-        //
+        $this->isAuthorizedForExpression($expressionId, $themeId);
 
         // Données existantes
 
         $expression = $this->getOneById($id);
 
-        $french = $expression->french;
-        $english = $expression->english;
-        $phonetics = $expression->phonetics;
+        $french = $expression["french"];
+        $english = $expression["english"];
+        $phonetics = $expression["phonetics"];
 
-        $themeId = $expression->theme_id;
+        $themeId = $expression["theme_id"];
 
         // Indications
 
@@ -364,11 +350,11 @@ class ExpressionsController extends ModelController {
 
         $expression = $this->getOneById($expressionId);
 
-        $french = $expression->french;
-        $english = $expression->english;
-        $phonetics = $expression->phonetics;
+        $french = $expression["french"];
+        $english = $expression["english"];
+        $phonetics = $expression["phonetics"];
 
-        $themeId = $expression->theme_id;
+        $themeId = $expression["theme_id"];
 
         // Suppression
 

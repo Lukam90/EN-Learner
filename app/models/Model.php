@@ -66,14 +66,14 @@ abstract class Model {
         
         $statement->execute();
 
-        return $statement->fetch(PDO::FETCH_OBJ);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     // Sélection de l'ensemble des lignes sans attribut
 
     public function fetchAll() {
         return $this->query()
-                    ->fetchAll(PDO::FETCH_OBJ);
+                    ->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Sélection de l'ensemble des lignes par un attribut
@@ -85,7 +85,7 @@ abstract class Model {
         
         $statement->execute();
 
-        return $statement->fetchAll(PDO::FETCH_OBJ);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // Nombre de lignes sans attributs

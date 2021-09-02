@@ -12,11 +12,11 @@ use app\models\Theme;
 use app\models\User;
 use app\models\Expression;
 
-use app\controllers\ModelController;
+use app\controllers\DataController;
 
 use app\validation\ThemeValidation;
 
-class ThemesController extends ModelController {
+class ThemesController extends DataController {
     // Modèles
 
     private $themeModel;
@@ -73,28 +73,6 @@ class ThemesController extends ModelController {
         }
     }
 
-    // Si non autorisé
-
-    public function stopIfErrors($themeId) {
-        // Utilisateur connecté
-
-        $this->isLoggedIn();
-
-        // Thème existant
-
-        $this->exists($themeId);
-
-        // Edition / Suppression
-
-        if (! canEditTheme($themeId) ) {
-            Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
-
-            Redirection::to("/themes");
-
-            return;
-        }
-    }
-
     // Sélection des thèmes
 
     public function getThemes() {
@@ -105,18 +83,6 @@ class ThemesController extends ModelController {
 
     public function getOneTheme($themeId) {
         return $this->themeModel->findOneById($themeId);
-    }
-
-    // Thème inexistant > Erreur (?)
-
-    public function themeNotExists($theme) {
-        if (! $theme) {
-            Session::alert("Le thème n'existe pas.");
-
-            Redirection::to("/themes");
-
-            return;
-        }
     }
 
     // Thème existant
@@ -202,59 +168,6 @@ class ThemesController extends ModelController {
         return;
     }
 
-    /* Expressions */
-
-    // Expressions d'un thème
-
-    public function getExpressions($themeId) {
-        $this->themeModel->findExpressions($themeId);
-    }
-
-    // Nombre d'expressions
-
-    public function getNbExpressions($themeId) {
-        return $this->themeModel->countExpressions($themeId);
-    }
-
-    // L'utilisateur est l'auteur de l'expression
-
-    public function ownsExpression($expressionId) {
-        $userId = Session::get("user_id");
-
-        return $this->expressionModel->belongsTo($userId, $expressionId);
-    }
-
-    // Auteur d'une expression
-
-    public function getAuthorForExpression($expressionId) {
-        return $this->expressionModel->findUser($expressionId)->username;
-    }
-
-    // Expression > Edition / Suppression
-
-    public function canEditExpression($expressionId) {
-        $userId = Session::get("user_id");
-
-        $belongsTo = $this->ownsExpression($expressionId);
-        $isSuperUser = $this->isSuperUser($userId);
-
-        $isAuthorized = $belongsTo || $isSuperUser;
-
-        return $isAuthorized;
-    }
-
-    // Expression > Autorisation
-
-    public function isAuthorizedForExpression($expressionId, $themeId) {
-        if (! canEditExpression($expressionId) ) {
-            Session::alert("Vous n'êtes pas autorisé(e) à effectuer cette action.");
-
-            Redirection::to("/themes/show/$themeId");
-
-            return;
-        }
-    }
-
     /* Validation */
 
     // Titre validé
@@ -262,8 +175,6 @@ class ThemesController extends ModelController {
     public function getCheckedTitle() {
         return $this->validator->checkTitle();
     }
-
-    // µ
 
     /**
      * Pages
@@ -287,9 +198,9 @@ class ThemesController extends ModelController {
         foreach ($list as $theme) {
             // Thème
 
-            $themeId = $theme->id;
+            $themeId = $theme["id"];
 
-            $title = $theme->title;
+            $title = $theme["title"];
 
             $author = $this->getAuthorForTheme($themeId);
             $nbExpressions = $this->getNbExpressions($themeId);
@@ -336,7 +247,7 @@ class ThemesController extends ModelController {
 
         // Thème courant
 
-        $title = $theme->title;
+        $title = $theme["title"];
 
         // Données
 
@@ -470,7 +381,7 @@ class ThemesController extends ModelController {
 
         $theme = $this->getOneTheme($themeId);
 
-        $title = $theme->title;
+        $title = $theme["title"];
 
         // Indication
 
@@ -541,7 +452,7 @@ class ThemesController extends ModelController {
 
         $theme = $this->getOneTheme($themeId);
 
-        $title = $theme->title;
+        $title = $theme["title"];
 
         $nbExpressions = $this->getNbExpressions($themeId);
 
@@ -586,7 +497,7 @@ class ThemesController extends ModelController {
 
         // Données
 
-        $title = $theme->title;
+        $title = $theme["title"];
 
         $list = $this->getExpressions($themeId);
 

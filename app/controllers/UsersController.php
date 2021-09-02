@@ -95,7 +95,7 @@ class UsersController extends ModelController {
     public function notSuspended($email) {
         $user = $this->getUserByEmail($email);
 
-        $isSuspended = ($user->role === "Suspendu");
+        $isSuspended = ($user["role"] === "Suspendu");
 
         if ($isSuspended) {
             Session::alert("Votre compte a été suspendu. Vous n'êtes pas autorisé(e) à vous connecter.");
@@ -171,7 +171,7 @@ class UsersController extends ModelController {
             "username" => $values["username"],
             "email" => $values["email"],
             "password" => $values["password"],
-            
+
             "role" => "Membre"
         ];
 
@@ -319,12 +319,12 @@ class UsersController extends ModelController {
         foreach ($list as $user) {
             // Lecture
 
-            $userId = $user->id;
+            $userId = $user["id"];
 
-            $username = $user->username;
-            $role = $user->role;
+            $username = $user["username"];
+            $role = $user["role"];
 
-            $createdAt = new \DateTime($user->created_at);
+            $createdAt = new \DateTime($user["created_at"]);
             $createdAt = $createdAt->format("d/m/Y");
 
             $nbThemes = $this->getNbThemes($userId);
@@ -385,9 +385,9 @@ class UsersController extends ModelController {
 
         $user = $this->getUserById($userId);
 
-        $username = $user->username;
-        $email = $user->email;
-        $oldPassword = $user->password;
+        $username = $user["username"];
+        $email = $user["email"];
+        $oldPassword = $user["password"];
 
         // Stats
 
@@ -577,9 +577,9 @@ class UsersController extends ModelController {
 
         $user = $this->getUserById($userId);
 
-        $id = $user->id;
-        $username = $user->username;
-        $role = $user->role;
+        $id = $user["id"];
+        $username = $user["username"];
+        $role = $user["role"];
 
         // Envoi des données
 
@@ -636,7 +636,7 @@ class UsersController extends ModelController {
 
         $user = $this->getUserById($userId);
 
-        $username = $user->username;
+        $username = $user["username"];
 
         $nbThemes = $this->getNbThemes($userId);
         $nbExpressions = $this->getNbExpressions($userId);
