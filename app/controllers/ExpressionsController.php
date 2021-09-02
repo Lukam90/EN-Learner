@@ -38,10 +38,145 @@ class ExpressionsController extends ModelController {
      * Fonctions utilitaires
      */
 
+    /* Expressions */
+
+    // Sélection d'une expression
+
+    public function getOneById($expressionId) {
+        return $this->expressionModel->findOneById($expressionId);
+    }
+
+    // Existence d'une expression
+
+    public function exists($expressionId) {
+        $exists = $this->getOneById($expressionId);
+    
+        if (! $exists) {
+            self::alert("L'expression n'existe pas.");
+    
+            Redirection::to("/themes");
+    
+            return;
+        }
+    }
+
+    // Unicité d'une expression
+
+    /*public function isUnique($expressionId) {
+        $exists = $this->getOneById($expressionId);
+    
+        if ($exists) {
+            self::alert("L'expression n'existe pas.");
+    
+            Redirection::to("/themes");
+    
+            return;
+        }
+    }*/
+
+    /* CRUD */
+
+    // Ajout d'une nouvelle expression
+
+    public function insertExpression($themeId, $values) {
+        $userId = Session::get("user_id");
+
+        $newExpression = [
+            "french" => $values["french"],
+            "english" => $values["english"],
+            "phonetics" => $values["phonetics"],
+
+            "user_id" => $userId,
+            "theme_id" => $themeId
+        ];
+
+        $saved = $this->expressionModel->insert($newExpression);
+
+        if ($saved) {
+            Session::success("L'expression a bien été ajoutée.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/themes/show/$themeId");
+
+        return;
+    }
+
+    // Edition d'une expression
+
+    public function updateExpression($expressionId, $themeId, $values) {
+        $newExpression = [
+            "french" => $values["french"],
+            "english" => $values["english"],
+            "phonetics" => $values["phonetics"],
+        ];
+
+        $saved = $this->expressionModel->update($expressionId, $newExpression);
+
+        if ($saved) {
+            Session::success("L'expression a bien été éditée.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/themes/show/$themeId");
+
+        return;
+    }
+
+    // Suppression d'une expression
+
+    public function deleteExpression($expressionId, $themeId) {
+        $deleted = $this->expressionModel->delete($expressionId);
+
+        if ($deleted) {
+            Session::success("L'expression a bien été supprimée.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/themes/show/$themeId");
+
+        return;
+    }
+
+    /* Validation */
+
+    // Indications
+
     public function setTips() {
         $validator->setTip("french", self::TIP_FRENCH);
         $validator->setTip("english", self::TIP_ENGLISH);
         $validator->setTip("phonetics", self::TIP_PHONETICS);
+    }
+
+    // Expression
+
+    public function getCheckedFrench() {
+        return $this->validator->checkFrench();
+    }
+
+    // Traduction
+
+    public function getCheckedEnglish() {
+        return $this->validator->checkEnglish();
+    }
+
+    // Transcription phonétique
+
+    public function getCheckedPhonetics() {
+        return $this->validator->checkPhonetics();
+    }
+
+    // Formulaire d'ajout et d'édition
+
+    public function validateForm() {
+        $errors = $this->getErrors();
+
+        return empty($errors["french"]) &&
+               empty($errors["english"]) &&
+               empty($errors["phonetics"]);
     }
 
     /**
@@ -53,17 +188,13 @@ class ExpressionsController extends ModelController {
     public function new($themeId) {
         Session::start();
 
-        // Utilisateur non connecté
+        // Utilisateur connecté
 
-        $this->notLoggedIn();
+        $this->isLoggedIn();
 
         // Existence du thème
 
-        Session::errorIfThemeNotExists($themeId);
-
-        // Validation
-
-        
+        //Session::errorIfThemeNotExists($themeId);
 
         // Indications
 
@@ -80,60 +211,40 @@ class ExpressionsController extends ModelController {
         if (Request::isPost()) {
             // Sécurité
 
-            sleep(1);
-
-            Session::errorIfNotToken();
+            $this->secure();
 
             // Données
 
-            $french = $validator->french();
-            $english = $validator->english();
-            $phonetics = $validator->phonetics();
+            $french = $this->getCheckedFrench();
+            $english = $this->getCheckedEnglish();
+            $phonetics = $this->getCheckedPhonetics();
 
             // Validation
 
-            $errors = $validator->getErrors();
+            $errors = $this->getErrors();
 
-            $valid = empty($errors["french"]) &&
-                     empty($errors["english"]) &&
-                     empty($errors["phonetics"]);
+            $valid = $this->validateForm();
 
             // Ajout
 
-            $userId = Session::get("user_id");
-
             if ($valid) {
-                $newExpression = [
+                $values = [
                     "french" => $french,
                     "english" => $english,
                     "phonetics" => $phonetics,
-                    "user_id" => $userId,
-                    "theme_id" => $themeId
                 ];
 
-                $saved = $this->expressionModel->insert($newExpression);
-
-                if ($saved) {
-                    Session::success("L'expression a bien été ajoutée.");
-                } else {
-                    Session::error();
-                }
-
-                Redirection::to("/themes/show/$themeId");
-
-                return;
+                $this->insertExpression($themeId, $values);
             }
         }
 
         // Rendu
 
-        $label = "Ajouter";
-
         $this->render("expressions/new_expression.twig", [
             "session" => Session::all(),
             
-            "label" => $label,
-            "tips" => $validator->getTips(),
+            "label" => "Ajouter",
+            "tips" => $this->getTips(),
             "errors" => $errors,
 
             "pageTitle" => "Ajout d'une expression",
@@ -149,20 +260,24 @@ class ExpressionsController extends ModelController {
 
     // Edition d'une expression
 
-    public function edit($id) {
+    public function edit($expressionId) {
         Session::start();
 
-        // Utilisateur non connecté
+        // Utilisateur connecté
 
-        $this->notLoggedIn();
+        $this->isLoggedIn();
 
-        // Expression inexistante
+        // Expression existante
 
-        Session::errorIfExpressionNotExists($id);
+        $this->exists($expressionId);
+
+        // Utilisateur autorisé
+
+        //
 
         // Données existantes
 
-        $expression = $this->expressionModel->findOneById($id);
+        $expression = $this->getOneById($id);
 
         $french = $expression->french;
         $english = $expression->english;
@@ -185,38 +300,26 @@ class ExpressionsController extends ModelController {
 
             // Données
 
-            $french = $this->validator->checkFrench();
-            $english = $this->validator->checkEnglish();
-            $phonetics = $this->validator->checkPhonetics();
+            $french = $this->getCheckedFrench();
+            $english = $this->getCheckedEnglish();
+            $phonetics = $this->getCheckedPhonetics();
 
             // Validation
 
             $errors = $this->getErrors();
 
-            $valid = empty($errors["french"]) &&
-                     empty($errors["english"]) &&
-                     empty($errors["phonetics"]);
+            $valid = $this->validateForm();
 
             // Edition
 
             if ($valid) {
-                $newExpression = [
+                $values = [
                     "french" => $french,
                     "english" => $english,
-                    "phonetics" => $phonetics,
+                    "phonetics" => $phonetics
                 ];
 
-                $saved = $this->expressionModel->update($id, $newExpression);
-
-                if ($saved) {
-                    Session::success("L'expression a bien été éditée.");
-                } else {
-                    Session::error();
-                }
-
-                Redirection::to("/themes/show/$themeId");
-
-                return;
+                $this->updateExpression($expressionId, $themeId, $values);
             }
         }
 
@@ -231,7 +334,7 @@ class ExpressionsController extends ModelController {
             "pageTitle" => "Edition de l'expression",
             "label" => "Editer",
 
-            "id" => $id,
+            "id" => $expressionId,
             "themeId" => $themeId,
 
             "french" => $french,
@@ -242,20 +345,24 @@ class ExpressionsController extends ModelController {
 
     // Suppression d'une expression
 
-    public function delete($id) {
+    public function delete($expressionId) {
         Session::start();
 
-        // Utilisateur non connecté
+        // Utilisateur connecté
 
-        $this->notLoggedIn();
+        $this->isLoggedIn();
 
-        // Expression inexistante
+        // Expression existante
 
-        Session::errorIfExpressionNotExists($id);
+        $this->exists($expressionId);
+
+        // Utilisateur autorisé
+
+        //
 
         // Expression courante
 
-        $expression = $this->expressionModel->findOneById($id);
+        $expression = $this->getOneById($expressionId);
 
         $french = $expression->french;
         $english = $expression->english;
@@ -270,17 +377,9 @@ class ExpressionsController extends ModelController {
 
             $this->secure();
 
-            $deleted = $this->expressionModel->delete($id);
+            // Action
 
-            if ($deleted) {
-                Session::success("L'expression a bien été supprimée.");
-            } else {
-                Session::error();
-            }
-
-            Redirection::to("/themes/show/$themeId");
-
-            return;
+            $this->deleteExpression($expressionId, $themeId);
         }
 
         // Rendu

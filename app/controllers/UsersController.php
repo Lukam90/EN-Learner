@@ -166,11 +166,12 @@ class UsersController extends ModelController {
 
     // Ajout d'un nouvel utilisateur
 
-    public function insertUser($username, $email, $password) {
+    public function insertUser($values) {
         $newUser = [
-            "username" => $username,
-            "email" => $email,
-            "password" => $password,
+            "username" => $values["username"],
+            "email" => $values["email"],
+            "password" => $values["password"],
+            
             "role" => "Membre"
         ];
 
@@ -271,11 +272,13 @@ class UsersController extends ModelController {
 
     // Formulaire d'inscription
 
-    public function validateRegisterForm($errors) {
-        empty($errors["username"])
-        && empty($errors["email"])
-        && empty($errors["password"])
-        && empty($errors["confirm"]);
+    public function validateRegisterForm() {
+        $errors = $this->getErrors();
+
+        return empty($errors["username"]) &&
+               empty($errors["email"]) &&
+               empty($errors["password"]) &&
+               empty($errors["confirm"]);
     }
 
     // Formulaire de connexion
@@ -448,12 +451,18 @@ class UsersController extends ModelController {
 
             $errors = $this->getErrors();
 
-            $valid = $this->validateRegisterForm($errors);
+            $valid = $this->validateRegisterForm();
 
             // Enregistrement
 
             if ($valid) {
-                $this->insertUser($username, $email, $password);
+                $values = [
+                    "username" => $username,
+                    "email" => $email,
+                    "password" => $password
+                ];
+
+                $this->insertUser($values);
             }
         }
 

@@ -145,24 +145,6 @@ class Session {
     }
 
     /**
-     * Error if expression not exists (ù)
-     */
-    
-    public static function errorIfExpressionNotExists($expressionId) {
-        $expressionModel = new Expression();
-    
-        $exists = $expressionModel->findOneById($expressionId);
-    
-        if (! $exists) {
-            self::alert("L'expression n'existe pas.");
-    
-            Redirection::to("/expressions");
-    
-            return;
-        }
-    }
-
-    /**
      * Session log in
      */
 
