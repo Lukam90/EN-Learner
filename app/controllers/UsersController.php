@@ -144,6 +144,12 @@ class UsersController extends ModelController {
         return $currentUserId == $userId;
     }
 
+    // Utilisateur autorisé
+
+    public function isAuthorized($userId) {
+        return $this->isSuperUser() || $this->sameUser($userId);
+    }
+
     // Accès à la page de profil
 
     public function canAccess($userId) {
@@ -179,6 +185,22 @@ class UsersController extends ModelController {
         } else {
             Session::error();
         }
+    }
+
+    // Changement de rôle / statut
+
+    public function changeRole($userId, $role) {
+        $saved = $this->userModel->changeRole($userId, $role);
+
+        if ($saved) {
+            Session::success("Le rôle de l'utilisateur a bien été édité.");
+        } else {
+            Session::error();
+        }
+
+        Redirection::to("/users");
+
+        return;
     }
 
     // Suppression d'un utilisateur
@@ -356,7 +378,7 @@ class UsersController extends ModelController {
 
         $this->canAccess($userId);
 
-        // Utilisateur courant
+        // Utilisateur sélectionné
 
         $user = $this->getUserById($userId);
 
@@ -527,20 +549,24 @@ class UsersController extends ModelController {
      * Edition d'un utilisateur
      */
 
-    public function edit($id) {
+    public function edit($userId) {
         Session::start();
 
-        // Utilisateur non connecté
+        // Utilisateur connecté
 
-        $this->notLoggedIn();
+        $this->isLoggedIn();
 
-        // Utilisateur inexistant
+        // Utilisateur existant
 
-        Session::errorIfUserNotExists($id);
+        $this->exists($userId);
+
+        // Utilisateur autorisé
+
+        $this->isAuthorized($userId);
 
         // Utilisateur sélectionné
 
-        $user = $this->getUserById($id);
+        $user = $this->getUserById($userId);
 
         $id = $user->id;
         $username = $user->username;
@@ -551,25 +577,13 @@ class UsersController extends ModelController {
         if (Request::isPost()) {
             // Sécurité
 
-            sleep(1);
-
-            Session::errorIfNotToken();
+            $this->secure();
 
             // Edition
 
             $role = Post::var("role");
 
-            $saved = $this->userModel->changeRole($id, $role);
-
-            if ($saved) {
-                Session::success("Le rôle de l'utilisateur a bien été édité.");
-            } else {
-                Session::error();
-            }
-
-            Redirection::to("/users");
-
-            return;
+            $this->changeRole($userId, $role);
         }
 
         // Rendu
@@ -597,15 +611,19 @@ class UsersController extends ModelController {
     public function delete($userId) {
         Session::start();
 
-        // Utilisateur non autorisé
+        // Utilisateur connecté
 
-        Session::errorIfNotSuperUser();
+        $this->isLoggedIn();
 
         // Utilisateur existant
 
         $this->exists($userId);
 
-        // Utilisateur courant
+        // Utilisateur autorisé
+
+        $this->isAuthorized($userId);
+
+        // Utilisateur sélectionné
 
         $user = $this->getUserById($userId);
 
