@@ -130,20 +130,6 @@ class Session {
         return self::has("user_id");
     }
 
-     /**
-     * Error if not matching token
-     */
-
-    public static function expiredToken() {
-        if (Post::var("token") != self::get("token")) {
-            self::alert("Le token CSRF a expiré. Veuillez vous reconnecter.");
-
-            Redirection::to("/users/logout");
-
-            return;
-        }
-    }
-
     /**
      * Session log in
      */

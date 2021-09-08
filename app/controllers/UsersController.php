@@ -649,7 +649,7 @@ class UsersController extends ModelController {
 
         // Rendu
 
-        $roles = ["Suspendu", "Membre", "Modérateur", "Administrateur"];
+        $roles = ["Suspendu", "Membre", "Modérateur"];
 
         $this->render("users/edit_user.twig", [
             "session" => Session::all(),
