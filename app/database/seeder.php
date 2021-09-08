@@ -22,7 +22,7 @@ $expressionModel->drop();
 $themeModel->drop();
 $userModel->drop();
 
-/* Utilisateurs */
+/* Table des utilisateurs */
 
 // Création
 
@@ -36,7 +36,7 @@ foreach ($users as $user) {
     $userModel->insert($user);
 }
 
-/* Thèmes */
+/// Thèmes
 
 // Création
 
@@ -50,7 +50,7 @@ foreach ($themes as $theme) {
     $themeModel->insert($theme);
 }
 
-/* Expressions */
+/// Expressions
 
 // Création
 

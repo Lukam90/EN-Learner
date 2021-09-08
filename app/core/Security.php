@@ -2,9 +2,6 @@
 
 namespace app\core;
 
-use app\core\Post;
-use app\core\Session;
-
 abstract class Security {
     // Nettoyage des caractères spéciaux (XSS)
 
@@ -24,13 +21,7 @@ abstract class Security {
 
     // Correspondance du jeton CSRF
 
-    public static function expiredToken() {
-        if (Post::var("token") != Session::get("token")) {
-            Session::alert("Le token CSRF a expiré. Veuillez vous reconnecter.");
-
-            Redirection::to("/users/logout");
-
-            exit;
-        }
+    public static function checkCSRF() {
+        return $_POST["token"] == $_SESSION["token"];
     }
 }

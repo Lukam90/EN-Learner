@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\core\Security;
 use app\core\Session;
 use app\core\Redirection;
 
@@ -26,7 +25,7 @@ abstract class ModelController extends Controller {
     public function secure() {
         sleep(1);
 
-        Security::expiredToken();
+        Session::expiredToken();
     }
 
     // Indications
