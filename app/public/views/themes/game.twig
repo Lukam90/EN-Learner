@@ -15,14 +15,15 @@
 
     {% if not started %}
         <form action="{{ root }}/themes/start/{{ id }}" method="post">
-            <div class="third">
-                <p>Niveau de difficulté</p>
+            <div class="quarter">
+                <p>Nombre de cartes ?</p>
 
                 <select class="input" name="level">
                     {% for level in levels %}
                     <option value="{{ level }}">{{ level }}</option>
                     {% endfor %}
                 </select>
+                
 
                 <button class="btn-success">Let's go !</button>
             </div>
@@ -50,7 +51,7 @@
 
         <div class="container">
             <a href="{{ root }}/themes/start/{{ id }}">
-                <button class="btn-success m-vertical">Rejouer ?</button>
+                <button class="btn-success m-vertical">Recommencer ?</button>
             </a>
         </div>
     {% endif %}
