@@ -1,0 +1,14 @@
+|french|english|phonetics|theme_id|user_id|
+|-|-|-|-|-|
+|janvier|January|dja-niu-wi|3|5|
+|février|February|fé-bwu-wi|3|5|
+|mars|March|mar-tch|3|5|
+|avril|April|éï-pweul|3|5|
+|mai|May|méï|3|5|
+|juin|June|dju-ne|3|5|
+|juillet|July|dju-laï|3|5|
+|août|August|o-ou-geust|3|5|
+|septembre|September|sép-tém-beur|3|5|
+|octobre|October|ok-to-ou-beur|3|5|
+|novembre|November|no-vém-beur|3|5|
+|décembre|December|di-sém-beur|3|5|

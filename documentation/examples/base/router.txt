@@ -1,0 +1,26 @@
+abstract class Router {
+    // ...
+
+    // Redirection de la page
+
+    public static function init() {
+        $url = self::url();
+        $page = self::page($url);
+
+        switch ($page) {
+            case "home":
+                Redirection::home();
+                
+                break;
+
+            // ...
+
+            default:
+                Redirection::notFound();
+
+                break;
+        }
+    }
+
+    // ...
+}

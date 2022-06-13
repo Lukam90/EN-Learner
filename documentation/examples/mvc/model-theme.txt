@@ -1,0 +1,26 @@
+class Theme extends Model {
+    // ...
+
+    // Sélection d'un thème par le titre
+
+    public function findOneByTitle($title) {
+        $this->setQuery("SELECT *
+                         FROM themes
+                         WHERE title = :title");
+
+        return $this->fetchOne("title", $title);
+    }
+
+    // Expressions d'un thème
+
+    public function findExpressions($themeId) {
+        $this->setQuery("SELECT e.*
+                         FROM expressions e, themes t
+                         WHERE e.theme_id = t.id
+                         AND t.id = :id");
+
+        return $this->fetchAllWith("id", $themeId);
+    }
+
+    // ...
+}

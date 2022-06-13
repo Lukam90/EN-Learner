@@ -1,0 +1,49 @@
+## Ex 1
+
+```sql
+CREATE TABLE IF NOT EXISTS client (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    nom VARCHAR(50) NOT NULL,
+    prenom VARCHAR(50) NOT NULL,
+    adresse VARCHAR(255) NOT NULL,
+    cp VARCHAR(10) NOT NULL,
+    ville VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS reservation (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    prix FLOAT NOT NULL,
+    client_id INTEGER NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES client (id)
+);
+
+CREATE TABLE IF NOT EXISTS avion (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    modele VARCHAR(20) NOT NULL,
+    capacite INTEGER NOT NULL,
+    compagnie VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS aeroport (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(3) NOT NULL,
+    adresse VARCHAR(255) NOT NULL,
+    ville VARCHAR(100) NOT NULL,
+    pays VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS vol (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    direction VARCHAR(10) NOT NULL,
+    `date` DATE DEFAULT CURRENT_TIMESTAMP,
+    heure TIME NOT NULL,
+    classe VARCHAR(15) NOT NULL,
+    nb_bagages INTEGER NOT NULL,
+    avion_id INTEGER NOT NULL,
+    aeroport_id INTEGER NOT NULL,
+    reservation_id INTEGER NOT NULL,
+    FOREIGN KEY (avion_id) REFERENCES avion (id),
+    FOREIGN KEY (aeroport_id) REFERENCES aeroport (id),
+    FOREIGN KEY (reservation_id) REFERENCES reservation (id)
+);
+```
