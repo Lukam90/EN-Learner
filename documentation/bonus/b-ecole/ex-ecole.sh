@@ -1,1 +1,0 @@
-python ex-ecole.py
